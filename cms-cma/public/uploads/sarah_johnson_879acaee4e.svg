@@ -1,0 +1,6 @@
+<svg width="200" height="200" xmlns="http://www.w3.org/2000/svg">
+  <rect width="200" height="200" fill="#dc2626"/>
+  <circle cx="100" cy="80" r="30" fill="white" opacity="0.8"/>
+  <rect x="70" y="120" width="60" height="60" rx="10" fill="white" opacity="0.8"/>
+  <text x="100" y="190" font-family="Arial" font-size="12" fill="white" text-anchor="middle">Sarah Johnson</text>
+</svg>
