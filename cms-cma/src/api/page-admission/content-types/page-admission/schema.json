@@ -1,0 +1,98 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_admissions",
+  "info": {
+    "singularName": "page-admission",
+    "pluralName": "page-admissions",
+    "displayName": "Page Admission",
+    "description": "Configuration de la page d'admission"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titre": {
+      "type": "string",
+      "required": true,
+      "default": "Parcours d'admission CMA"
+    },
+    "sousTitre": {
+      "type": "string",
+      "default": "Comment intégrer CMA ?"
+    },
+    "introduction": {
+      "type": "text"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "contactPhone": {
+      "type": "string",
+      "default": "01 89 70 60 52"
+    },
+    "contactEmail": {
+      "type": "email",
+      "default": "inscription.academy@cma-education.com"
+    },
+    "ctaTexte": {
+      "type": "string",
+      "default": "Déposer ma candidature"
+    },
+    "ctaUrl": {
+      "type": "string",
+      "default": "https://cma-education.ymag.cloud/index.php/preinscription/"
+    },
+    "pointCle1Titre": {
+      "type": "string",
+      "default": "Sans concours"
+    },
+    "pointCle1Description": {
+      "type": "string",
+      "default": "Admission sur entretien de motivation uniquement"
+    },
+    "pointCle2Titre": {
+      "type": "string",
+      "default": "Gratuit pour l'alternant"
+    },
+    "pointCle2Description": {
+      "type": "string",
+      "default": "Aucun frais de scolarité ou d'inscription"
+    },
+    "pointCle3Titre": {
+      "type": "string",
+      "default": "Réponse rapide"
+    },
+    "pointCle3Description": {
+      "type": "string",
+      "default": "Décision sous 48h après l'entretien"
+    },
+    "titreEtapes": {
+      "type": "string",
+      "default": "Les étapes de votre admission"
+    },
+    "descriptionEtapes": {
+      "type": "text",
+      "default": "Un processus simple et transparent pour rejoindre la Construction Management Academy"
+    },
+    "titreCTA": {
+      "type": "string",
+      "default": "Prêt à rejoindre CMA ?"
+    },
+    "descriptionCTA": {
+      "type": "text",
+      "default": "Lancez votre candidature dès maintenant et commencez votre parcours vers une carrière dans le BTP"
+    },
+    "titreContact": {
+      "type": "string",
+      "default": "Des questions sur l'admission ?"
+    },
+    "descriptionContact": {
+      "type": "text",
+      "default": "Notre équipe est à votre disposition pour vous accompagner"
+    }
+  }
+}

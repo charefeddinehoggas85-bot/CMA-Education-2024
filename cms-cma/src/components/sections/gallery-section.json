@@ -1,0 +1,41 @@
+{
+  "collectionName": "components_sections_gallery_sections",
+  "info": {
+    "displayName": "Gallery Section",
+    "description": "Section galerie d'images avec titre et légendes"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "images": {
+      "type": "media",
+      "multiple": true,
+      "required": true,
+      "allowedTypes": ["images"]
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["grid", "carousel", "masonry"],
+      "default": "grid"
+    },
+    "columns": {
+      "type": "integer",
+      "min": 1,
+      "max": 6,
+      "default": 3
+    },
+    "showCaptions": {
+      "type": "boolean",
+      "default": true
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#ffffff"
+    }
+  }
+}

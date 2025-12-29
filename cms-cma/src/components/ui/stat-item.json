@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_ui_stat_items",
+  "info": {
+    "displayName": "Stat Item",
+    "description": "Élément de statistique avec chiffre et label"
+  },
+  "options": {},
+  "attributes": {
+    "number": {
+      "type": "integer",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "suffix": {
+      "type": "string",
+      "default": ""
+    },
+    "prefix": {
+      "type": "string",
+      "default": ""
+    },
+    "icon": {
+      "type": "string"
+    },
+    "color": {
+      "type": "string",
+      "default": "#3b82f6"
+    }
+  }
+}

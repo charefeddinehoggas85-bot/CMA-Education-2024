@@ -1,0 +1,76 @@
+{
+  "kind": "collectionType",
+  "collectionName": "formateurs",
+  "info": {
+    "singularName": "formateur",
+    "pluralName": "formateurs",
+    "displayName": "Formateur",
+    "description": "Formateurs et intervenants"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "prenom": {
+      "type": "string"
+    },
+    "poste": {
+      "type": "string",
+      "required": true
+    },
+    "secteur": {
+      "type": "enumeration",
+      "enum": ["direction", "batiment", "travaux-publics", "architecture-energie"],
+      "default": "batiment"
+    },
+    "specialites": {
+      "type": "json"
+    },
+    "certifications": {
+      "type": "json"
+    },
+    "experience": {
+      "type": "string"
+    },
+    "description": {
+      "type": "text"
+    },
+    "photo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "biographie": {
+      "type": "richtext"
+    },
+    "linkedin": {
+      "type": "string"
+    },
+    "gender": {
+      "type": "enumeration",
+      "enum": ["male", "female"],
+      "default": "male"
+    },
+    "isDirector": {
+      "type": "boolean",
+      "default": false
+    },
+    "formations": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::formation.formation"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}

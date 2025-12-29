@@ -1,0 +1,143 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_entreprises",
+  "info": {
+    "singularName": "page-entreprise",
+    "pluralName": "page-entreprises",
+    "displayName": "Page Entreprises",
+    "description": "Contenu complet de la page Formations Entreprises - 100% modifiable"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitre": {
+      "type": "string",
+      "required": true,
+      "default": "Formations BTP pour Entreprises"
+    },
+    "heroSousTitre": {
+      "type": "string",
+      "default": "Formations sur mesure"
+    },
+    "heroDescription": {
+      "type": "text",
+      "required": true
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "heroBoutonPrincipal": {
+      "type": "string",
+      "default": "Demander un devis"
+    },
+    "heroBoutonSecondaire": {
+      "type": "string",
+      "default": "Télécharger la brochure"
+    },
+    "sectionInvestirTitre": {
+      "type": "string",
+      "default": "Pourquoi investir dans la formation de vos salariés ?"
+    },
+    "sectionInvestirSousTitre": {
+      "type": "string",
+      "default": "Les avantages"
+    },
+    "sectionThematiquesTitre": {
+      "type": "string",
+      "default": "Nos thématiques de formation pour les entreprises"
+    },
+    "sectionThematiquesSousTitre": {
+      "type": "string",
+      "default": "Formations populaires"
+    },
+    "sectionThematiquesDescription": {
+      "type": "text",
+      "default": "Nous couvrons de nombreux domaines, avec des modules courts ou des parcours complets."
+    },
+    "surMesureTitre": {
+      "type": "string",
+      "default": "Formations sur mesure et adaptables"
+    },
+    "surMesureDescription": {
+      "type": "text",
+      "default": "Toutes nos formations pour les entreprises sont proposées sur devis, afin de s'adapter parfaitement à vos besoins spécifiques et vos objectifs."
+    },
+    "surMesureBouton": {
+      "type": "string",
+      "default": "Demander un programme personnalisé"
+    },
+    "modalitesTitre": {
+      "type": "string",
+      "default": "Modalités de formation"
+    },
+    "modalitesSousTitre": {
+      "type": "string",
+      "default": "Flexibilité totale"
+    },
+    "modalitesDescription": {
+      "type": "text",
+      "default": "Nos formations sont proposées dans toute la France selon vos préférences"
+    },
+    "tarifTitre": {
+      "type": "string",
+      "default": "Tarification"
+    },
+    "tarifJour": {
+      "type": "string",
+      "default": "À partir de 700€ HT"
+    },
+    "tarifJourLabel": {
+      "type": "string",
+      "default": "Par jour et par stagiaire"
+    },
+    "tarifDescription": {
+      "type": "text",
+      "default": "Le coût varie selon le format (inter/intra), la durée, le contenu personnalisé."
+    },
+    "tarifIntra": {
+      "type": "string",
+      "default": "Tarif formation en intra : nous consulter"
+    },
+    "financementTitre": {
+      "type": "string",
+      "default": "Financement"
+    },
+    "financementDescription": {
+      "type": "text",
+      "default": "Nous vous accompagnons dans la mobilisation de vos droits à la formation"
+    },
+    "financements": {
+      "type": "json",
+      "default": []
+    },
+    "ctaTitre": {
+      "type": "string",
+      "default": "Prêt à former vos équipes ?"
+    },
+    "ctaDescription": {
+      "type": "text",
+      "default": "Contactez-nous pour discuter de vos besoins et obtenir un devis personnalisé"
+    },
+    "ctaBoutonPrincipal": {
+      "type": "string",
+      "default": "Nous contacter"
+    },
+    "ctaBoutonSecondaire": {
+      "type": "string",
+      "default": "Télécharger la brochure"
+    },
+    "telephone": {
+      "type": "string",
+      "default": "01 89 70 60 52"
+    },
+    "email": {
+      "type": "string",
+      "default": "contact.academy@cma-education.com"
+    }
+  }
+}

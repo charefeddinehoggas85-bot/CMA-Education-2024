@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "formation_thematiques",
+  "info": {
+    "singularName": "formation-thematique",
+    "pluralName": "formation-thematiques",
+    "displayName": "Formation Thematique (Entreprise)",
+    "description": "Thématiques de formations pour entreprises"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "duree": {
+      "type": "string"
+    },
+    "niveau": {
+      "type": "string"
+    },
+    "prix": {
+      "type": "string"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}

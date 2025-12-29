@@ -1,0 +1,36 @@
+{
+  "collectionName": "components_contact_horaires",
+  "info": {
+    "displayName": "Horaire",
+    "description": "Horaire d'ouverture"
+  },
+  "options": {},
+  "attributes": {
+    "jour": {
+      "type": "enumeration",
+      "enum": [
+        "lundi",
+        "mardi",
+        "mercredi",
+        "jeudi",
+        "vendredi",
+        "samedi",
+        "dimanche"
+      ],
+      "required": true
+    },
+    "ouverture": {
+      "type": "time"
+    },
+    "fermeture": {
+      "type": "time"
+    },
+    "ferme": {
+      "type": "boolean",
+      "default": false
+    },
+    "note": {
+      "type": "string"
+    }
+  }
+}

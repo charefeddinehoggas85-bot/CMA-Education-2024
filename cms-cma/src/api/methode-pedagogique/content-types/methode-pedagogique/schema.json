@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "methodes_pedagogiques",
+  "info": {
+    "singularName": "methode-pedagogique",
+    "pluralName": "methodes-pedagogiques",
+    "displayName": "Méthode Pédagogique",
+    "description": "Méthodes pédagogiques de l'école"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    },
+    "couleur": {
+      "type": "string",
+      "default": "from-blue-500 to-blue-600"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

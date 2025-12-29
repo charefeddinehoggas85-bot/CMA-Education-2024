@@ -1,0 +1,48 @@
+<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="200" height="200" fill="white"/>
+  
+  <!-- Building (Blue) -->
+  <g id="building">
+    <!-- Main building structure -->
+    <path d="M 85 60 L 115 60 L 115 120 L 85 120 Z" fill="#0052CC" stroke="#0052CC" stroke-width="1"/>
+    
+    <!-- Building left side -->
+    <path d="M 75 80 L 85 60 L 85 120 L 75 120 Z" fill="#0052CC" opacity="0.8"/>
+    
+    <!-- Building right side -->
+    <path d="M 115 60 L 125 80 L 125 120 L 115 120 Z" fill="#0052CC" opacity="0.8"/>
+    
+    <!-- Windows -->
+    <rect x="88" y="70" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="98" y="70" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="88" y="82" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="98" y="82" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="88" y="94" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="98" y="94" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="88" y="106" width="6" height="6" fill="white" opacity="0.6"/>
+    <rect x="98" y="106" width="6" height="6" fill="white" opacity="0.6"/>
+  </g>
+  
+  <!-- Bridge Left (Orange/Yellow) -->
+  <g id="bridge-left">
+    <!-- Main cable -->
+    <path d="M 50 85 Q 60 75 75 80" stroke="#FFA500" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Support cables -->
+    <line x1="55" y1="82" x2="55" y2="95" stroke="#FFA500" stroke-width="2"/>
+    <line x1="65" y1="78" x2="65" y2="95" stroke="#FFA500" stroke-width="2"/>
+  </g>
+  
+  <!-- Bridge Right (Orange/Yellow) -->
+  <g id="bridge-right">
+    <!-- Main cable -->
+    <path d="M 150 85 Q 140 75 125 80" stroke="#FFA500" stroke-width="3" fill="none" stroke-linecap="round"/>
+    <!-- Support cables -->
+    <line x1="145" y1="82" x2="145" y2="95" stroke="#FFA500" stroke-width="2"/>
+    <line x1="135" y1="78" x2="135" y2="95" stroke="#FFA500" stroke-width="2"/>
+  </g>
+  
+  <!-- Road -->
+  <rect x="85" y="115" width="30" height="8" fill="#0052CC" opacity="0.6"/>
+  <line x1="100" y1="115" x2="100" y2="123" stroke="white" stroke-width="1" stroke-dasharray="2,2"/>
+</svg>

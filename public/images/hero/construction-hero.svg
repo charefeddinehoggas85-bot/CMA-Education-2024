@@ -1,0 +1,56 @@
+<svg width="1200" height="800" viewBox="0 0 1200 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" style="stop-color:#FDF7E3;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#FADD82;stop-opacity:0.3" />
+    </linearGradient>
+    <linearGradient id="buildingGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0D4BD3;stop-opacity:0.9" />
+      <stop offset="100%" style="stop-color:#0D4BD3;stop-opacity:0.7" />
+    </linearGradient>
+  </defs>
+  
+  <!-- Sky background -->
+  <rect width="1200" height="800" fill="url(#skyGradient)"/>
+  
+  <!-- Modern buildings silhouette -->
+  <g opacity="0.8">
+    <!-- Building 1 -->
+    <rect x="100" y="300" width="120" height="500" fill="url(#buildingGradient)" rx="8"/>
+    <rect x="110" y="320" width="20" height="25" fill="#FADD82" opacity="0.7"/>
+    <rect x="140" y="340" width="20" height="25" fill="#FADD82" opacity="0.7"/>
+    <rect x="170" y="360" width="20" height="25" fill="#FADD82" opacity="0.7"/>
+    
+    <!-- Building 2 -->
+    <rect x="250" y="200" width="100" height="600" fill="url(#buildingGradient)" rx="6"/>
+    <rect x="260" y="220" width="15" height="20" fill="#FADD82" opacity="0.6"/>
+    <rect x="285" y="250" width="15" height="20" fill="#FADD82" opacity="0.6"/>
+    <rect x="310" y="280" width="15" height="20" fill="#FADD82" opacity="0.6"/>
+    
+    <!-- Building 3 -->
+    <rect x="380" y="250" width="140" height="550" fill="url(#buildingGradient)" rx="10"/>
+    <rect x="400" y="280" width="25" height="30" fill="#FADD82" opacity="0.8"/>
+    <rect x="440" y="320" width="25" height="30" fill="#FADD82" opacity="0.8"/>
+    <rect x="480" y="360" width="25" height="30" fill="#FADD82" opacity="0.8"/>
+    
+    <!-- Crane -->
+    <line x1="600" y1="150" x2="600" y2="600" stroke="#0D4BD3" stroke-width="8" opacity="0.7"/>
+    <line x1="600" y1="200" x2="800" y2="200" stroke="#0D4BD3" stroke-width="6" opacity="0.7"/>
+    <line x1="600" y1="200" x2="550" y2="250" stroke="#0D4BD3" stroke-width="4" opacity="0.7"/>
+    
+    <!-- Modern geometric elements -->
+    <circle cx="900" cy="300" r="80" fill="#FADD82" opacity="0.3"/>
+    <rect x="950" y="400" width="60" height="60" fill="#0D4BD3" opacity="0.4" rx="30" transform="rotate(45 980 430)"/>
+  </g>
+  
+  <!-- Floating particles -->
+  <circle cx="200" cy="150" r="3" fill="#FADD82" opacity="0.6">
+    <animate attributeName="cy" values="150;130;150" dur="3s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="800" cy="100" r="4" fill="#0D4BD3" opacity="0.5">
+    <animate attributeName="cy" values="100;80;100" dur="4s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="1000" cy="200" r="2" fill="#FADD82" opacity="0.7">
+    <animate attributeName="cy" values="200;180;200" dur="2.5s" repeatCount="indefinite"/>
+  </circle>
+</svg>

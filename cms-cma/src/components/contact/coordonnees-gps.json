@@ -1,0 +1,22 @@
+{
+  "collectionName": "components_contact_coordonnees_gps",
+  "info": {
+    "displayName": "Coordonnées GPS",
+    "description": "Coordonnées GPS"
+  },
+  "options": {},
+  "attributes": {
+    "latitude": {
+      "type": "decimal",
+      "required": true
+    },
+    "longitude": {
+      "type": "decimal",
+      "required": true
+    },
+    "zoom": {
+      "type": "integer",
+      "default": 15
+    }
+  }
+}

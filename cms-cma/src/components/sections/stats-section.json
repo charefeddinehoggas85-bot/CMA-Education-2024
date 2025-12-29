@@ -1,0 +1,35 @@
+{
+  "collectionName": "components_sections_stats_sections",
+  "info": {
+    "displayName": "Stats Section",
+    "description": "Section statistiques avec chiffres clés"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "stats": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.stat-item"
+    },
+    "layout": {
+      "type": "enumeration",
+      "enum": ["horizontal", "grid"],
+      "default": "horizontal"
+    },
+    "animationType": {
+      "type": "enumeration",
+      "enum": ["none", "countUp", "fadeIn"],
+      "default": "countUp"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#f8fafc"
+    }
+  }
+}

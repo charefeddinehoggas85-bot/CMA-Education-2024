@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Footer - 5 Icônes Sociales</title>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .social-icons { display: flex; gap: 10px; margin: 20px 0; }
+        .social-icon { 
+            width: 44px; height: 44px; 
+            background: #1e40af; 
+            border-radius: 12px; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            color: white; 
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+        .social-icon:hover { background: #fbbf24; color: #1e40af; }
+        .test-info { background: #f3f4f6; padding: 15px; border-radius: 8px; margin: 10px 0; }
+    </style>
+</head>
+<body>
+    <h1>🧪 Test Footer - 5 Icônes Sociales</h1>
+    
+    <div class="test-info">
+        <h3>📋 Test de référence</h3>
+        <p>Ce test montre comment les 5 icônes sociales DEVRAIENT apparaître:</p>
+    </div>
+    
+    <div class="social-icons">
+        <a href="https://www.facebook.com/Constructionmanagementacademy" class="social-icon" title="Facebook">📘</a>
+        <a href="https://www.instagram.com/construction_management_academy" class="social-icon" title="Instagram">📷</a>
+        <a href="https://www.tiktok.com/@cmaeducation" class="social-icon" title="TikTok">🎵</a>
+        <a href="https://www.youtube.com/channel/construction-management-academy" class="social-icon" title="YouTube">📺</a>
+        <a href="https://www.linkedin.com/company/construction-management-academy" class="social-icon" title="LinkedIn">💼</a>
+    </div>
+    
+    <div class="test-info">
+        <h3>🔍 Instructions de comparaison</h3>
+        <ol>
+            <li>Ouvrez <a href="http://localhost:3001" target="_blank">http://localhost:3001</a></li>
+            <li>Scrollez vers le footer</li>
+            <li>Comparez avec les 5 icônes ci-dessus</li>
+            <li>Si vous voyez moins de 5 icônes, il y a un problème</li>
+        </ol>
+    </div>
+    
+    <div class="test-info">
+        <h3>🎯 Nouveaux liens (mis à jour)</h3>
+        <ul>
+            <li><strong>Facebook:</strong> /Constructionmanagementacademy ✅</li>
+            <li><strong>TikTok:</strong> /@cmaeducation ✅</li>
+        </ul>
+    </div>
+    
+    <script>
+        console.log('🧪 Test Footer - 5 Icônes Sociales');
+        console.log('📊 Icônes de référence: 5');
+        console.log('🔗 Liens mis à jour: Facebook + TikTok');
+        
+        // Compter les icônes
+        const icons = document.querySelectorAll('.social-icon');
+        console.log(`📱 Icônes affichées dans ce test: ${icons.length}`);
+    </script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "categories_blog",
+  "info": {
+    "singularName": "categorie-blog",
+    "pluralName": "categories-blog",
+    "displayName": "Catégorie Blog",
+    "description": "Catégories pour les articles de blog"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "nom"
+    },
+    "description": {
+      "type": "text"
+    },
+    "couleur": {
+      "type": "string",
+      "default": "#3B82F6"
+    },
+    "articles": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::article-blog.article-blog",
+      "mappedBy": "categorie"
+    }
+  }
+}

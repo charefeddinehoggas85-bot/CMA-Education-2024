@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_sections_text_sections",
+  "info": {
+    "displayName": "Text Section",
+    "description": "Section de texte riche avec titre"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string"
+    },
+    "content": {
+      "type": "richtext",
+      "required": true
+    },
+    "alignment": {
+      "type": "enumeration",
+      "enum": ["left", "center", "right"],
+      "default": "left"
+    },
+    "backgroundColor": {
+      "type": "string",
+      "default": "#ffffff"
+    }
+  }
+}

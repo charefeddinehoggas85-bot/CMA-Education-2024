@@ -1,0 +1,436 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brochure - Conducteur de Travaux en VRD (Voiries et réseaux divers) - Cursus 1 an</title>
+  <style>
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      padding: 20mm;
+      background: #FFFFFF;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* Header avec logo et bandes colorées */
+    .header {
+      position: relative;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 4px solid #0000FF;
+    }
+
+    .logo {
+      width: 180px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .header-band {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100%;
+      background: linear-gradient(135deg, #0000FF 0%, #0000CC 100%);
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .header-band-yellow {
+      position: absolute;
+      top: 0;
+      right: 100px;
+      width: 50px;
+      height: 100%;
+      background: #FFFF00;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    /* Titres */
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0000FF;
+      margin-bottom: 10px;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .rncp {
+      display: inline-block;
+      background: #FFFF00;
+      color: #000;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #0000FF;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #FFFF00;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #FFFF00;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .section-content {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    /* Listes */
+    .list-item {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      border-left: 3px solid #0000FF;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, rgba(0,0,255,0.03) 0%, rgba(255,255,255,1) 100%);
+    }
+
+    .list-item::before {
+      content: '▸';
+      position: absolute;
+      left: 8px;
+      color: #FFFF00;
+      font-weight: bold;
+    }
+
+    /* Encadrés */
+    .info-box {
+      background: linear-gradient(135deg, rgba(0,0,255,0.05) 0%, rgba(255,255,0,0.05) 100%);
+      border: 2px solid #0000FF;
+      border-left: 6px solid #FFFF00;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+
+    .info-box-title {
+      font-weight: bold;
+      color: #0000FF;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .info-box-content {
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* Grid pour informations pratiques */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .info-item {
+      background: #FFFFFF;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .info-item-label {
+      font-weight: bold;
+      color: #0000FF;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .info-item-value {
+      font-size: 13px;
+      color: #333;
+    }
+
+    /* Footer */
+    .footer {
+      position: absolute;
+      bottom: 15mm;
+      left: 20mm;
+      right: 20mm;
+      padding-top: 15px;
+      border-top: 3px solid #0000FF;
+      font-size: 11px;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-contact {
+      font-size: 11px;
+    }
+
+    .footer-contact strong {
+      color: #0000FF;
+    }
+
+    .page-number {
+      background: #FFFF00;
+      color: #000;
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-weight: bold;
+    }
+
+    /* Débouchés avec salaires */
+    .debouche-item {
+      padding: 10px;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, rgba(255,255,0,0.1) 0%, rgba(255,255,255,1) 100%);
+      border-left: 4px solid #FFFF00;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .debouche-title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .debouche-salary {
+      color: #0000FF;
+      font-weight: bold;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* Bande décorative */
+    .decorative-band {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #0000FF 0%, #FFFF00 100%);
+      opacity: 0.1;
+      border-radius: 0 0 0 100%;
+      z-index: 0;
+    }
+
+    @media print {
+      .page {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+      }
+    }
+  
+  </style>
+</head>
+<body>
+  
+    <div class="page">
+      <div class="decorative-band"></div>
+      <div class="header-band"></div>
+      <div class="header-band-yellow"></div>
+      
+      <div class="header">
+        <img src="/logoo.svg" alt="CMA Logo" class="logo" />
+        <div class="subtitle">BAC+3 - Niveau 6</div>
+        <h1 class="title">Conducteur de Travaux en VRD (Voiries et réseaux divers) - Cursus 1 an</h1>
+        <span class="rncp">Code RNCP : RNCP 41369</span>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Présentation de la Formation</h2>
+        <div class="section-content">
+          <p><strong>Formation intensive pour former des professionnels capables de gérer l'ensemble des étapes d'un chantier VRD, de la préparation à la réception des ouvrages.</strong></p>
+          <p style="margin-top: 10px;">Cette formation a pour objectif de former des professionnels capables de gérer l'ensemble des étapes d'un chantier, de la préparation à la réception des ouvrages, et d'en piloter toutes les dimensions techniques, administratives, financières et managériales. D'une durée de 1 an, la formation alterne enseignements théoriques et périodes en entreprise pour totaliser 560 heures en centre : ce format en alternance favorise une forte immersion professionnelle. Le parcours consolide les compétences indispensables au métier, tout en intégrant les outils modernes tels que le BIM et l'IA, permettant ainsi de maîtriser l'optimisation de la productivité et de répondre aux enjeux réglementaires et environnementaux propres au secteur.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Objectifs Pédagogiques</h2>
+        <div class="section-content">
+          
+            <div class="list-item">Préparer un chantier VRD en définissant les méthodes d'exécution, le planning, le budget et les démarches administratives, dans le respect des exigences réglementaires, de sécurité et environnementales</div>
+          
+            <div class="list-item">Piloter l'exécution des travaux VRD en assurant le suivi technique, organisationnel et financier du chantier, et en mettant en œuvre les actions correctives nécessaires</div>
+          
+            <div class="list-item">Manager et coordonner les équipes et intervenants de chantier, en animant les réunions et en faisant converger les intérêts de l'entreprise et du client</div>
+          
+            <div class="list-item">Garantir la conformité du chantier en veillant au respect des délais, de la qualité, de la sécurité, des normes réglementaires et des engagements contractuels</div>
+          
+          <p style="margin-top: 10px; font-style: italic; color: #666;">Suite page suivante...</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">📅 Informations Clés</div>
+        <div class="info-box-content">
+          <strong>Durée :</strong> 1 an<br>
+          <strong>Volume horaire :</strong> 560 heures en centre<br>
+          <strong>Rythme :</strong> Alternance
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-contact">
+          <strong>CMA - Construction Management Academy</strong><br>
+          67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne<br>
+          📞 01 89 70 60 52 | ✉️ contact.academy@cma-education.com
+        </div>
+        <div class="page-number">Page 1</div>
+      </div>
+    </div>
+  
+  
+    <div class="page">
+      <div class="decorative-band"></div>
+      
+      <div class="header">
+        <img src="/logoo.svg" alt="CMA Logo" class="logo" />
+        <h2 class="title" style="font-size: 22px;">Conducteur de Travaux en VRD (Voiries et réseaux divers) - Cursus 1 an</h2>
+      </div>
+
+      
+        <div class="section">
+          <h2 class="section-title">Objectifs Pédagogiques (suite)</h2>
+          <div class="section-content">
+            
+              <div class="list-item">Réceptionner et clôturer le chantier VRD en assurant la traçabilité, la levée des réserves, l'établissement du décompte général et définitif et la facturation finale</div>
+            
+          </div>
+        </div>
+      
+
+      <div class="section">
+        <h2 class="section-title">Programme Détaillé</h2>
+        <div class="section-content">
+          
+            <div class="list-item">Techniques avancées, Méthodes et organisation : Techniques TP complexes, organisation des travaux, interfaces BE, Phasage TP, plannings et méthodes de chantier</div>
+          
+            <div class="list-item">Analyse financière et planification : Contre-étude technico-financière, optimisation des coûts, DGD, plannings multi-acteurs et pilotage des délais</div>
+          
+            <div class="list-item">Gestion administrative, contractuelle et qualité : Marchés publics, CCAG, avenants, litiges, plans qualité ISO et traitement des non-conformités</div>
+          
+            <div class="list-item">Sécurité, logistique et management transversal : Pilotage SPS/PPSPS, logistique PIC multi-flux, management de la prévention, conduite d'équipe et relation client</div>
+          
+            <div class="list-item">Outils numériques, animation et projet tutoré : BIM/IA/outils avancés, animation des réunions (ODJ/compte-rendu), reporting et projet tutoré complet VRD/TP réel</div>
+          
+            <div class="list-item">Projet tutoré de niveau conducteur de travaux : Contre-étude, organisation complète et pilotage d'un projet VRD / TP sur cas réel</div>
+          
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Débouchés Professionnels</h2>
+        <div class="section-content">
+          
+              <div class="debouche-item">
+                <div class="debouche-title">Responsable Travaux BTP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Chef de chantier</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Conducteur de travaux TP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Chef de projet TP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Responsable innovation numérique en TP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Consultant en développement durable appliqué aux TP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Spécialiste BIM ou IA appliquée aux TP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Chargé d'affaires technico-financières TP</div>
+                
+              </div>
+            
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-contact">
+          <strong>CMA - Construction Management Academy</strong><br>
+          📞 01 89 70 60 52 | ✉️ contact.academy@cma-education.com
+        </div>
+        <div class="page-number">Page 2</div>
+      </div>
+    </div>
+  
+  
+</body>
+</html>
+  

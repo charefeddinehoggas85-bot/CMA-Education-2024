@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_sections_contact_sections",
+  "info": {
+    "displayName": "Contact Section",
+    "description": "Section de contact avec formulaire et informations"
+  },
+  "options": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true,
+      "default": "Contactez-nous"
+    },
+    "subtitle": {
+      "type": "text"
+    },
+    "showForm": {
+      "type": "boolean",
+      "default": true
+    },
+    "showMap": {
+      "type": "boolean",
+      "default": false
+    },
+    "contactInfo": {
+      "type": "component",
+      "repeatable": true,
+      "component": "ui.contact-info"
+    }
+  }
+}

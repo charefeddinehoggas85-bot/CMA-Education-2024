@@ -1,0 +1,31 @@
+{
+  "collectionName": "components_contact_telephones",
+  "info": {
+    "displayName": "Téléphone",
+    "description": "Numéro de téléphone"
+  },
+  "options": {},
+  "attributes": {
+    "numero": {
+      "type": "string",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "fixe",
+        "mobile",
+        "fax"
+      ],
+      "default": "fixe"
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "principal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

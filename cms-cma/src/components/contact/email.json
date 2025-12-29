@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_contact_emails",
+  "info": {
+    "displayName": "Email",
+    "description": "Adresse email"
+  },
+  "options": {},
+  "attributes": {
+    "email": {
+      "type": "email",
+      "required": true
+    },
+    "type": {
+      "type": "enumeration",
+      "enum": [
+        "contact",
+        "inscription",
+        "commercial",
+        "support",
+        "rh"
+      ],
+      "default": "contact"
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "principal": {
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

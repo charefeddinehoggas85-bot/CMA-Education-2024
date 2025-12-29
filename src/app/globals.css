@@ -1,0 +1,43 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Performance optimizations */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-display: swap;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+  
+  img {
+    content-visibility: auto;
+  }
+}
+
+/* SEO-friendly focus styles */
+@layer components {
+  .focus-visible:focus-visible {
+    @apply outline-2 outline-offset-2 outline-primary-blue;
+  }
+}
+
+/* Custom properties for better performance */
+:root {
+  --primary-blue: #1e40af;
+  --primary-yellow: #fbbf24;
+  --text-gray: #374151;
+}
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+  * {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

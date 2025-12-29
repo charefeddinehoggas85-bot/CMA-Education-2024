@@ -1,0 +1,280 @@
+/**
+ * Script d'import COMPLET du contenu VAE BTP dans Strapi
+ * 100% modifiable via le panel admin Strapi
+ */
+
+const STRAPI_URL = process.env.STRAPI_URL || 'http://localhost:1337';
+const STRAPI_TOKEN = process.env.STRAPI_API_TOKEN;
+
+const headers = {
+  'Content-Type': 'application/json',
+  'Authorization': `Bearer ${STRAPI_TOKEN}`
+};
+
+// ============================================
+// PAGE VAE - CONTENU COMPLET 100% MODIFIABLE
+// ============================================
+
+const pageVAEContent = {
+  // Hero Section
+  heroTitre: "Transformez votre expérience BTP en diplôme",
+  heroSousTitre: "Validation des Acquis de l'Expérience",
+  heroDescription: "Vous avez acquis des compétences au fil des années dans le BTP sans diplôme officiel ? La VAE vous permet de transformer cette expérience terrain en certification professionnelle reconnue par l'État. À la Construction Management Academy, nous vous accompagnons dans toutes les étapes de votre démarche VAE.",
+  heroBoutonPrincipal: "Démarrer ma VAE",
+  heroBoutonSecondaire: "Télécharger la brochure",
+  
+  // Stats Hero
+  statExperienceValeur: "1 an",
+  statExperienceLabel: "minimum",
+  statCertificationsValeur: "5 titres",
+  statCertificationsLabel: "RNCP",
+  statFinancementValeur: "CPF",
+  statFinancementLabel: "éligible",
+  badgeTexte: "✓ 0 diplôme requis",
+  
+  // Section Présentation
+  sectionTitre: "Qu'est-ce que la VAE et à qui s'adresse-t-elle ?",
+  sectionSousTitre: "Comprendre la VAE",
+  sectionDescription: `<p>La <strong>Validation des Acquis de l'Expérience</strong> est un droit individuel inscrit dans le Code du Travail (articles L6313-1 et L6353-3). Elle permet d'obtenir tout ou partie d'un diplôme, d'un titre professionnel ou d'un certificat de qualification, en justifiant d'au moins <strong>1 an d'expérience</strong> en lien avec la certification visée.</p>
+<p>Nos formations BTP en VAE sont accessibles <strong>sans condition d'âge, de nationalité ou de statut</strong> (salarié, indépendant, demandeur d'emploi, bénévole…). Vous devez justifier d'au moins 1 an d'expérience continue ou non, à temps plein ou partiel, en lien direct avec la certification visée.</p>`,
+  
+  // Points clés
+  pointCle1Titre: "Accès élargi",
+  pointCle1Description: "Sans diplôme initial requis",
+  pointCle1Icone: "🎯",
+  pointCle2Titre: "Reconnaissance",
+  pointCle2Description: "Titre RNCP officiel",
+  pointCle2Icone: "🏆",
+  pointCle3Titre: "Flexible",
+  pointCle3Description: "À votre rythme",
+  pointCle3Icone: "⚡",
+  
+  // Section Avantages
+  avantagesTitre: "Avantages de la VAE BTP",
+  
+  // Section Certifications
+  certificationsTitre: "Certifications VAE BTP accessibles à la CMA",
+  certificationsSousTitre: "Nos certifications",
+  certificationsDescription: "Toutes nos certifications RNCP sont accessibles via la VAE. Validez un titre complet ou un ou plusieurs CCP (Certificats de Compétences Professionnelles).",
+  validationPartielleTexte: "En cas de validation partielle, vous disposez de 1 an pour compléter les blocs de compétences manquants.",
+  
+  // Section Formules
+  formulesTitre: "Choisissez votre formule d'accompagnement",
+  formulesSousTitre: "Nos offres",
+  formulesDescription: "Deux formules adaptées à vos besoins et votre niveau d'autonomie",
+  financementTexte: "Financements possibles : CPF, employeurs, OPCO, autofinancement",
+  financementSousTexte: "Nous vous aidons à constituer votre dossier de financement",
+  
+  // Section FAQ
+  faqTitre: "Questions fréquentes sur la VAE BTP",
+  faqSousTitre: "FAQ",
+  
+  // CTA Final
+  ctaTitre: "Prêt à valoriser votre expérience BTP ?",
+  ctaDescription: "Transformez votre expérience terrain en diplôme reconnu. Contactez-nous pour étudier votre éligibilité à la VAE BTP et démarrer votre parcours de certification.",
+  ctaBoutonPrincipal: "Démarrer ma VAE maintenant",
+  ctaBoutonSecondaire: "Nous appeler",
+  ctaTelephone: "+33123456789"
+};
+
+// Certifications VAE
+const vaeCertifications = [
+  {
+    titre: "Conducteur de Travaux Bâtiment et Génie Civil",
+    rncp: "RNCP n°40217",
+    niveau: "niveau5",
+    description: "Titre professionnel niveau 5 (BAC+2) - Pilotez vos chantiers de construction avec une certification reconnue.",
+    ordre: 1
+  },
+  {
+    titre: "Chef de Chantier en Voirie et Réseaux Divers",
+    rncp: "RNCP n°41368",
+    niveau: "niveau5",
+    description: "Titre professionnel niveau 5 (BAC+2) - Gérez les travaux VRD avec expertise et certification officielle.",
+    ordre: 2
+  },
+  {
+    titre: "Chargé d'Affaires du Bâtiment",
+    rncp: "RNCP n°35503",
+    niveau: "niveau5",
+    description: "Titre professionnel niveau 5 (BAC+2) - Développez votre activité commerciale dans le BTP.",
+    ordre: 3
+  },
+  {
+    titre: "Coordinateur BIM du Bâtiment",
+    rncp: "RNCP n°39408",
+    niveau: "niveau6",
+    description: "Titre professionnel niveau 6 (BAC+3) - Maîtrisez la maquette numérique et la coordination BIM.",
+    ordre: 4
+  },
+  {
+    titre: "Conducteur de Travaux Voirie et Réseaux Divers",
+    rncp: "RNCP n°39469",
+    niveau: "niveau6",
+    description: "Titre professionnel niveau 6 (BAC+3) - Dirigez les projets VRD avec une expertise certifiée.",
+    ordre: 5
+  }
+];
+
+// Avantages VAE
+const vaeAvantages = [
+  { texte: "Accessible à tous, sans condition de diplôme initial, dès lors que l'expérience est en lien direct avec la certification visée", icone: "check", ordre: 1 },
+  { texte: "Reconnaissance officielle par un titre RNCP inscrit au Répertoire National des Certifications Professionnelles", icone: "award", ordre: 2 },
+  { texte: "Accompagnement personnalisé et flexible adapté à votre rythme et vos contraintes professionnelles", icone: "users", ordre: 3 },
+  { texte: "Financement possible via CPF, OPCO, employeur ou autofinancement - nous vous aidons à constituer votre dossier", icone: "euro", ordre: 4 },
+  { texte: "Valorisation de votre expérience terrain acquise au fil des années dans le secteur BTP", icone: "briefcase", ordre: 5 },
+  { texte: "Validation partielle possible : obtenez un ou plusieurs CCP et complétez dans l'année suivante", icone: "clock", ordre: 6 }
+];
+
+// Formules VAE
+const vaeFormules = [
+  {
+    titre: "VAE avec Accompagnement (Formule Complète)",
+    description: "Un accompagnement individualisé tout au long de votre démarche VAE pour maximiser vos chances de réussite.",
+    modalites: "Présentiel, visio, téléphone et mail",
+    services: [
+      "Analyse approfondie de votre parcours professionnel",
+      "Identification des activités pertinentes pour la certification",
+      "Aide à la rédaction du dossier de validation",
+      "Préparation intensive à l'entretien devant le jury",
+      "Suivi personnalisé jusqu'à l'obtention du titre"
+    ],
+    prix: "4 500 € TTC (3 750 € HT)",
+    heures: "Jusqu'à 20 heures d'accompagnement",
+    ordre: 1
+  },
+  {
+    titre: "VAE sans Accompagnement (Formule Libre)",
+    description: "Vous gérez votre démarche en autonomie, mais bénéficiez de notre expertise pour organiser votre passage devant le jury.",
+    modalites: "Démarche en autonomie",
+    services: [
+      "Vérification de votre éligibilité à la VAE",
+      "Inscription et convocation au jury",
+      "Informations administratives et techniques",
+      "Support pour les démarches de financement"
+    ],
+    prix: "2 760 € TTC (2 300 € HT)",
+    heures: "Suivi administratif uniquement",
+    ordre: 2
+  }
+];
+
+// FAQ VAE
+const vaeFaqs = [
+  {
+    question: "Quelle expérience est requise pour accéder à la VAE BTP ?",
+    reponse: "Vous devez justifier d'au moins 1 an d'expérience (continue ou non, à temps plein ou partiel) en lien direct avec la certification visée. Cette expérience peut être acquise en tant que salarié, indépendant, bénévole ou demandeur d'emploi.",
+    ordre: 1
+  },
+  {
+    question: "Puis-je valider partiellement un titre professionnel ?",
+    reponse: "Oui, vous pouvez valider un titre complet ou un ou plusieurs CCP (Certificats de Compétences Professionnelles). En cas de validation partielle, vous disposez d'1 an pour compléter les blocs de compétences manquants.",
+    ordre: 2
+  },
+  {
+    question: "Comment financer ma VAE BTP ?",
+    reponse: "Plusieurs options de financement sont possibles : CPF (Compte Personnel de Formation), financement employeur, OPCO (Opérateur de Compétences) ou autofinancement. Notre équipe vous accompagne dans la constitution de votre dossier de financement.",
+    ordre: 3
+  },
+  {
+    question: "Quelle est la différence entre les deux formules VAE ?",
+    reponse: "La formule avec accompagnement (4 500 € TTC) inclut jusqu'à 20h d'accompagnement personnalisé : analyse de parcours, aide à la rédaction, préparation au jury. La formule libre (2 760 € TTC) vous laisse autonome sur la préparation, avec un suivi administratif pour l'inscription et la convocation.",
+    ordre: 4
+  },
+  {
+    question: "Combien de temps dure une démarche VAE ?",
+    reponse: "La durée varie selon votre disponibilité et la complexité de votre dossier. En moyenne, comptez 6 à 12 mois entre le début de la démarche et le passage devant le jury. L'accompagnement personnalisé peut accélérer ce processus.",
+    ordre: 5
+  },
+  {
+    question: "Quelles certifications sont accessibles via la VAE à la CMA ?",
+    reponse: "Nous proposons 5 certifications RNCP : Conducteur de Travaux Bâtiment (niveau 5), Chef de Chantier VRD (niveau 5), Chargé d'Affaires Bâtiment (niveau 5), Coordinateur BIM (niveau 6) et Conducteur de Travaux VRD (niveau 6).",
+    ordre: 6
+  }
+];
+
+// ============================================
+// FONCTIONS D'IMPORT
+// ============================================
+
+async function importPageVAE() {
+  console.log('\n📄 Import Page VAE (Single Type)...');
+  
+  try {
+    const response = await fetch(`${STRAPI_URL}/api/page-vae`, {
+      method: 'PUT',
+      headers,
+      body: JSON.stringify({ data: { ...pageVAEContent, publishedAt: new Date().toISOString() } })
+    });
+    
+    if (response.ok) {
+      console.log('✅ Page VAE importée avec succès');
+    } else {
+      const error = await response.text();
+      console.log('❌ Erreur Page VAE:', error.substring(0, 200));
+    }
+  } catch (error) {
+    console.log('❌ Erreur:', error.message);
+  }
+}
+
+async function clearAndImportCollection(endpoint, items, name) {
+  console.log(`\n📦 Import ${name}...`);
+  
+  // Supprimer les anciens
+  try {
+    const existing = await fetch(`${STRAPI_URL}/api/${endpoint}`, { headers });
+    if (existing.ok) {
+      const data = await existing.json();
+      for (const item of (data.data || [])) {
+        await fetch(`${STRAPI_URL}/api/${endpoint}/${item.id}`, { method: 'DELETE', headers });
+      }
+    }
+  } catch (e) {}
+  
+  // Importer les nouveaux
+  let success = 0;
+  for (const item of items) {
+    try {
+      const response = await fetch(`${STRAPI_URL}/api/${endpoint}`, {
+        method: 'POST',
+        headers,
+        body: JSON.stringify({ data: { ...item, publishedAt: new Date().toISOString() } })
+      });
+      if (response.ok) success++;
+    } catch (e) {}
+  }
+  
+  console.log(`✅ ${name}: ${success}/${items.length} importés`);
+}
+
+async function main() {
+  console.log('🚀 Import COMPLET du contenu VAE BTP dans Strapi');
+  console.log('================================================');
+  console.log('📡 URL:', STRAPI_URL);
+  
+  if (!STRAPI_TOKEN) {
+    console.log('\n❌ STRAPI_API_TOKEN non défini');
+    console.log('   Définissez: $env:STRAPI_API_TOKEN="votre_token"');
+    return;
+  }
+  
+  await importPageVAE();
+  await clearAndImportCollection('vae-certifications', vaeCertifications, 'Certifications VAE');
+  await clearAndImportCollection('vae-avantages', vaeAvantages, 'Avantages VAE');
+  await clearAndImportCollection('vae-formules', vaeFormules, 'Formules VAE');
+  await clearAndImportCollection('vae-faqs', vaeFaqs, 'FAQ VAE');
+  
+  console.log('\n================================================');
+  console.log('✅ Import terminé !');
+  console.log('\n📋 Contenu 100% modifiable via Strapi Admin:');
+  console.log('   • Page VAE: tous les textes, titres, boutons');
+  console.log('   • 5 certifications RNCP');
+  console.log('   • 6 avantages');
+  console.log('   • 2 formules avec prix et services');
+  console.log('   • 6 questions FAQ');
+  console.log('\n🔗 Admin: http://localhost:1337/admin');
+  console.log('🌐 Page: http://localhost:3000/formations/vae-btp');
+}
+
+main().catch(console.error);

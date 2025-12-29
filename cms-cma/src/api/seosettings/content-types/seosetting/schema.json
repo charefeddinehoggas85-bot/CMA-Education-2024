@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "seo_settings",
+  "info": {
+    "singularName": "seosetting",
+    "pluralName": "seosettings",
+    "displayName": "SEO Setting",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

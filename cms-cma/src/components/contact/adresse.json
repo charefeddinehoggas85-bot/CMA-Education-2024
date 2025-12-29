@@ -1,0 +1,33 @@
+{
+  "collectionName": "components_contact_adresses",
+  "info": {
+    "displayName": "Adresse",
+    "description": "Adresse complète"
+  },
+  "options": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "rue": {
+      "type": "string",
+      "required": true
+    },
+    "ville": {
+      "type": "string",
+      "required": true
+    },
+    "codePostal": {
+      "type": "string",
+      "required": true
+    },
+    "pays": {
+      "type": "string",
+      "default": "France"
+    },
+    "complement": {
+      "type": "string"
+    }
+  }
+}

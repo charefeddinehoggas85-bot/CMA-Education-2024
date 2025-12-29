@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "entreprise_modalites",
+  "info": {
+    "singularName": "entreprise-modalite",
+    "pluralName": "entreprise-modalites",
+    "displayName": "Entreprise Modalité",
+    "description": "Modalités de formation pour entreprises"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "type": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}

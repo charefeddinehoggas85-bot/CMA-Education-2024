@@ -1,0 +1,35 @@
+{
+  "kind": "collectionType",
+  "collectionName": "chiffres_cles",
+  "info": {
+    "singularName": "chiffre-cle",
+    "pluralName": "chiffres-cles",
+    "displayName": "Chiffre Clé",
+    "description": "Chiffres clés de l'école (statistiques)"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "valeur": {
+      "type": "string",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 0
+    },
+    "page": {
+      "type": "string",
+      "default": "pedagogie"
+    }
+  }
+}

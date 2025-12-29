@@ -1,0 +1,63 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_partenaires",
+  "info": {
+    "singularName": "page-partenaires",
+    "pluralName": "pages-partenaires",
+    "displayName": "Page Partenaires",
+    "description": "Configuration de la page partenaires"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitle": {
+      "type": "string",
+      "required": true,
+      "default": "Nos Partenaires"
+    },
+    "heroSubtitle": {
+      "type": "text",
+      "default": "Des entreprises leaders du BTP qui nous font confiance pour former les professionnels de demain"
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "sectionTitle": {
+      "type": "string",
+      "default": "Ils nous font confiance"
+    },
+    "sectionSubtitle": {
+      "type": "text",
+      "default": "Nos partenaires accueillent nos alternants et participent activement à leur formation"
+    },
+    "ctaTitle": {
+      "type": "string",
+      "default": "Devenez partenaire"
+    },
+    "ctaDescription": {
+      "type": "text",
+      "default": "Rejoignez notre réseau d'entreprises partenaires et accueillez nos alternants formés aux métiers du BTP"
+    },
+    "statEntreprises": {
+      "type": "string",
+      "default": "12"
+    },
+    "statAlternants": {
+      "type": "string",
+      "default": "150+"
+    },
+    "statInsertion": {
+      "type": "string",
+      "default": "98%"
+    },
+    "statSatisfaction": {
+      "type": "string",
+      "default": "95%"
+    }
+  }
+}

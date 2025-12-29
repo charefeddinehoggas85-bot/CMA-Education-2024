@@ -1,0 +1,26 @@
+{
+  "collectionName": "components_ui_contact_infos",
+  "info": {
+    "displayName": "Contact Info",
+    "description": "Information de contact (téléphone, email, adresse)"
+  },
+  "options": {},
+  "attributes": {
+    "type": {
+      "type": "enumeration",
+      "enum": ["phone", "email", "address", "hours"],
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "value": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "collectionName": "components_contact_reseaux_sociaux",
+  "info": {
+    "displayName": "Réseau Social",
+    "description": "Réseau social"
+  },
+  "options": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "url": {
+      "type": "string",
+      "required": true
+    },
+    "icon": {
+      "type": "string"
+    },
+    "actif": {
+      "type": "boolean",
+      "default": true
+    }
+  }
+}

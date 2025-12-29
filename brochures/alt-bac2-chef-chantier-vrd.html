@@ -1,0 +1,416 @@
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Brochure - Chef de Chantier Voirie et Réseaux Divers</title>
+  <style>
+    
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    @page {
+      size: A4;
+      margin: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      color: #333;
+      line-height: 1.6;
+    }
+
+    .page {
+      width: 210mm;
+      height: 297mm;
+      padding: 20mm;
+      background: #FFFFFF;
+      page-break-after: always;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .page:last-child {
+      page-break-after: auto;
+    }
+
+    /* Header avec logo et bandes colorées */
+    .header {
+      position: relative;
+      margin-bottom: 30px;
+      padding-bottom: 20px;
+      border-bottom: 4px solid #0000FF;
+    }
+
+    .logo {
+      width: 180px;
+      height: auto;
+      margin-bottom: 15px;
+    }
+
+    .header-band {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 100px;
+      height: 100%;
+      background: linear-gradient(135deg, #0000FF 0%, #0000CC 100%);
+      opacity: 0.1;
+      z-index: 0;
+    }
+
+    .header-band-yellow {
+      position: absolute;
+      top: 0;
+      right: 100px;
+      width: 50px;
+      height: 100%;
+      background: #FFFF00;
+      opacity: 0.2;
+      z-index: 0;
+    }
+
+    /* Titres */
+    .title {
+      font-size: 28px;
+      font-weight: bold;
+      color: #0000FF;
+      margin-bottom: 10px;
+      line-height: 1.3;
+      position: relative;
+      z-index: 1;
+    }
+
+    .subtitle {
+      font-size: 16px;
+      color: #666;
+      margin-bottom: 5px;
+      font-weight: 600;
+    }
+
+    .rncp {
+      display: inline-block;
+      background: #FFFF00;
+      color: #000;
+      padding: 5px 15px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      margin-top: 10px;
+    }
+
+    /* Sections */
+    .section {
+      margin-bottom: 25px;
+    }
+
+    .section-title {
+      font-size: 18px;
+      font-weight: bold;
+      color: #0000FF;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 2px solid #FFFF00;
+      display: flex;
+      align-items: center;
+    }
+
+    .section-title::before {
+      content: '';
+      width: 8px;
+      height: 8px;
+      background: #FFFF00;
+      border-radius: 50%;
+      margin-right: 10px;
+    }
+
+    .section-content {
+      font-size: 13px;
+      color: #444;
+      line-height: 1.8;
+    }
+
+    /* Listes */
+    .list-item {
+      padding: 8px 0;
+      padding-left: 25px;
+      position: relative;
+      border-left: 3px solid #0000FF;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, rgba(0,0,255,0.03) 0%, rgba(255,255,255,1) 100%);
+    }
+
+    .list-item::before {
+      content: '▸';
+      position: absolute;
+      left: 8px;
+      color: #FFFF00;
+      font-weight: bold;
+    }
+
+    /* Encadrés */
+    .info-box {
+      background: linear-gradient(135deg, rgba(0,0,255,0.05) 0%, rgba(255,255,0,0.05) 100%);
+      border: 2px solid #0000FF;
+      border-left: 6px solid #FFFF00;
+      padding: 15px;
+      margin: 15px 0;
+      border-radius: 8px;
+    }
+
+    .info-box-title {
+      font-weight: bold;
+      color: #0000FF;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .info-box-content {
+      font-size: 13px;
+      color: #555;
+    }
+
+    /* Grid pour informations pratiques */
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      margin-top: 15px;
+    }
+
+    .info-item {
+      background: #FFFFFF;
+      padding: 12px;
+      border-radius: 6px;
+      border: 1px solid #e0e0e0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    .info-item-label {
+      font-weight: bold;
+      color: #0000FF;
+      font-size: 12px;
+      margin-bottom: 5px;
+    }
+
+    .info-item-value {
+      font-size: 13px;
+      color: #333;
+    }
+
+    /* Footer */
+    .footer {
+      position: absolute;
+      bottom: 15mm;
+      left: 20mm;
+      right: 20mm;
+      padding-top: 15px;
+      border-top: 3px solid #0000FF;
+      font-size: 11px;
+      color: #666;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer-contact {
+      font-size: 11px;
+    }
+
+    .footer-contact strong {
+      color: #0000FF;
+    }
+
+    .page-number {
+      background: #FFFF00;
+      color: #000;
+      padding: 5px 12px;
+      border-radius: 15px;
+      font-weight: bold;
+    }
+
+    /* Débouchés avec salaires */
+    .debouche-item {
+      padding: 10px;
+      margin-bottom: 8px;
+      background: linear-gradient(90deg, rgba(255,255,0,0.1) 0%, rgba(255,255,255,1) 100%);
+      border-left: 4px solid #FFFF00;
+      border-radius: 4px;
+      font-size: 13px;
+    }
+
+    .debouche-title {
+      font-weight: 600;
+      color: #333;
+    }
+
+    .debouche-salary {
+      color: #0000FF;
+      font-weight: bold;
+      font-size: 12px;
+      margin-top: 3px;
+    }
+
+    /* Bande décorative */
+    .decorative-band {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 150px;
+      height: 150px;
+      background: linear-gradient(135deg, #0000FF 0%, #FFFF00 100%);
+      opacity: 0.1;
+      border-radius: 0 0 0 100%;
+      z-index: 0;
+    }
+
+    @media print {
+      .page {
+        margin: 0;
+        border: none;
+        box-shadow: none;
+      }
+    }
+  
+  </style>
+</head>
+<body>
+  
+    <div class="page">
+      <div class="decorative-band"></div>
+      <div class="header-band"></div>
+      <div class="header-band-yellow"></div>
+      
+      <div class="header">
+        <img src="/logoo.svg" alt="CMA Logo" class="logo" />
+        <div class="subtitle">Niveau 5 (équivalent BAC+2)</div>
+        <h1 class="title">Chef de Chantier Voirie et Réseaux Divers</h1>
+        <span class="rncp">Code RNCP : RNCP41368</span>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Présentation de la Formation</h2>
+        <div class="section-content">
+          <p><strong>Formation professionnalisante pour devenir chef de chantier VRD capable de préparer, diriger et clôturer l'exécution de chantiers de voirie et réseaux divers.</strong></p>
+          <p style="margin-top: 10px;">Cette formation professionnalisante, directement ancrée dans les réalités du terrain, vous forme en tant que chef de chantier en voirie et réseaux divers capables de préparer l'exécution d'un chantier, diriger l'exécution, et clôturer l'exécution (voirie, réseaux, assainissement, ouvrages d'art, etc.). Elle permet d'acquérir des compétences techniques, organisationnelles et réglementaires immédiatement applicables en entreprise. Grâce à l'alternance, les apprenants deviennent rapidement opérationnels, répondant aux besoins concrets du secteur des travaux publics.</p>
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Objectifs Pédagogiques</h2>
+        <div class="section-content">
+          
+            <div class="list-item">Maîtriser les fondamentaux techniques VRD pour exécuter un chantier</div>
+          
+            <div class="list-item">Appliquer les techniques topographiques pour implantations et contrôles</div>
+          
+            <div class="list-item">Réaliser des métrés quantitatifs précis et analyser les études de prix</div>
+          
+            <div class="list-item">Organiser et piloter un chantier VRD/TP</div>
+          
+          <p style="margin-top: 10px; font-style: italic; color: #666;">Suite page suivante...</p>
+        </div>
+      </div>
+
+      <div class="info-box">
+        <div class="info-box-title">📅 Informations Clés</div>
+        <div class="info-box-content">
+          <strong>Durée :</strong> 1 an<br>
+          <strong>Volume horaire :</strong> 560 heures<br>
+          <strong>Rythme :</strong> 16 semaines à l'école - 36 semaines en entreprise
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-contact">
+          <strong>CMA - Construction Management Academy</strong><br>
+          67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne<br>
+          📞 01 89 70 60 52 | ✉️ contact.academy@cma-education.com
+        </div>
+        <div class="page-number">Page 1</div>
+      </div>
+    </div>
+  
+  
+    <div class="page">
+      <div class="decorative-band"></div>
+      
+      <div class="header">
+        <img src="/logoo.svg" alt="CMA Logo" class="logo" />
+        <h2 class="title" style="font-size: 22px;">Chef de Chantier Voirie et Réseaux Divers</h2>
+      </div>
+
+      
+        <div class="section">
+          <h2 class="section-title">Objectifs Pédagogiques (suite)</h2>
+          <div class="section-content">
+            
+              <div class="list-item">Mobiliser/coordonner ressources humaines et matérielles</div>
+            
+              <div class="list-item">Encadrer et motiver des équipes pluridisciplinaires</div>
+            
+          </div>
+        </div>
+      
+
+      <div class="section">
+        <h2 class="section-title">Programme Détaillé</h2>
+        <div class="section-content">
+          
+            <div class="list-item">Méthodologie & techniques VRD : Bases du métier, méthodes de travail, techniques VRD, topographie, métrés et études de prix</div>
+          
+            <div class="list-item">Préparation et coordination de chantier : Planification, organisation, coordination des acteurs et gestion administrative et juridique</div>
+          
+            <div class="list-item">Sécurité, qualité et conformité réglementaire : Prévention des risques, AIPR, contrôle qualité, réception et clôture des travaux</div>
+          
+            <div class="list-item">Management et outils numériques : Management d'équipe, DAO/CAO, informatique et apports de l'IA pour le chantier</div>
+          
+            <div class="list-item">Mise en situation professionnelle & certification : Projets tutorés couvrant tout le cycle du chantier et préparation aux certifications</div>
+          
+        </div>
+      </div>
+
+      <div class="section">
+        <h2 class="section-title">Débouchés Professionnels</h2>
+        <div class="section-content">
+          
+              <div class="debouche-item">
+                <div class="debouche-title">Chef(fe) de chantier VRD</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Chef de chantier TP</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Chef de chantier voirie et réseaux divers</div>
+                
+              </div>
+            
+              <div class="debouche-item">
+                <div class="debouche-title">Chef de chantier terrassement et canalisation</div>
+                
+              </div>
+            
+        </div>
+      </div>
+
+      <div class="footer">
+        <div class="footer-contact">
+          <strong>CMA - Construction Management Academy</strong><br>
+          📞 01 89 70 60 52 | ✉️ contact.academy@cma-education.com
+        </div>
+        <div class="page-number">Page 2</div>
+      </div>
+    </div>
+  
+  
+</body>
+</html>
+  

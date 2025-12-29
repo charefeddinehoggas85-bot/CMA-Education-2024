@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "entreprise_services",
+  "info": {
+    "singularName": "entreprise-service",
+    "pluralName": "entreprise-services",
+    "displayName": "Entreprise Service",
+    "description": "Services proposés aux entreprises"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titre": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text",
+      "required": true
+    },
+    "icone": {
+      "type": "string"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}
