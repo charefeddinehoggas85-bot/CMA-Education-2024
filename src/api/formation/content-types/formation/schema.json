@@ -1,0 +1,174 @@
+{
+  "kind": "collectionType",
+  "collectionName": "formations",
+  "info": {
+    "singularName": "formation",
+    "pluralName": "formations",
+    "displayName": "Formation",
+    "description": "Formations proposées par l'école"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "title"
+    },
+    "level": {
+      "type": "string",
+      "required": true
+    },
+    "rncp": {
+      "type": "string"
+    },
+    "rncpUrl": {
+      "type": "string",
+      "regex": "^https?://.*$"
+    },
+    "shortDesc": {
+      "type": "text",
+      "required": true
+    },
+    "fullDesc": {
+      "type": "richtext"
+    },
+    "metierDesc": {
+      "type": "richtext"
+    },
+    "objectifs": {
+      "type": "json"
+    },
+    "programme": {
+      "type": "json"
+    },
+    "competences2eAnnee": {
+      "type": "json"
+    },
+    "debouches": {
+      "type": "json"
+    },
+    "duree": {
+      "type": "string"
+    },
+    "volumeHoraire": {
+      "type": "string"
+    },
+    "repartition": {
+      "type": "string"
+    },
+    "rythme": {
+      "type": "string"
+    },
+    "modalite": {
+      "type": "string"
+    },
+    "typeContrat": {
+      "type": "string"
+    },
+    "effectif": {
+      "type": "string"
+    },
+    "prerequis": {
+      "type": "json"
+    },
+    "cout": {
+      "type": "string"
+    },
+    "financement": {
+      "type": "string"
+    },
+    "certificateur": {
+      "type": "string"
+    },
+    "dateEnregistrement": {
+      "type": "string"
+    },
+    "entreprisesPartenaires": {
+      "type": "json"
+    },
+    "tauxReussite": {
+      "type": "string"
+    },
+    "tauxInsertion": {
+      "type": "string"
+    },
+    "conception": {
+      "type": "string"
+    },
+    "evaluation": {
+      "type": "json"
+    },
+    "modalitesEvaluation": {
+      "type": "json"
+    },
+    "poursuites": {
+      "type": "json"
+    },
+    "poursuiteEtudes": {
+      "type": "json"
+    },
+    "publicCible": {
+      "type": "string"
+    },
+    "contact": {
+      "type": "json"
+    },
+    "category": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::formation-category.formation-category",
+      "inversedBy": "formations"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "gallery": {
+      "type": "media",
+      "multiple": true,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "brochure": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "files"
+      ]
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    },
+    "isActive": {
+      "type": "boolean",
+      "default": true
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "json"
+    },
+    "pageUrl": {
+      "type": "string",
+      "default": ""
+    }
+  }
+}

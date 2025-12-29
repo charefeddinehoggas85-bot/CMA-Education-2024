@@ -1,0 +1,31 @@
+{
+  "kind": "collectionType",
+  "collectionName": "outils_pedagogiques",
+  "info": {
+    "singularName": "outil-pedagogique",
+    "pluralName": "outils-pedagogiques",
+    "displayName": "Outil Pédagogique",
+    "description": "Outils et technologies pédagogiques"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "nom": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 0
+    },
+    "categorie": {
+      "type": "string",
+      "default": "outil"
+    }
+  }
+}

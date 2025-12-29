@@ -1,0 +1,72 @@
+{
+  "kind": "singleType",
+  "collectionName": "site_settings",
+  "info": {
+    "singularName": "site-setting",
+    "pluralName": "site-settings",
+    "displayName": "Paramètres du Site",
+    "description": "Configuration générale du site (logo, nom, contact, etc.)"
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "siteName": {
+      "type": "string",
+      "required": true,
+      "default": "CMA Education"
+    },
+    "siteDescription": {
+      "type": "text"
+    },
+    "logo": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "favicon": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "contactPhone": {
+      "type": "string",
+      "default": "01 89 70 60 52"
+    },
+    "contactEmail": {
+      "type": "email",
+      "default": "contact.academy@cma-education.com"
+    },
+    "contactAddress": {
+      "type": "text"
+    },
+    "socialMedia": {
+      "type": "json"
+    },
+    "headerButtonText": {
+      "type": "string",
+      "default": "Candidater"
+    },
+    "headerButtonUrl": {
+      "type": "string",
+      "default": "/contact"
+    },
+    "headerButtonVariant": {
+      "type": "enumeration",
+      "enum": ["primary", "secondary", "neon", "outline"],
+      "default": "neon"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "string"
+    }
+  }
+}

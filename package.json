@@ -18,10 +18,21 @@
     "prepare:upload": "node scripts/prepare-for-upload.js",
     "postinstall": "echo '✅ Installation terminée'",
     "prebuild": "echo '🔧 Préparation du build...'",
-    "predev": "echo '🚀 Démarrage en mode développement...'"
+    "predev": "echo '🚀 Démarrage en mode développement...'",
+    "strapi": "strapi",
+    "strapi:build": "strapi build",
+    "strapi:develop": "strapi develop",
+    "strapi:start": "strapi start",
+    "cms:dev": "strapi develop",
+    "cms:build": "strapi build",
+    "cms:start": "strapi start"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
+    "@strapi/plugin-email": "^4.25.9",
+    "@strapi/plugin-upload": "^4.25.9",
+    "@strapi/plugin-users-permissions": "^4.25.9",
+    "@strapi/strapi": "^4.25.9",
     "@tailwindcss/line-clamp": "^0.4.4",
     "@types/nodemailer": "^7.0.4",
     "autoprefixer": "^10.4.23",
@@ -32,8 +43,12 @@
     "lucide-react": "^0.400.0",
     "next": "14.2.35",
     "nodemailer": "^7.0.12",
+    "pg": "^8.16.3",
     "react": "^18",
-    "react-dom": "^18"
+    "react-dom": "^18",
+    "sharp": "^0.34.5",
+    "sqlite3": "^5.1.6",
+    "styled-components": "^5.3.11"
   },
   "devDependencies": {
     "@types/node": "^20",
@@ -54,5 +69,8 @@
   },
   "homepage": "https://cma-education.vercel.app",
   "author": "CMA Education",
-  "description": "Site web moderne pour CMA Education - Formations BTP"
+  "description": "Site web moderne pour CMA Education - Formations BTP",
+  "strapi": {
+    "uuid": "cma-education-clone-cms"
+  }
 }

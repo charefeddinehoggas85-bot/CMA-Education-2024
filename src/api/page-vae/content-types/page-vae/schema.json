@@ -1,0 +1,186 @@
+{
+  "kind": "singleType",
+  "collectionName": "page_vaes",
+  "info": {
+    "singularName": "page-vae",
+    "pluralName": "page-vaes",
+    "displayName": "Page VAE",
+    "description": "Contenu complet de la page VAE BTP - 100% modifiable"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "heroTitre": {
+      "type": "string",
+      "required": true,
+      "default": "Transformez votre expérience BTP en diplôme"
+    },
+    "heroSousTitre": {
+      "type": "string",
+      "default": "Validation des Acquis de l'Expérience"
+    },
+    "heroDescription": {
+      "type": "text",
+      "required": true
+    },
+    "heroImage": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": ["images"]
+    },
+    "heroBoutonPrincipal": {
+      "type": "string",
+      "default": "Démarrer ma VAE"
+    },
+    "heroBoutonSecondaire": {
+      "type": "string",
+      "default": "Télécharger la brochure"
+    },
+    "statExperienceValeur": {
+      "type": "string",
+      "default": "1 an"
+    },
+    "statExperienceLabel": {
+      "type": "string",
+      "default": "minimum"
+    },
+    "statCertificationsValeur": {
+      "type": "string",
+      "default": "5 titres"
+    },
+    "statCertificationsLabel": {
+      "type": "string",
+      "default": "RNCP"
+    },
+    "statFinancementValeur": {
+      "type": "string",
+      "default": "CPF"
+    },
+    "statFinancementLabel": {
+      "type": "string",
+      "default": "éligible"
+    },
+    "badgeTexte": {
+      "type": "string",
+      "default": "✓ 0 diplôme requis"
+    },
+    "sectionTitre": {
+      "type": "string",
+      "default": "Qu'est-ce que la VAE et à qui s'adresse-t-elle ?"
+    },
+    "sectionSousTitre": {
+      "type": "string",
+      "default": "Comprendre la VAE"
+    },
+    "sectionDescription": {
+      "type": "richtext"
+    },
+    "pointCle1Titre": {
+      "type": "string",
+      "default": "Accès élargi"
+    },
+    "pointCle1Description": {
+      "type": "string",
+      "default": "Sans diplôme initial requis"
+    },
+    "pointCle1Icone": {
+      "type": "string",
+      "default": "🎯"
+    },
+    "pointCle2Titre": {
+      "type": "string",
+      "default": "Reconnaissance"
+    },
+    "pointCle2Description": {
+      "type": "string",
+      "default": "Titre RNCP officiel"
+    },
+    "pointCle2Icone": {
+      "type": "string",
+      "default": "🏆"
+    },
+    "pointCle3Titre": {
+      "type": "string",
+      "default": "Flexible"
+    },
+    "pointCle3Description": {
+      "type": "string",
+      "default": "À votre rythme"
+    },
+    "pointCle3Icone": {
+      "type": "string",
+      "default": "⚡"
+    },
+    "avantagesTitre": {
+      "type": "string",
+      "default": "Avantages de la VAE BTP"
+    },
+    "certificationsTitre": {
+      "type": "string",
+      "default": "Certifications VAE BTP accessibles à la CMA"
+    },
+    "certificationsSousTitre": {
+      "type": "string",
+      "default": "Nos certifications"
+    },
+    "certificationsDescription": {
+      "type": "text",
+      "default": "Toutes nos certifications RNCP sont accessibles via la VAE. Validez un titre complet ou un ou plusieurs CCP."
+    },
+    "validationPartielleTexte": {
+      "type": "text",
+      "default": "En cas de validation partielle, vous disposez de 1 an pour compléter les blocs de compétences manquants."
+    },
+    "formulesTitre": {
+      "type": "string",
+      "default": "Choisissez votre formule d'accompagnement"
+    },
+    "formulesSousTitre": {
+      "type": "string",
+      "default": "Nos offres"
+    },
+    "formulesDescription": {
+      "type": "text",
+      "default": "Deux formules adaptées à vos besoins et votre niveau d'autonomie"
+    },
+    "financementTexte": {
+      "type": "string",
+      "default": "Financements possibles : CPF, employeurs, OPCO, autofinancement"
+    },
+    "financementSousTexte": {
+      "type": "string",
+      "default": "Nous vous aidons à constituer votre dossier de financement"
+    },
+    "faqTitre": {
+      "type": "string",
+      "default": "Questions fréquentes sur la VAE BTP"
+    },
+    "faqSousTitre": {
+      "type": "string",
+      "default": "FAQ"
+    },
+    "ctaTitre": {
+      "type": "string",
+      "default": "Prêt à valoriser votre expérience BTP ?"
+    },
+    "ctaDescription": {
+      "type": "text",
+      "default": "Transformez votre expérience terrain en diplôme reconnu. Contactez-nous pour étudier votre éligibilité à la VAE BTP."
+    },
+    "ctaBoutonPrincipal": {
+      "type": "string",
+      "default": "Démarrer ma VAE maintenant"
+    },
+    "ctaBoutonSecondaire": {
+      "type": "string",
+      "default": "Nous appeler"
+    },
+    "ctaTelephone": {
+      "type": "string",
+      "default": "+33123456789"
+    }
+  }
+}

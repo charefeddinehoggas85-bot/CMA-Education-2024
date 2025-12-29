@@ -1,0 +1,23 @@
+{
+  "kind": "collectionType",
+  "collectionName": "navigation_menus",
+  "info": {
+    "singularName": "navigationmenu",
+    "pluralName": "navigationmenus",
+    "displayName": "Navigation Menu",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": false
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "title": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    }
+  }
+}

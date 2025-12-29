@@ -1,0 +1,78 @@
+{
+  "kind": "collectionType",
+  "collectionName": "articles_blog",
+  "info": {
+    "singularName": "article-blog",
+    "pluralName": "articles-blog",
+    "displayName": "Article Blog",
+    "description": "Articles de blog du site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "titre": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "titre"
+    },
+    "extrait": {
+      "type": "text",
+      "required": true
+    },
+    "contenu": {
+      "type": "richtext"
+    },
+    "auteur": {
+      "type": "string",
+      "required": true
+    },
+    "datePublication": {
+      "type": "date",
+      "required": true
+    },
+    "tempsLecture": {
+      "type": "string",
+      "default": "5 min"
+    },
+    "image": {
+      "type": "media",
+      "multiple": false,
+      "required": false,
+      "allowedTypes": [
+        "images"
+      ]
+    },
+    "featured": {
+      "type": "boolean",
+      "default": false
+    },
+    "tags": {
+      "type": "json"
+    },
+    "categorie": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::categorie-blog.categorie-blog",
+      "inversedBy": "articles"
+    },
+    "formationsLiees": {
+      "type": "relation",
+      "relation": "manyToMany",
+      "target": "api::formation.formation"
+    },
+    "seoTitle": {
+      "type": "string"
+    },
+    "seoDescription": {
+      "type": "text"
+    },
+    "seoKeywords": {
+      "type": "json"
+    }
+  }
+}

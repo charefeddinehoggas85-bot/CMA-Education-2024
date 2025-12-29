@@ -1,0 +1,36 @@
+{
+  "kind": "collectionType",
+  "collectionName": "statistiques_site",
+  "info": {
+    "singularName": "statistique-site",
+    "pluralName": "statistiques-site",
+    "displayName": "Statistique Site",
+    "description": "Statistiques et chiffres clés du site"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "cle": {
+      "type": "string",
+      "required": true,
+      "unique": true
+    },
+    "nombre": {
+      "type": "integer",
+      "required": true
+    },
+    "label": {
+      "type": "string",
+      "required": true
+    },
+    "suffixe": {
+      "type": "string"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}

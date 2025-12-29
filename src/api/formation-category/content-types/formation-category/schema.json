@@ -1,0 +1,44 @@
+{
+  "kind": "collectionType",
+  "collectionName": "formation_categories",
+  "info": {
+    "singularName": "formation-category",
+    "pluralName": "formation-categories",
+    "displayName": "Formation Category",
+    "description": "Catégories de formations (Alternance, Reconversion, VAE, etc.)"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "name": {
+      "type": "string",
+      "required": true
+    },
+    "slug": {
+      "type": "uid",
+      "targetField": "name"
+    },
+    "description": {
+      "type": "text"
+    },
+    "color": {
+      "type": "string",
+      "default": "#3B82F6"
+    },
+    "icon": {
+      "type": "string"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    },
+    "formations": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::formation.formation",
+      "mappedBy": "category"
+    }
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vae_faqs",
+  "info": {
+    "singularName": "vae-faq",
+    "pluralName": "vae-faqs",
+    "displayName": "VAE FAQ",
+    "description": "Questions fréquentes sur la VAE BTP"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "question": {
+      "type": "string",
+      "required": true
+    },
+    "reponse": {
+      "type": "text",
+      "required": true
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}

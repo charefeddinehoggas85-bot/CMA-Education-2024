@@ -1,0 +1,37 @@
+{
+  "kind": "collectionType",
+  "collectionName": "etape_admissions",
+  "info": {
+    "singularName": "etape-admission",
+    "pluralName": "etape-admissions",
+    "displayName": "Étape Admission",
+    "description": "Étapes du processus d'admission CMA"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "numero": {
+      "type": "integer",
+      "required": true
+    },
+    "titre": {
+      "type": "string",
+      "required": true
+    },
+    "description": {
+      "type": "text"
+    },
+    "details": {
+      "type": "json"
+    },
+    "icone": {
+      "type": "string"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 0
+    }
+  }
+}

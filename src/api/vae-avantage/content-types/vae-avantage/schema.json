@@ -1,0 +1,28 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vae_avantages",
+  "info": {
+    "singularName": "vae-avantage",
+    "pluralName": "vae-avantages",
+    "displayName": "VAE Avantage",
+    "description": "Avantages de la VAE BTP"
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "texte": {
+      "type": "string",
+      "required": true
+    },
+    "icone": {
+      "type": "string",
+      "default": "check"
+    },
+    "ordre": {
+      "type": "integer",
+      "default": 1
+    }
+  }
+}
