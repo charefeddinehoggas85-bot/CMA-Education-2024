@@ -251,24 +251,86 @@ export async function getFormations() {
 }
 
 export async function getFormation(slug: string): Promise<Record<string, any> | null> {
-  // Utiliser populate=* pour récupérer TOUS les champs (programme, objectifs, debouches, etc.)
-  const data = await fetchAPI(`/api/formations?filters[slug][$eq]=${slug}&populate=*`)
-  const transformed = transformStrapiData<Record<string, any>>(data.data?.[0])
-  
-  // Mapper explicitement les données de brochure si présentes
-  if (transformed && data.data?.[0]?.attributes?.brochure?.data) {
-    transformed.brochure = data.data[0].attributes.brochure
+  try {
+    // Utiliser populate=* pour récupérer TOUS les champs (programme, objectifs, debouches, etc.)
+    const data = await fetchAPI(`/api/formations?filters[slug][$eq]=${slug}&populate=*`)
+    
+    // Debug: log la réponse brute
+    console.log('🔍 Strapi API Response for slug:', slug)
+    console.log('   - data.data exists:', !!data?.data)
+    console.log('   - data.data length:', data?.data?.length || 0)
+    
+    if (!data?.data?.[0]) {
+      console.log('❌ Aucune formation trouvée dans Strapi pour:', slug)
+      return null
+    }
+    
+    const item = data.data[0]
+    const attrs = item.attributes || {}
+    
+    // Construire l'objet formation avec TOUS les champs Strapi
+    const formation: Record<string, any> = {
+      id: item.id,
+      title: attrs.title,
+      slug: attrs.slug,
+      level: attrs.level,
+      rncp: attrs.rncp,
+      rncpUrl: attrs.rncpUrl,
+      shortDescription: attrs.shortDesc || attrs.shortDescription,
+      shortDesc: attrs.shortDesc,
+      fullDescription: attrs.fullDesc || attrs.fullDescription,
+      fullDesc: attrs.fullDesc,
+      metierDesc: attrs.metierDesc,
+      duree: attrs.duree,
+      volumeHoraire: attrs.volumeHoraire,
+      repartition: attrs.repartition,
+      rythme: attrs.rythme,
+      modalite: attrs.modalite,
+      typeContrat: attrs.typeContrat,
+      effectif: attrs.effectif,
+      cout: attrs.cout,
+      financement: attrs.financement,
+      certificateur: attrs.certificateur,
+      // Champs JSON/Array - directement depuis Strapi
+      objectifs: attrs.objectifs,
+      programme: attrs.programme,
+      debouches: attrs.debouches,
+      prerequis: attrs.prerequis,
+      evaluation: attrs.evaluation,
+      poursuiteEtudes: attrs.poursuiteEtudes,
+      entreprisesPartenaires: attrs.entreprisesPartenaires,
+      // Stats
+      tauxReussite: attrs.tauxReussite,
+      tauxInsertion: attrs.tauxInsertion,
+      publicCible: attrs.publicCible,
+      contact: attrs.contact,
+      isActive: attrs.isActive,
+      // Médias
+      image: attrs.image?.data?.attributes?.url,
+      imageData: attrs.image,
+      brochure: attrs.brochure,
+      // Catégorie
+      category: attrs.category?.data ? {
+        id: attrs.category.data.id,
+        ...attrs.category.data.attributes
+      } : null
+    }
+    
+    // Log pour debug
+    console.log('✅ Formation Strapi chargée:', formation.title)
+    console.log('   - ID:', formation.id)
+    console.log('   - Durée:', formation.duree)
+    console.log('   - Objectifs:', Array.isArray(formation.objectifs) ? formation.objectifs.length : 'non-array')
+    console.log('   - Programme:', Array.isArray(formation.programme) ? formation.programme.length : 'non-array')
+    console.log('   - Débouchés:', Array.isArray(formation.debouches) ? formation.debouches.length : 'non-array')
+    console.log('   - Prérequis:', Array.isArray(formation.prerequis) ? formation.prerequis.length : 'non-array')
+    
+    return formation
+    
+  } catch (error) {
+    console.error('❌ Erreur getFormation pour slug:', slug, error)
+    return null
   }
-  
-  // Log pour debug
-  if (transformed) {
-    console.log('✅ Formation Strapi chargée:', transformed.title)
-    console.log('   - Objectifs:', transformed.objectifs?.length || 0)
-    console.log('   - Programme:', transformed.programme?.length || 0)
-    console.log('   - Débouchés:', transformed.debouches?.length || 0)
-  }
-  
-  return transformed
 }
 
 export async function getFormationsByCategory(categorySlug: string) {

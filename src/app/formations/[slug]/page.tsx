@@ -76,41 +76,43 @@ function findStaticFormation(slug: string): Formation | null {
 
 // Server-side data fetching
 async function getFormationData(slug: string): Promise<Formation | null> {
+  console.log('🔍 SSR: Chargement formation pour slug:', slug)
+  console.log('   - STRAPI_URL:', process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app')
+  
   try {
-    console.log('🔍 SSR: Chargement formation pour slug:', slug)
-    
     // Priorité 1: Essayer Strapi
     const strapiFormation = await getFormation(slug)
     
-    if (strapiFormation && (strapiFormation as any)?.id) {
-      console.log('✅ SSR: Formation Strapi trouvée:', (strapiFormation as any).title)
+    // Vérifier que la formation Strapi a des données valides
+    if (strapiFormation && strapiFormation.id && strapiFormation.title) {
+      console.log('✅ SSR: Formation Strapi VALIDE trouvée!')
+      console.log('   - ID:', strapiFormation.id)
+      console.log('   - Titre:', strapiFormation.title)
+      console.log('   - Durée:', strapiFormation.duree)
+      console.log('   - Objectifs count:', Array.isArray(strapiFormation.objectifs) ? strapiFormation.objectifs.length : 'N/A')
+      console.log('   - Débouchés count:', Array.isArray(strapiFormation.debouches) ? strapiFormation.debouches.length : 'N/A')
+      
+      // Retourner les données Strapi
       return strapiFormation as Formation
     }
     
-    console.log('⚠️ SSR: Pas de formation Strapi, fallback vers statique')
-    
-    // Priorité 2: Fallback vers données statiques
-    const staticFormation = findStaticFormation(slug)
-    if (staticFormation) {
-      console.log('✅ SSR: Formation statique trouvée:', staticFormation.title)
-      return staticFormation
-    }
-    
-    console.log('❌ SSR: Aucune formation trouvée')
-    return null
+    console.log('⚠️ SSR: Formation Strapi invalide ou non trouvée, fallback vers statique')
+    console.log('   - strapiFormation:', strapiFormation ? 'exists but invalid' : 'null')
     
   } catch (error) {
-    console.error('❌ SSR: Erreur chargement formation:', error)
-    
-    // En cas d'erreur Strapi, essayer les données statiques
-    const staticFormation = findStaticFormation(slug)
-    if (staticFormation) {
-      console.log('✅ SSR: Fallback statique après erreur:', staticFormation.title)
-      return staticFormation
-    }
-    
-    return null
+    console.error('❌ SSR: Erreur Strapi:', error)
   }
+  
+  // Priorité 2: Fallback vers données statiques (seulement si Strapi échoue)
+  const staticFormation = findStaticFormation(slug)
+  if (staticFormation) {
+    console.log('⚠️ SSR: Utilisation données STATIQUES (fallback)')
+    console.log('   - Titre:', staticFormation.title)
+    return staticFormation
+  }
+  
+  console.log('❌ SSR: Aucune formation trouvée (ni Strapi ni statique)')
+  return null
 }
 
 // Page principale avec SSR
