@@ -28,9 +28,12 @@
 
 /* Custom properties for better performance */
 :root {
-  --primary-blue: #1e40af;
-  --primary-yellow: #fbbf24;
+  --primary-blue: #0D4BD3;
+  --primary-yellow: #FADD82;
+  --primary-cream: #FDF7E3;
   --text-gray: #374151;
+  --neutral-dark: #1f2937;
+  --neutral-white: #FFFFFF;
 }
 
 /* Reduce motion for accessibility */
@@ -39,5 +42,36 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* Utility classes for original design */
+@layer utilities {
+  .text-primary-blue {
+    color: var(--primary-blue);
+  }
+  
+  .text-primary-yellow {
+    color: var(--primary-yellow);
+  }
+  
+  .bg-primary-blue {
+    background-color: var(--primary-blue);
+  }
+  
+  .bg-primary-yellow {
+    background-color: var(--primary-yellow);
+  }
+  
+  .bg-primary-cream {
+    background-color: var(--primary-cream);
+  }
+  
+  .border-primary-blue {
+    border-color: var(--primary-blue);
+  }
+  
+  .border-primary-yellow {
+    border-color: var(--primary-yellow);
   }
 }

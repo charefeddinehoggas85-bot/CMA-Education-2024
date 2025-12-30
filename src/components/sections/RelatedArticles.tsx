@@ -9,11 +9,11 @@ interface RelatedArticlesProps {
 }
 
 const RelatedArticles = ({ currentId }: RelatedArticlesProps) => {
-  const currentArticle = blogArticles.find(a => a.id === parseInt(currentId))
+  const currentArticle = blogArticles.find(a => a.id === currentId)
   
   // Sélectionner 3 articles similaires (même catégorie ou articles récents)
   const relatedArticles = blogArticles
-    .filter(article => article.id !== parseInt(currentId))
+    .filter(article => article.id !== currentId)
     .filter(article => 
       currentArticle ? 
       article.category === currentArticle.category || 
@@ -66,24 +66,24 @@ const RelatedArticles = ({ currentId }: RelatedArticlesProps) => {
                 <div className="flex items-center justify-between text-sm text-gray-500 mb-4">
                   <div className="flex items-center space-x-1">
                     <Calendar className="w-4 h-4" />
-                    <span>{article.date}</span>
+                    <span>{new Date(article.publishedAt).toLocaleDateString('fr-FR')}</span>
                   </div>
                   <div className="flex items-center space-x-1">
                     <Clock className="w-4 h-4" />
-                    <span>{article.readTime}</span>
+                    <span>{article.readTime} min</span>
                   </div>
                 </div>
                 
                 <div className="flex items-center justify-between">
                   <Link 
-                    href={`/blog/${article.id}`}
+                    href={`/blog/${article.slug}`}
                     className="inline-flex items-center text-primary-blue font-semibold hover:text-primary-yellow transition-colors group"
                   >
                     Lire l'article
                     <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                   </Link>
                   <div className="text-xs text-gray-400">
-                    Par {article.author.split(' - ')[0]}
+                    Par {article.author.name}
                   </div>
                 </div>
               </div>

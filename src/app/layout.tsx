@@ -4,7 +4,7 @@ import WhatsAppWidget from '@/components/ui/WhatsAppWidget'
 import ChatBot from '@/components/ui/ChatBot'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import OpenDayPopupProvider from '@/components/layout/OpenDayPopupProvider'
-import ResponsiveDebugger from '@/components/dev/ResponsiveDebugger'
+
 import { organizationSchema, localBusinessSchema } from '@/lib/structured-data'
 
 export const metadata: Metadata = {
@@ -91,7 +91,6 @@ export default function RootLayout({
           <ChatBot />
           <OpenDayPopupProvider />
           <ServiceWorkerRegistration />
-          <ResponsiveDebugger />
         </div>
       </body>
     </html>
