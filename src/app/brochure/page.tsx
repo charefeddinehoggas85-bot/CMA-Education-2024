@@ -34,7 +34,7 @@ export default function BrochurePage() {
         const data = await getFormations()
         // Filtrer seulement les formations avec brochures
         const formationsWithBrochures = (data as Formation[]).filter(f => 
-          f.brochure || (f as any).brochureData?.data
+          (f as any).brochure?.data?.attributes?.url
         )
         setFormations(formationsWithBrochures)
       } catch (error) {
@@ -52,8 +52,7 @@ export default function BrochurePage() {
 
     try {
       // Construire l'URL de la brochure
-      const brochureUrl = selectedFormation.brochure || 
-                         `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${(selectedFormation as any).brochureData.data.attributes.url}`;
+      const brochureUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${(selectedFormation as any).brochure.data.attributes.url}`;
       
       // Télécharger la brochure
       const link = document.createElement('a');
