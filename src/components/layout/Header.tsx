@@ -207,7 +207,7 @@ const Header = () => {
                 alt={`${siteSettings?.siteName || 'Construction Management Academy'} Logo`}
                 width={200}
                 height={200}
-                className="h-10 md:h-12 lg:h-14 w-auto max-w-[120px] md:max-w-[160px] lg:max-w-none transition-all duration-300 group-hover:scale-105"
+                className="h-14 md:h-16 lg:h-18 w-auto max-w-[160px] md:max-w-[200px] lg:max-w-none transition-all duration-300 group-hover:scale-105"
               />
             </div>
           </Link>

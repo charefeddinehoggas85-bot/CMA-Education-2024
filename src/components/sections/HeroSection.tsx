@@ -23,10 +23,10 @@ const HeroSection = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     id: 1,
     siteName: 'Construction Management Academy',
-    siteTagline: 'Construction Management Academy',
-    heroTitle: 'Construction Management Academy - Devenez l\'acteur du BTP d\'aujourd\'hui et de demain',
-    heroSubtitle: 'Construction Management Academy',
-    heroDescription: 'Formations BTP en alternance, reconversion et VAE. Du Niveau 5 au Niveau 7 (Bac+2 à Bac+5) avec nos partenaires entreprises.',
+    siteTagline: 'Centre de formation BTP',
+    heroTitle: 'Devenez l\'acteur du BTP d\'aujourd\'hui et de demain',
+    heroSubtitle: 'Formations BTP spécialisées',
+    heroDescription: 'Alternance, reconversion et VAE. Niveaux 5 à 7 (Bac+2 à Bac+5).',
     contactPhone: '01 89 70 60 52',
     contactEmail: 'contact.academy@construction-management-academy.fr'
   })
@@ -72,7 +72,7 @@ const HeroSection = () => {
   }
 
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-header-offset-mobile md:pt-header-offset-md lg:pt-header-offset">
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-header-offset md:pt-header-offset-md lg:pt-header-offset-lg xl:pt-header-offset-xl 2xl:pt-header-offset-2xl">
       {/* Video Background */}
       <div className="absolute inset-0">
         <video 
@@ -87,8 +87,8 @@ const HeroSection = () => {
         <div className="absolute inset-0 bg-gradient-to-br from-slate-900/30 via-slate-800/30 to-slate-800/30"></div>
       </div>
 
-      {/* Content - Responsive */}
-      <div className="relative z-20 text-center text-white max-w-6xl mx-auto px-4 py-6 md:py-8 lg:py-12">
+      {/* Content - Responsive Optimisé pour 2XL */}
+      <div className="relative z-20 text-center text-white max-w-4xl lg:max-w-6xl xl:max-w-7xl 2xl:max-w-8xl mx-auto px-4 py-6 md:py-8 lg:py-12 2xl:py-16">
         {/* Hero Title - Dynamique depuis Strapi - Responsive */}
         <motion.div
           className="mb-6 md:mb-8"
@@ -97,26 +97,23 @@ const HeroSection = () => {
           transition={{ duration: 0.8 }}
         >
           <motion.h1 
-            className="text-2xl md:text-4xl lg:text-6xl xl:text-7xl font-black mb-4 md:mb-6 leading-tight"
+            className="text-2xl md:text-4xl lg:text-6xl xl:text-7xl 2xl:text-8xl font-black mb-4 md:mb-6 2xl:mb-8 leading-tight"
             initial={{ opacity: 0, scale: 0.9 }}
             animate={{ opacity: 1, scale: 1 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <span className="block text-white mb-1 md:mb-2">
-              {siteSettings?.heroTitle?.split(' - ')[0] || 'Construction Management Academy'}
-            </span>
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-yellow via-orange-400 to-primary-yellow">
-              {siteSettings?.heroTitle?.split(' - ')[1] || 'Devenez l\'acteur du BTP d\'aujourd\'hui et de demain'}
+              {siteSettings?.heroTitle || 'Devenez l\'acteur du BTP d\'aujourd\'hui et de demain'}
             </span>
           </motion.h1>
           
           <motion.p 
-            className="text-lg md:text-xl lg:text-2xl xl:text-3xl font-light text-gray-300 mb-2"
+            className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl font-light text-gray-300 mb-2"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {siteSettings?.heroSubtitle || siteSettings?.siteTagline || 'Construction Management Academy'}
+            {siteSettings?.heroSubtitle || 'Formations BTP spécialisées'}
           </motion.p>
           
           <motion.div 
@@ -127,17 +124,17 @@ const HeroSection = () => {
           />
         </motion.div>
 
-        {/* Clear Value Proposition - Dynamique */}
+        {/* Clear Value Proposition - Dynamique - Optimisé 2XL */}
         <motion.p 
-          className="text-xl md:text-2xl text-gray-200 mb-8 max-w-4xl mx-auto leading-relaxed"
+          className="text-lg md:text-xl lg:text-2xl xl:text-3xl 2xl:text-4xl text-gray-200 mb-8 2xl:mb-12 max-w-3xl lg:max-w-4xl xl:max-w-5xl 2xl:max-w-6xl mx-auto leading-relaxed"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
           {siteSettings?.heroDescription || (
             <>
-              Formations BTP en <span className="text-primary-yellow font-semibold">alternance, reconversion et VAE</span>.
-              <br />Du <span className="text-primary-yellow font-semibold">Niveau 5 au Niveau 7 (Bac+2 à Bac+5)</span> avec nos partenaires entreprises.
+              <span className="text-primary-yellow font-semibold">Alternance, reconversion et VAE</span>.
+              <br />Niveaux <span className="text-primary-yellow font-semibold">5 à 7 (Bac+2 à Bac+5)</span>.
             </>
           )}
         </motion.p>

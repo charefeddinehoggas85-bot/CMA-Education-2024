@@ -1,5 +1,4 @@
 import type { Metadata } from 'next'
-import { Poppins } from 'next/font/google'
 import './globals.css'
 import WhatsAppWidget from '@/components/ui/WhatsAppWidget'
 import ChatBot from '@/components/ui/ChatBot'
@@ -8,17 +7,9 @@ import OpenDayPopupProvider from '@/components/layout/OpenDayPopupProvider'
 import ResponsiveDebugger from '@/components/dev/ResponsiveDebugger'
 import { organizationSchema, localBusinessSchema } from '@/lib/structured-data'
 
-const poppins = Poppins({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700', '800', '900'],
-  display: 'swap',
-  preload: true,
-  fallback: ['system-ui', 'arial']
-})
-
 export const metadata: Metadata = {
-  title: 'Formation BTP Alternance, Reconversion et VAE | Construction Management Academy',
-  description: 'Formation conducteur de travaux, chargé d\'affaires bâtiment en alternance. Formation BTP reconversion et VAE. 98% insertion, prise en charge OPCO. Centre de formation BTP Île-de-France.',
+  title: 'Formations BTP Alternance, Reconversion et VAE | Construction Management Academy',
+  description: 'Formation conducteur de travaux, chargé d\'affaires bâtiment en alternance. Formation BTP reconversion et VAE. 98% insertion, prise en charge OPCO.',
   keywords: [
     'formation btp alternance',
     'formation conducteur de travaux',
@@ -45,7 +36,7 @@ export const metadata: Metadata = {
     ]
   },
   openGraph: {
-    title: 'Formation BTP Alternance, Reconversion et VAE | Construction Management Academy',
+    title: 'Formations BTP Alternance, Reconversion et VAE | Construction Management Academy',
     description: 'Formation conducteur de travaux, chargé d\'affaires bâtiment en alternance. Formation BTP reconversion et VAE. 98% insertion, prise en charge OPCO.',
     type: 'website',
     locale: 'fr_FR',
@@ -53,7 +44,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: 'summary_large_image',
-    title: 'Formation BTP Alternance, Reconversion et VAE | Construction Management Academy',
+    title: 'Formations BTP Alternance, Reconversion et VAE | Construction Management Academy',
     description: 'Formation conducteur de travaux, chargé d\'affaires bâtiment en alternance. 98% insertion, prise en charge OPCO.',
   },
   robots: {
@@ -93,7 +84,7 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={poppins.className} suppressHydrationWarning>
+      <body className="font-sans antialiased" suppressHydrationWarning>
         <div id="__next">
           {children}
           <WhatsAppWidget />

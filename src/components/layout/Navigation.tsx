@@ -2,8 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { usePathname, useRouter } from 'next/navigation'
-import { Menu, X, Phone } from 'lucide-react'
+import { usePathname } from 'next/navigation'
+import { Menu, X, Phone, Calendar } from 'lucide-react'
 import OptimizedButton from '@/components/ui/OptimizedButton'
 import FormationsDropdown from '@/components/ui/FormationsDropdown'
 
@@ -12,7 +12,6 @@ const Navigation = () => {
   const [isScrolled, setIsScrolled] = useState(false)
   const [isMounted, setIsMounted] = useState(false)
   const pathname = usePathname()
-  const router = useRouter()
 
   useEffect(() => {
     setIsMounted(true)
@@ -43,114 +42,133 @@ const Navigation = () => {
 
   return (
     <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-lg' : 'bg-white/90 backdrop-blur-sm'}`}>
-      <nav className="w-full px-6 sm:px-8 lg:px-12 xl:px-16">
-        <div className="flex justify-between items-center h-24 w-full">
+      {/* Container principal avec padding adaptatif */}
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex items-center justify-between h-14 sm:h-16 md:h-18 lg:h-20 xl:h-22">
           
-          {/* Logo à gauche */}
-          <div className="flex-shrink-0">
-            <Link href="/" className="flex items-center group">
-              <div className="relative hover:scale-105 transition-transform duration-200">
+          {/* SECTION GAUCHE - Logo */}
+          <div className="flex-shrink-0 flex items-center">
+            <Link href="/" className="group flex items-center">
+              <div className="relative transition-transform duration-200 group-hover:scale-105">
                 <img 
                   src="/images/logoo.svg" 
                   alt="Construction Management Academy" 
-                  className="h-32 w-auto"
+                  className="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-20 w-auto"
                 />
               </div>
             </Link>
           </div>
 
-          {/* Navigation au centre */}
-          <div className="hidden lg:flex items-center justify-center flex-1 mx-8">
-            <div className="flex items-center space-x-8">
-              <FormationsDropdown isScrolled={isScrolled} />
+          {/* SECTION CENTRE - Navigation principale (Desktop uniquement) */}
+          <nav className="hidden lg:flex items-center justify-center flex-1 max-w-4xl mx-8">
+            <div className="flex items-center space-x-1 xl:space-x-2">
+              {/* Dropdown Formations */}
+              <div className="relative">
+                <FormationsDropdown isScrolled={isScrolled} />
+              </div>
+              
+              {/* Liens de navigation */}
               {navigation.map((item) => {
                 const isActive = pathname === item.href
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`font-medium transition-colors px-4 py-2 rounded-lg whitespace-nowrap ${
+                    className={`relative px-3 py-2 text-ui-sm font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                       isActive 
-                        ? 'text-primary-yellow bg-primary-yellow/10' 
-                        : 'text-gray-900 hover:text-primary-yellow'
+                        ? 'text-primary-blue bg-primary-blue/10 shadow-sm' 
+                        : 'text-gray-700 hover:text-primary-blue hover:bg-gray-50'
                     }`}
                   >
                     {item.name}
+                    {isActive && (
+                      <div className="absolute bottom-0 left-1/2 transform -translate-x-1/2 w-1 h-1 bg-primary-blue rounded-full"></div>
+                    )}
                   </Link>
                 )
               })}
             </div>
-          </div>
+          </nav>
 
-          {/* CTA à droite */}
-          <div className="hidden lg:flex items-center space-x-4 flex-shrink-0">
+          {/* SECTION DROITE - Actions (Desktop uniquement) */}
+          <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 flex-shrink-0">
+            {/* Téléphone */}
             <a 
               href="tel:0189706052" 
-              className="flex items-center space-x-2 px-4 py-2 rounded-lg transition-colors text-gray-900 hover:bg-gray-100"
+              className="flex items-center space-x-2 px-3 py-2 text-ui-sm font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-all duration-200"
             >
               <Phone className="w-4 h-4" />
-              <span className="text-sm font-medium">01 89 70 60 52</span>
+              <span className="hidden xl:inline">01 89 70 60 52</span>
             </a>
             
-            {/* Bouton Inscription JPO - Premium Design */}
+            {/* Bouton JPO */}
             {isMounted && (
               <a 
                 href="https://docs.google.com/forms/d/e/1FAIpQLSdHNGeoFvaaeknFrtrgIaUe7yDxS1fm0JiYo7q-bxetbfeOiQ/viewform?pli=1" 
                 target="_blank" 
                 rel="noopener noreferrer"
+                className="group"
               >
-                <button className="group relative px-6 py-3 font-bold text-sm rounded-xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-orange-400 via-orange-500 to-red-500 hover:from-orange-500 hover:via-orange-600 hover:to-red-600">
-                  <span className="relative z-10 flex items-center justify-center gap-2 text-white">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                    </svg>
-                    <span>Inscription JPO</span>
-                  </span>
+                <button className="flex items-center space-x-2 px-4 py-2.5 text-ui-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
+                  <Calendar className="w-4 h-4" />
+                  <span className="hidden xl:inline">JPO</span>
                 </button>
               </a>
             )}
             
+            {/* Bouton Candidater */}
             <OptimizedButton 
               variant="gradient" 
-              size="md" 
-              className="shadow-lg"
+              size="sm" 
+              className="px-4 py-2.5 text-ui-sm font-semibold shadow-md hover:shadow-lg"
               onClick={handleCandidater}
             >
               CANDIDATER
             </OptimizedButton>
           </div>
 
-          {/* Menu mobile */}
-          <div className="lg:hidden flex-shrink-0">
+          {/* BOUTON MENU MOBILE */}
+          <div className="lg:hidden flex items-center">
             <button
-              className="p-2 rounded-lg transition-colors text-gray-900 hover:bg-gray-100"
+              className="p-2 text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-colors duration-200"
               onClick={() => setIsOpen(!isOpen)}
+              aria-label="Menu"
             >
               {isOpen ? <X size={24} /> : <Menu size={24} />}
             </button>
           </div>
         </div>
+      </div>
 
-        {isOpen && (
-          <div className="lg:hidden bg-white/95 backdrop-blur-xl rounded-2xl mt-2 border border-gray-200/50 shadow-xl transition-all duration-300">
-            <div className="p-6 space-y-4">
+      {/* MENU MOBILE */}
+      {isOpen && (
+        <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/50 shadow-xl">
+          <div className="max-w-7xl mx-auto px-4 py-6">
+            <nav className="space-y-2">
+              {/* Formations en premier */}
               <Link
                 href="/formations"
-                className="block font-medium transition-colors px-3 py-2 rounded-lg text-gray-700 hover:text-primary-blue"
+                className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors ${
+                  pathname === '/formations'
+                    ? 'text-primary-blue bg-primary-blue/10' 
+                    : 'text-gray-700 hover:text-primary-blue hover:bg-gray-50'
+                }`}
                 onClick={() => setIsOpen(false)}
               >
                 Formations
               </Link>
+              
+              {/* Autres liens */}
               {navigation.map((item) => {
                 const isActive = pathname === item.href
                 return (
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`block font-medium transition-colors px-3 py-2 rounded-lg ${
+                    className={`block px-4 py-3 text-base font-medium rounded-lg transition-colors ${
                       isActive 
                         ? 'text-primary-blue bg-primary-blue/10' 
-                        : 'text-gray-700 hover:text-primary-blue'
+                        : 'text-gray-700 hover:text-primary-blue hover:bg-gray-50'
                     }`}
                     onClick={() => setIsOpen(false)}
                   >
@@ -158,48 +176,50 @@ const Navigation = () => {
                   </Link>
                 )
               })}
+            </nav>
+            
+            {/* Actions mobiles */}
+            <div className="mt-6 pt-6 border-t border-gray-200 space-y-4">
+              {/* Téléphone */}
+              <a 
+                href="tel:0189706052" 
+                className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-colors"
+              >
+                <Phone className="w-5 h-5" />
+                <span className="text-base font-medium">01 89 70 60 52</span>
+              </a>
               
-              <div className="pt-4 border-t border-gray-200">
+              {/* Bouton JPO mobile */}
+              {isMounted && (
                 <a 
-                  href="tel:0189706052" 
-                  className="flex items-center space-x-2 text-gray-700 mb-4"
+                  href="https://docs.google.com/forms/d/e/1FAIpQLSdHNGeoFvaaeknFrtrgIaUe7yDxS1fm0JiYo7q-bxetbfeOiQ/viewform?pli=1" 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  onClick={() => setIsOpen(false)}
                 >
-                  <Phone className="w-4 h-4" />
-                  <span>01 89 70 60 52</span>
+                  <button className="w-full flex items-center justify-center space-x-2 px-4 py-3 text-base font-semibold text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-lg shadow-md transition-all duration-200">
+                    <Calendar className="w-5 h-5" />
+                    <span>Inscription JPO</span>
+                  </button>
                 </a>
-                
-                {isMounted && (
-                  <a 
-                    href="https://docs.google.com/forms/d/e/1FAIpQLSdHNGeoFvaaeknFrtrgIaUe7yDxS1fm0JiYo7q-bxetbfeOiQ/viewform?pli=1" 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="block w-full mb-3"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    <button className="group relative w-full px-4 py-3 font-bold text-sm rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 active:scale-95 bg-gradient-to-r from-orange-400 via-orange-500 to-red-500 hover:from-orange-500 hover:via-orange-600 hover:to-red-600">
-                      <span className="relative z-10 flex items-center justify-center gap-2 text-white">
-                        <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                          <path d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
-                        </svg>
-                        <span>Inscription JPO</span>
-                      </span>
-                    </button>
-                  </a>
-                )}
-                
-                <OptimizedButton 
-                  variant="gradient" 
-                  size="md" 
-                  className="w-full"
-                  onClick={handleCandidater}
-                >
-                  CANDIDATER
-                </OptimizedButton>
-              </div>
+              )}
+              
+              {/* Bouton Candidater mobile */}
+              <OptimizedButton 
+                variant="gradient" 
+                size="md" 
+                className="w-full text-base font-semibold"
+                onClick={() => {
+                  handleCandidater()
+                  setIsOpen(false)
+                }}
+              >
+                CANDIDATER
+              </OptimizedButton>
             </div>
           </div>
-        )}
-      </nav>
+        </div>
+      )}
     </header>
   )
 }

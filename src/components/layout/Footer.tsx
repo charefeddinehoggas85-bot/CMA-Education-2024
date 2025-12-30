@@ -36,47 +36,18 @@ const Footer = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null)
   const [loading, setLoading] = useState(true)
 
+  // FORCE: Données statiques pour garantir 5 réseaux sociaux TOUJOURS
+  const FORCED_SOCIAL_MEDIA = {
+    facebook: 'https://www.facebook.com/Constructionmanagementacademy',
+    instagram: 'https://www.instagram.com/construction_management_academy',
+    tiktok: 'https://www.tiktok.com/@cmaeducation',
+    youtube: 'https://www.youtube.com/channel/construction-management-academy',
+    linkedin: 'https://www.linkedin.com/company/construction-management-academy'
+  };
+
   useEffect(() => {
-    async function loadData() {
-      try {
-        console.log('🔄 Tentative de chargement des données Strapi...');
-        const [statsData, settingsData] = await Promise.all([
-          getStatistiquesSite(),
-          getSiteSettings()
-        ])
-        
-        console.log('📊 Données Strapi chargées:', { statsData, settingsData });
-        setStats(statsData as Statistique[])
-        setSiteSettings(settingsData as SiteSettings)
-      } catch (error) {
-        console.warn('⚠️ Erreur Strapi, utilisation des données de fallback:', error)
-        // TOUJOURS utiliser les données de fallback pour garantir l'affichage des 5 icônes
-        setStats([
-          { id: 1, cle: 'experience', nombre: 15, label: 'Années', suffixe: '+', ordre: 1 },
-          { id: 2, cle: 'formations', nombre: 8, label: 'Formations', suffixe: '', ordre: 2 },
-          { id: 3, cle: 'partners', nombre: 45, label: 'Partenaires', suffixe: '+', ordre: 3 }
-        ])
-        setSiteSettings({
-          id: 1,
-          siteName: 'Construction Management Academy',
-          contactPhone: '01 89 70 60 52',
-          contactEmail: 'contact.academy@construction-management-academy.fr',
-          contactAddress: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
-          socialMedia: {
-            linkedin: 'https://www.linkedin.com/company/construction-management-academy',
-            instagram: 'https://www.instagram.com/construction_management_academy',
-            facebook: 'https://www.facebook.com/Constructionmanagementacademy',
-            youtube: 'https://www.youtube.com/channel/construction-management-academy',
-            tiktok: 'https://www.tiktok.com/@cmaeducation'
-          }
-        })
-      } finally {
-        setLoading(false)
-      }
-    }
-    
-    // FORCE: Toujours utiliser les données de fallback pour garantir 5 icônes
-    console.log('🎯 Utilisation forcée des données de fallback pour 5 icônes sociales');
+    // FORCE: Ignorer complètement Strapi et utiliser les données statiques
+    console.log('🎯 FORCE: Utilisation des données statiques pour 5 réseaux sociaux');
     setStats([
       { id: 1, cle: 'experience', nombre: 15, label: 'Années', suffixe: '+', ordre: 1 },
       { id: 2, cle: 'formations', nombre: 8, label: 'Formations', suffixe: '', ordre: 2 },
@@ -88,18 +59,9 @@ const Footer = () => {
       contactPhone: '01 89 70 60 52',
       contactEmail: 'contact.academy@construction-management-academy.fr',
       contactAddress: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
-      socialMedia: {
-        linkedin: 'https://www.linkedin.com/company/construction-management-academy',
-        instagram: 'https://www.instagram.com/construction_management_academy',
-        facebook: 'https://www.facebook.com/Constructionmanagementacademy',
-        youtube: 'https://www.youtube.com/channel/construction-management-academy',
-        tiktok: 'https://www.tiktok.com/@cmaeducation'
-      }
+      socialMedia: FORCED_SOCIAL_MEDIA
     })
     setLoading(false)
-    
-    // Optionnel: Charger les données Strapi en arrière-plan
-    loadData()
   }, [])
 
   const quickLinks = [
@@ -168,35 +130,34 @@ const Footer = () => {
                 </div>
               )}
 
-              {/* Réseaux sociaux - Responsive */}
+              {/* Réseaux sociaux - FORCE 5 ICÔNES - Responsive */}
               <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
-                {siteSettings?.socialMedia?.facebook && (
-                  <Link href={siteSettings.socialMedia.facebook} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
-                    <Facebook className="w-5 h-5" />
-                  </Link>
-                )}
-                {siteSettings?.socialMedia?.instagram && (
-                  <Link href={siteSettings.socialMedia.instagram} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/></svg>
-                  </Link>
-                )}
-                {siteSettings?.socialMedia?.tiktok && (
-                  <Link href={siteSettings.socialMedia.tiktok} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
-                    <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
-                    </svg>
-                  </Link>
-                )}
-                {siteSettings?.socialMedia?.youtube && (
-                  <Link href={siteSettings.socialMedia.youtube} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
-                    <Youtube className="w-5 h-5" />
-                  </Link>
-                )}
-                {siteSettings?.socialMedia?.linkedin && (
-                  <Link href={siteSettings.socialMedia.linkedin} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
-                    <Linkedin className="w-5 h-5" />
-                  </Link>
-                )}
+                {/* Facebook - TOUJOURS AFFICHÉ */}
+                <Link href={FORCED_SOCIAL_MEDIA.facebook} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
+                  <Facebook className="w-5 h-5" />
+                </Link>
+                
+                {/* Instagram - TOUJOURS AFFICHÉ */}
+                <Link href={FORCED_SOCIAL_MEDIA.instagram} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zM5.838 12a6.162 6.162 0 1 1 12.324 0 6.162 6.162 0 0 1-12.324 0zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm4.965-10.322a1.44 1.44 0 1 1 2.881.001 1.44 1.44 0 0 1-2.881-.001z"/></svg>
+                </Link>
+                
+                {/* TikTok - TOUJOURS AFFICHÉ */}
+                <Link href={FORCED_SOCIAL_MEDIA.tiktok} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
+                  <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
+                    <path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 5 20.1a6.34 6.34 0 0 0 10.86-4.43v-7a8.16 8.16 0 0 0 4.77 1.52v-3.4a4.85 4.85 0 0 1-1-.1z"/>
+                  </svg>
+                </Link>
+                
+                {/* YouTube - TOUJOURS AFFICHÉ */}
+                <Link href={FORCED_SOCIAL_MEDIA.youtube} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
+                  <Youtube className="w-5 h-5" />
+                </Link>
+                
+                {/* LinkedIn - TOUJOURS AFFICHÉ */}
+                <Link href={FORCED_SOCIAL_MEDIA.linkedin} className="w-11 h-11 bg-white/10 backdrop-blur-sm rounded-xl flex items-center justify-center hover:bg-primary-yellow hover:text-primary-blue transition-all duration-300 group">
+                  <Linkedin className="w-5 h-5" />
+                </Link>
               </div>
             </div>
 

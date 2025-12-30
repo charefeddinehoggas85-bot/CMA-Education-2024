@@ -1,22 +1,31 @@
-# Exclure le CMS Strapi du build frontend
-cms-cma/**
-cms-cma/
+# Fichiers de développement
+*.log
+*.tmp
+.DS_Store
+Thumbs.db
 
-# Exclure les fichiers de documentation
+# Documentation
 *.md
 !README.md
 
-# Exclure les scripts de développement
-scripts/**
-scripts/
+# Fichiers de test
+test-*
+debug-*
+*-test.html
 
-# Exclure les dossiers de contenu
-Formations/**
-Formations/
-brochures/**
-brochures/
-
-# Exclure les fichiers de configuration locale
+# Environnement local
 .env.local
-.env.example
+.env.migration
 .env.production
+
+# Cache et builds
+.next/cache
+node_modules/.cache
+
+# Fichiers de configuration spécifiques
+setup-*
+start-cms.*
+deploy*.js
+railway-*.json
+partners-sample-data.json
+PROJECT_STATS.json
