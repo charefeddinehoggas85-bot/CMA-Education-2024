@@ -16,15 +16,24 @@ const nextConfig = {
         protocol: 'https',
         hostname: '*.vercel.app',
       },
+      {
+        protocol: 'https',
+        hostname: '*.railway.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'cma-education-strapi-production.up.railway.app',
+      },
     ],
     formats: ['image/webp', 'image/avif'],
   },
   experimental: {
     optimizePackageImports: ['lucide-react'],
   },
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
+  // Ne pas supprimer les console.log en production pour le debug
+  // compiler: {
+  //   removeConsole: process.env.NODE_ENV === 'production',
+  // },
   poweredByHeader: false,
   compress: true,
   swcMinify: true,
