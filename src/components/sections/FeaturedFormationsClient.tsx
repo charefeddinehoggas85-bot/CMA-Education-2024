@@ -393,268 +393,355 @@ export function FeaturedFormationsClient({ formations }: FeaturedFormationsClien
     )
   }
 
-  // Sinon, afficher les formations par catégories avec carrousels horizontaux
+  // Galerie moderne avec extraits de formations par catégorie
   return (
-    <div className="space-y-16">
-      {/* Titre de la section */}
+    <div className="space-y-20">
+      {/* Titre principal de la galerie */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
+        transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="text-center mb-12"
+        className="text-center mb-16"
       >
-        <h3 className="text-4xl font-bold text-gray-900 mb-6">
-          Explorez nos formations par modalité
+        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-blue/10 to-primary-yellow/10 px-6 py-3 rounded-full mb-6">
+          <div className="w-2 h-2 bg-primary-blue rounded-full animate-pulse"></div>
+          <span className="text-primary-blue font-semibold text-sm uppercase tracking-wider">Galerie Formations</span>
+          <div className="w-2 h-2 bg-primary-yellow rounded-full animate-pulse"></div>
+        </div>
+        <h3 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+          Découvrez Nos
+          <span className="block bg-gradient-to-r from-primary-blue to-primary-yellow bg-clip-text text-transparent">
+            Formations d'Excellence
+          </span>
         </h3>
         <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-          Des parcours complets et certifiants pour tous les profils : étudiants, professionnels en reconversion, 
-          validation d'acquis ou formations sur mesure pour entreprises
+          Explorez notre catalogue de formations BTP par modalité. Chaque parcours est conçu pour vous mener vers l'excellence professionnelle.
         </p>
       </motion.div>
 
-      {/* Carrousel Formations en Alternance */}
-      <FormationsCarousel
-        title="Formations en Alternance"
-        formations={formationsAlternance}
-        icon={GraduationCap}
-        bgGradient="bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50"
-        iconColor="bg-gradient-to-r from-primary-blue to-indigo-600"
-      />
-
-      {/* Carrousel Formations Reconversion */}
-      <FormationsCarousel
-        title="Reconversion Professionnelle"
-        formations={formationsReconversion}
-        icon={Users}
-        bgGradient="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50"
-        iconColor="bg-gradient-to-r from-green-500 to-emerald-600"
-      />
-
-      {/* Section VAE */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="bg-gradient-to-br from-purple-50 via-violet-50 to-indigo-50 rounded-3xl p-8 shadow-2xl relative overflow-hidden"
-      >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10zm10 0c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
-
-        <div className="relative z-10">
-          {/* Header VAE */}
-          <div className="flex items-center gap-4 mb-8">
-            <div className="bg-gradient-to-r from-purple-500 to-violet-600 p-4 rounded-2xl shadow-lg">
-              <Award className="w-8 h-8 text-white" />
+      {/* Galerie Masonry Layout */}
+      <div className="grid lg:grid-cols-12 gap-8">
+        
+        {/* Colonne 1 - Formations Alternance (Grande carte) */}
+        <motion.div
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+          className="lg:col-span-6 group"
+        >
+          <div className="relative h-[600px] bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
+            {/* Background Pattern */}
+            <div className="absolute inset-0 opacity-10">
+              <div className="absolute inset-0" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E")`,
+              }} />
             </div>
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900">Validation des Acquis de l'Expérience</h3>
-              <p className="text-gray-600 mt-1">Valorisez votre expérience professionnelle</p>
+
+            {/* Content */}
+            <div className="relative z-10 p-8 h-full flex flex-col justify-between text-white">
+              {/* Header */}
+              <div>
+                <div className="flex items-center gap-3 mb-6">
+                  <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl">
+                    <GraduationCap className="w-8 h-8" />
+                  </div>
+                  <div>
+                    <h4 className="text-3xl font-bold">Formations en Alternance</h4>
+                    <p className="text-blue-100 mt-1">Théorie + Pratique en entreprise</p>
+                  </div>
+                </div>
+
+                {/* Extraits de formations */}
+                <div className="space-y-4 mb-8">
+                  {formationsAlternance.slice(0, 3).map((formation, index) => (
+                    <motion.div
+                      key={formation.id}
+                      initial={{ opacity: 0, x: -20 }}
+                      whileInView={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.5, delay: index * 0.1 }}
+                      viewport={{ once: true }}
+                      className="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-all duration-300"
+                    >
+                      <h5 className="font-semibold mb-2 line-clamp-1">{formation.title}</h5>
+                      <div className="flex items-center gap-4 text-sm text-blue-100">
+                        <span className="flex items-center gap-1">
+                          <Clock className="w-3 h-3" />
+                          {formation.duration}
+                        </span>
+                        <span className="flex items-center gap-1">
+                          <Award className="w-3 h-3" />
+                          {formation.level}
+                        </span>
+                      </div>
+                    </motion.div>
+                  ))}
+                </div>
+              </div>
+
+              {/* CTA */}
+              <div className="space-y-4">
+                <div className="text-center">
+                  <div className="text-4xl font-bold text-primary-yellow mb-2">{formationsAlternance.length}</div>
+                  <div className="text-blue-100">Formations disponibles</div>
+                </div>
+                <Link
+                  href="/formations"
+                  className="block w-full bg-white text-primary-blue px-6 py-4 rounded-xl font-semibold text-center hover:bg-blue-50 transition-all duration-300 group/btn"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    Explorer l'Alternance
+                    <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
+                  </span>
+                </Link>
+              </div>
             </div>
           </div>
+        </motion.div>
 
-          {/* Grille des certifications VAE */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {/* Niveau 5 */}
-            {vaeCertifications.niveau5.map((cert, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="bg-purple-100 text-purple-700 px-3 py-1 rounded-full text-xs font-bold">
-                    Niveau 5
+        {/* Colonne 2 - Reconversion + VAE */}
+        <div className="lg:col-span-6 space-y-8">
+          
+          {/* Reconversion Professionnelle */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.2 }}
+            viewport={{ once: true }}
+            className="group"
+          >
+            <div className="relative h-[280px] bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
+                }} />
+              </div>
+
+              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-white/20 backdrop-blur-sm p-2 rounded-xl">
+                      <Users className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold">Reconversion</h4>
+                      <p className="text-green-100 text-sm">Nouvelle carrière BTP</p>
+                    </div>
                   </div>
-                  <Link href={cert.rncpUrl} target="_blank" className="text-purple-600 hover:text-purple-800">
-                    <ExternalLink className="w-4 h-4" />
-                  </Link>
+
+                  {/* Extrait formation reconversion */}
+                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 mb-4">
+                    <h5 className="font-semibold text-sm mb-1 line-clamp-1">
+                      {formationsReconversion[0]?.title}
+                    </h5>
+                    <p className="text-xs text-green-100 line-clamp-2">
+                      {formationsReconversion[0]?.shortDescription}
+                    </p>
+                  </div>
                 </div>
-                <h4 className="font-bold text-gray-900 mb-2 line-clamp-2">{cert.titre}</h4>
-                <p className="text-xs text-gray-600 mb-3">{cert.rncp}</p>
+
+                <Link
+                  href="/formations/reconversion-btp"
+                  className="bg-white text-green-600 px-4 py-3 rounded-xl font-semibold text-center text-sm hover:bg-green-50 transition-all duration-300 group/btn"
+                >
+                  <span className="flex items-center justify-center gap-2">
+                    Découvrir
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </span>
+                </Link>
+              </div>
+            </div>
+          </motion.div>
+
+          {/* VAE */}
+          <motion.div
+            initial={{ opacity: 0, x: 50 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            transition={{ duration: 0.8, delay: 0.4 }}
+            viewport={{ once: true }}
+            className="group"
+          >
+            <div className="relative h-[280px] bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
+              {/* Background Pattern */}
+              <div className="absolute inset-0 opacity-10">
+                <div className="absolute inset-0" style={{
+                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='50' height='50' viewBox='0 0 50 50' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpolygon points='25 0 30 20 50 25 30 30 25 50 20 30 0 25 20 20'/%3E%3C/g%3E%3C/svg%3E")`,
+                }} />
+              </div>
+
+              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
+                <div>
+                  <div className="flex items-center gap-3 mb-4">
+                    <div className="bg-white/20 backdrop-blur-sm p-2 rounded-xl">
+                      <Award className="w-6 h-6" />
+                    </div>
+                    <div>
+                      <h4 className="text-2xl font-bold">VAE</h4>
+                      <p className="text-purple-100 text-sm">Validation des acquis</p>
+                    </div>
+                  </div>
+
+                  {/* Extraits certifications VAE */}
+                  <div className="space-y-2 mb-4">
+                    {vaeCertifications.niveau5.slice(0, 2).map((cert, index) => (
+                      <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-2">
+                        <h5 className="font-semibold text-xs mb-1 line-clamp-1">{cert.titre}</h5>
+                        <div className="flex items-center gap-2">
+                          <span className="bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full text-xs font-bold">
+                            Niveau 5
+                          </span>
+                          <span className="text-xs text-purple-100">{cert.rncp}</span>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
                 <Link
                   href="/formations/vae-btp"
-                  className="text-purple-600 hover:text-purple-800 font-medium text-sm inline-flex items-center gap-1 group"
+                  className="bg-white text-purple-600 px-4 py-3 rounded-xl font-semibold text-center text-sm hover:bg-purple-50 transition-all duration-300 group/btn"
                 >
-                  En savoir plus
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  <span className="flex items-center justify-center gap-2">
+                    Découvrir la VAE
+                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
+                  </span>
                 </Link>
-              </motion.div>
-            ))}
-
-            {/* Niveau 6 */}
-            {vaeCertifications.niveau6.map((cert, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5, delay: (index + 3) * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="bg-indigo-100 text-indigo-700 px-3 py-1 rounded-full text-xs font-bold">
-                    Niveau 6
-                  </div>
-                  <Link href={cert.rncpUrl} target="_blank" className="text-purple-600 hover:text-purple-800">
-                    <ExternalLink className="w-4 h-4" />
-                  </Link>
-                </div>
-                <h4 className="font-bold text-gray-900 mb-2 line-clamp-2">{cert.titre}</h4>
-                <p className="text-xs text-gray-600 mb-3">{cert.rncp}</p>
-                <Link
-                  href="/formations/vae-btp"
-                  className="text-purple-600 hover:text-purple-800 font-medium text-sm inline-flex items-center gap-1 group"
-                >
-                  En savoir plus
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </motion.div>
-            ))}
-          </div>
-
-          {/* CTA VAE */}
-          <div className="text-center">
-            <Link
-              href="/formations/vae-btp"
-              className="inline-flex items-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
-            >
-              Découvrir la VAE
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
+              </div>
+            </div>
+          </motion.div>
         </div>
-      </motion.div>
+      </div>
 
-      {/* Section Formations Entreprises */}
+      {/* Section Formations Entreprises - Pleine largeur */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 50 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.8, delay: 0.6 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-br from-orange-50 via-amber-50 to-yellow-50 rounded-3xl p-8 shadow-2xl relative overflow-hidden"
+        className="group"
       >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-5">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Cpath d='M30 30h30v30H30V30zm15 15h15v15H45V45z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
-
-        <div className="relative z-10">
-          {/* Header Entreprises */}
-          <div className="flex items-center gap-4 mb-8">
-            <div className="bg-gradient-to-r from-orange-500 to-amber-600 p-4 rounded-2xl shadow-lg">
-              <Building2 className="w-8 h-8 text-white" />
-            </div>
-            <div>
-              <h3 className="text-3xl font-bold text-gray-900">Formations sur Mesure Entreprises</h3>
-              <p className="text-gray-600 mt-1">Solutions adaptées à vos besoins spécifiques</p>
-            </div>
+        <div className="relative bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-600 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500">
+          {/* Background Pattern */}
+          <div className="absolute inset-0 opacity-10">
+            <div className="absolute inset-0" style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M40 40h40v40H40V40zm20 20h20v20H60V60z'/%3E%3C/g%3E%3C/svg%3E")`,
+            }} />
           </div>
 
-          {/* Grille des thématiques entreprises */}
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {entrepriseThematiques.map((thematique, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, x: -20 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                viewport={{ once: true }}
-                className="bg-white/90 backdrop-blur-sm rounded-2xl p-6 hover:bg-white hover:shadow-lg transition-all duration-300"
-              >
-                <div className="flex items-center gap-3 mb-4">
-                  <div className="w-3 h-3 bg-gradient-to-r from-orange-400 to-amber-500 rounded-full"></div>
-                  <h4 className="font-bold text-gray-900 text-sm">{thematique}</h4>
+          <div className="relative z-10 p-8 lg:p-12">
+            <div className="grid lg:grid-cols-2 gap-8 items-center">
+              {/* Contenu */}
+              <div className="text-white">
+                <div className="flex items-center gap-4 mb-6">
+                  <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl">
+                    <Building2 className="w-10 h-10" />
+                  </div>
+                  <div>
+                    <h4 className="text-4xl font-bold">Formations Entreprises</h4>
+                    <p className="text-orange-100 mt-2">Solutions sur mesure pour vos équipes</p>
+                  </div>
                 </div>
+
+                <p className="text-lg text-orange-100 mb-8 leading-relaxed">
+                  Développez les compétences de vos collaborateurs avec nos formations personnalisées. 
+                  Du Lean Construction au BIM collaboratif, nous adaptons nos programmes à vos enjeux.
+                </p>
+
+                <div className="flex flex-wrap gap-3 mb-8">
+                  {entrepriseThematiques.slice(0, 3).map((thematique, index) => (
+                    <div key={index} className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold">
+                      {thematique}
+                    </div>
+                  ))}
+                </div>
+
                 <Link
                   href="/formations/entreprises"
-                  className="text-orange-600 hover:text-orange-800 font-medium text-sm inline-flex items-center gap-1 group"
+                  className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-300 group/btn"
                 >
-                  Découvrir
-                  <ArrowRight className="w-3 h-3 group-hover:translate-x-1 transition-transform" />
+                  Découvrir nos solutions
+                  <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
                 </Link>
-              </motion.div>
-            ))}
-          </div>
+              </div>
 
-          {/* CTA Entreprises */}
-          <div className="text-center">
-            <Link
-              href="/formations/entreprises"
-              className="inline-flex items-center gap-3 bg-white text-gray-900 px-8 py-4 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 hover:scale-105"
-            >
-              Formations Entreprises
-              <ArrowRight className="w-5 h-5" />
-            </Link>
+              {/* Statistiques */}
+              <div className="grid grid-cols-2 gap-6 text-white">
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.8 }}
+                  viewport={{ once: true }}
+                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
+                >
+                  <div className="text-4xl font-bold text-white mb-2">700€</div>
+                  <div className="text-orange-100">À partir de / stagiaire</div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 0.9 }}
+                  viewport={{ once: true }}
+                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
+                >
+                  <div className="text-4xl font-bold text-white mb-2">100%</div>
+                  <div className="text-orange-100">Sur mesure</div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1.0 }}
+                  viewport={{ once: true }}
+                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
+                >
+                  <div className="text-4xl font-bold text-white mb-2">3</div>
+                  <div className="text-orange-100">Modalités</div>
+                </motion.div>
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  whileInView={{ opacity: 1, scale: 1 }}
+                  transition={{ duration: 0.5, delay: 1.1 }}
+                  viewport={{ once: true }}
+                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
+                >
+                  <div className="text-4xl font-bold text-white mb-2">5</div>
+                  <div className="text-orange-100">Thématiques</div>
+                </motion.div>
+              </div>
+            </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Section statistiques finale */}
+      {/* Section finale - CTA global */}
       <motion.div
         initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.8, delay: 0.8 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-r from-primary-blue via-blue-600 to-indigo-700 rounded-3xl p-12 text-white text-center relative overflow-hidden"
+        className="text-center bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-3xl p-12"
       >
-        {/* Background Pattern */}
-        <div className="absolute inset-0 opacity-10">
-          <div className="absolute inset-0" style={{
-            backgroundImage: `url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpolygon points='50 0 60 40 100 50 60 60 50 100 40 60 0 50 40 40'/%3E%3C/g%3E%3C/svg%3E")`,
-          }} />
-        </div>
-
-        <div className="relative z-10">
-          <h3 className="text-4xl font-bold mb-8">Excellence et Innovation en Formation BTP</h3>
-          <div className="grid md:grid-cols-4 gap-8">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.1 }}
-              viewport={{ once: true }}
-            >
-              <div className="text-5xl font-bold text-primary-yellow mb-3">25+</div>
-              <div className="text-blue-100 text-lg">Formations certifiantes</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.2 }}
-              viewport={{ once: true }}
-            >
-              <div className="text-5xl font-bold text-primary-yellow mb-3">4</div>
-              <div className="text-blue-100 text-lg">Modalités d'apprentissage</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.3 }}
-              viewport={{ once: true }}
-            >
-              <div className="text-5xl font-bold text-primary-yellow mb-3">95%</div>
-              <div className="text-blue-100 text-lg">Taux de réussite</div>
-            </motion.div>
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6, delay: 0.4 }}
-              viewport={{ once: true }}
-            >
-              <div className="text-5xl font-bold text-primary-yellow mb-3">1000+</div>
-              <div className="text-blue-100 text-lg">Diplômés par an</div>
-            </motion.div>
-          </div>
+        <h4 className="text-3xl font-bold text-gray-900 mb-6">
+          Prêt à transformer votre carrière ?
+        </h4>
+        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
+          Découvrez toutes nos formations et trouvez celle qui correspond parfaitement à vos ambitions professionnelles.
+        </p>
+        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+          <Link
+            href="/formations"
+            className="inline-flex items-center gap-3 bg-primary-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-300 group"
+          >
+            Voir toutes les formations
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+          <Link
+            href="/contact"
+            className="inline-flex items-center gap-3 bg-white text-primary-blue border-2 border-primary-blue px-8 py-4 rounded-xl font-semibold hover:bg-primary-blue hover:text-white transition-all duration-300"
+          >
+            Nous contacter
+          </Link>
         </div>
       </motion.div>
     </div>
