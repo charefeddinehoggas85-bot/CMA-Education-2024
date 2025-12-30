@@ -51,13 +51,33 @@ export default function BrochurePage() {
     setIsLoading(true)
 
     try {
-      // Construire l'URL de la brochure
-      const brochureUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${(selectedFormation as any).brochure.data.attributes.url}`;
+      // Construire l'URL de la brochure avec fallback
+      let brochureUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${(selectedFormation as any).brochure.data.attributes.url}`;
+      
+      // Fallback vers brochure générique si l'URL Strapi ne fonctionne pas
+      const fallbackBrochures: { [key: string]: string } = {
+        'conducteur-travaux-batiment': '/brochures/conducteur-travaux-batiment.pdf',
+        'charge-affaires-batiment': '/brochures/charge-affaires-batiment.pdf',
+        'chef-projets-btp': '/brochures/chef-projets-btp.pdf',
+        'conducteur-travaux-vrd': '/brochures/conducteur-travaux-vrd.pdf',
+        'chef-chantier-vrd': '/brochures/chef-chantier-vrd.pdf',
+        'double-parcours-bim': '/brochures/double-parcours-bim.pdf'
+      };
+      
+      // Vérifier si on a un fallback pour cette formation
+      const formationKey = selectedFormation.slug || selectedFormation.title.toLowerCase()
+        .replace(/[^a-z0-9]/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
+      
+      if (fallbackBrochures[formationKey]) {
+        brochureUrl = fallbackBrochures[formationKey];
+      }
       
       // Télécharger la brochure
       const link = document.createElement('a');
       link.href = brochureUrl;
-      link.download = `brochure-${selectedFormation.slug}-${formData.nom}-${formData.prenom}.pdf`;
+      link.download = `brochure-${selectedFormation.slug || formationKey}-${formData.nom}-${formData.prenom}.pdf`;
       link.target = '_blank';
       document.body.appendChild(link);
       link.click();
