@@ -483,8 +483,8 @@ export default function FormationsPage() {
         // Fallback vers données statiques en cas d'erreur
         try {
           const { formationsAlternance: staticAlt, formationsReconversion: staticReconv } = await import('@/data/formations-static')
-          setFormationsAlternance(staticAlt || [])
-          setFormationsReconversion(staticReconv || [])
+          setFormationsAlternance((staticAlt || []) as any[])
+          setFormationsReconversion((staticReconv || []) as any[])
           console.log('✅ Fallback statique chargé')
         } catch (e) {
           setFormationsAlternance([])
