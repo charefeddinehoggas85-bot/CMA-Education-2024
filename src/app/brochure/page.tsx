@@ -51,37 +51,41 @@ export default function BrochurePage() {
     setIsLoading(true)
 
     try {
-      // Construire l'URL de la brochure avec fallback
-      let brochureUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${(selectedFormation as any).brochure.data.attributes.url}`;
+      console.log('🔄 Téléchargement de la brochure via API proxy...');
       
-      // Fallback vers brochure générique si l'URL Strapi ne fonctionne pas
-      const fallbackBrochures: { [key: string]: string } = {
-        'conducteur-travaux-batiment': '/brochures/conducteur-travaux-batiment.pdf',
-        'charge-affaires-batiment': '/brochures/charge-affaires-batiment.pdf',
-        'chef-projets-btp': '/brochures/chef-projets-btp.pdf',
-        'conducteur-travaux-vrd': '/brochures/conducteur-travaux-vrd.pdf',
-        'chef-chantier-vrd': '/brochures/chef-chantier-vrd.pdf',
-        'double-parcours-bim': '/brochures/double-parcours-bim.pdf'
-      };
-      
-      // Vérifier si on a un fallback pour cette formation
-      const formationKey = selectedFormation.slug || selectedFormation.title.toLowerCase()
-        .replace(/[^a-z0-9]/g, '-')
-        .replace(/-+/g, '-')
-        .replace(/^-|-$/g, '');
-      
-      if (fallbackBrochures[formationKey]) {
-        brochureUrl = fallbackBrochures[formationKey];
+      // Utiliser notre API proxy pour télécharger la brochure
+      const response = await fetch('/api/download-brochure', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formationId: selectedFormation.id,
+          userData: formData
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Erreur lors du téléchargement');
       }
+
+      // Récupérer le PDF en tant que blob
+      const pdfBlob = await response.blob();
       
-      // Télécharger la brochure
+      // Créer un lien de téléchargement
+      const url = window.URL.createObjectURL(pdfBlob);
       const link = document.createElement('a');
-      link.href = brochureUrl;
-      link.download = `brochure-${selectedFormation.slug || formationKey}-${formData.nom}-${formData.prenom}.pdf`;
-      link.target = '_blank';
+      link.href = url;
+      link.download = `brochure-${selectedFormation.slug || 'formation'}-${formData.nom}-${formData.prenom}.pdf`;
       document.body.appendChild(link);
       link.click();
       document.body.removeChild(link);
+      
+      // Nettoyer l'URL temporaire
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+
+      console.log('✅ Brochure téléchargée avec succès !');
 
       // Envoyer les données par EmailJS
       await emailjs.send(
@@ -97,7 +101,7 @@ export default function BrochurePage() {
           user_email: formData.email,
           user_telephone: formData.telephone,
           date: new Date().toLocaleDateString('fr-FR'),
-          brochure_type: 'Strapi PDF'
+          brochure_type: 'Strapi PDF via Proxy'
         },
         'tdRwM2nw_IxILeGS-'
       )
@@ -109,7 +113,8 @@ export default function BrochurePage() {
         setSelectedFormation(null)
       }, 3000)
     } catch (error) {
-      console.error('Erreur téléchargement:', error)
+      console.error('❌ Erreur téléchargement:', error)
+      alert(`Erreur: ${error instanceof Error ? error.message : 'Problème de téléchargement'}`)
     } finally {
       setIsLoading(false)
     }

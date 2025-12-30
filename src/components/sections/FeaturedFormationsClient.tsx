@@ -1,7 +1,7 @@
 'use client'
 
 import { motion, AnimatePresence } from 'framer-motion'
-import { ArrowRight, GraduationCap, Users, Award, Building2, Clock, MapPin, Star, ExternalLink, ChevronLeft, ChevronRight } from 'lucide-react'
+import { ArrowRight, GraduationCap, Users, Award, Building2, Clock, MapPin, Star, ExternalLink, ChevronLeft, ChevronRight, CheckCircle, BookOpen, Euro } from 'lucide-react'
 import Link from 'next/link'
 import { getStrapiMediaURL } from '@/lib/strapi'
 import { formationsAlternance, formationsReconversion, vaeCertifications, entrepriseThematiques } from '@/data/formations-static'
@@ -34,157 +34,7 @@ interface FeaturedFormationsClientProps {
   formations: Formation[]
 }
 
-// Composant pour une carte de formation moderne avec toutes les informations
-function ModernFormationCard({ formation, index }: { formation: any, index: number }) {
-  const [isHovered, setIsHovered] = useState(false)
-  
-  return (
-    <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
-      viewport={{ once: true }}
-      onHoverStart={() => setIsHovered(true)}
-      onHoverEnd={() => setIsHovered(false)}
-      className="group relative bg-white rounded-3xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 transform hover:-translate-y-3 flex-shrink-0 w-80 h-[520px] border border-gray-100"
-    >
-      {/* Image Container avec overlay gradient */}
-      <div className="relative h-48 overflow-hidden">
-        {formation.image ? (
-          <motion.img
-            src={formation.image}
-            alt={formation.title || formation.titre || 'Formation'}
-            className="w-full h-full object-cover"
-            animate={{ scale: isHovered ? 1.1 : 1 }}
-            transition={{ duration: 0.5 }}
-          />
-        ) : (
-          <div className="w-full h-full bg-gradient-to-br from-primary-blue via-blue-600 to-indigo-700 flex items-center justify-center">
-            <div className="text-white text-center">
-              <div className="text-5xl mb-3">🏗️</div>
-              <p className="text-sm font-semibold opacity-90">Formation BTP</p>
-            </div>
-          </div>
-        )}
-        
-        {/* Overlay gradient animé */}
-        <motion.div 
-          className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent"
-          animate={{ opacity: isHovered ? 1 : 0.7 }}
-          transition={{ duration: 0.3 }}
-        />
-        
-        {/* Badges flottants */}
-        <div className="absolute top-4 left-4 right-4 flex justify-between items-start">
-          {formation.isAlternance && (
-            <motion.div 
-              className="bg-primary-yellow text-primary-blue px-3 py-1.5 rounded-full text-xs font-bold shadow-lg"
-              whileHover={{ scale: 1.05 }}
-            >
-              Alternance
-            </motion.div>
-          )}
-          {formation.isReconversion && (
-            <motion.div 
-              className="bg-green-500 text-white px-3 py-1.5 rounded-full text-xs font-bold shadow-lg"
-              whileHover={{ scale: 1.05 }}
-            >
-              Reconversion
-            </motion.div>
-          )}
-          <motion.div 
-            className="bg-white/20 backdrop-blur-sm text-white px-3 py-1.5 rounded-full text-xs font-bold"
-            whileHover={{ scale: 1.05 }}
-          >
-            <Star className="w-3 h-3 inline mr-1" />
-            Populaire
-          </motion.div>
-        </div>
-
-        {/* Niveau RNCP en bas de l'image */}
-        {formation.level && (
-          <div className="absolute bottom-4 left-4">
-            <div className="bg-white/90 backdrop-blur-sm text-primary-blue px-3 py-1.5 rounded-full text-xs font-bold shadow-lg">
-              {formation.level}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Contenu principal */}
-      <div className="p-6 flex flex-col h-[calc(100%-12rem)]">
-        {/* Titre avec animation */}
-        <motion.h3 
-          className="text-lg font-bold text-gray-900 mb-3 line-clamp-2 group-hover:text-primary-blue transition-colors"
-          animate={{ y: isHovered ? -2 : 0 }}
-          transition={{ duration: 0.3 }}
-        >
-          {formation.title || formation.titre}
-        </motion.h3>
-
-        {/* Description courte */}
-        {formation.shortDescription && (
-          <p className="text-sm text-gray-600 mb-4 line-clamp-3 leading-relaxed">
-            {formation.shortDescription}
-          </p>
-        )}
-
-        {/* Informations pratiques */}
-        <div className="space-y-2 mb-4 flex-grow">
-          {formation.duration && (
-            <div className="flex items-center gap-2 text-xs text-gray-600">
-              <Clock className="w-4 h-4 text-primary-blue" />
-              <span>{formation.duration}</span>
-            </div>
-          )}
-          {formation.mode && (
-            <div className="flex items-center gap-2 text-xs text-gray-600">
-              <MapPin className="w-4 h-4 text-primary-blue" />
-              <span>{formation.mode}</span>
-            </div>
-          )}
-          {formation.price && (
-            <div className="flex items-center gap-2 text-xs font-semibold text-green-600">
-              <span className="w-4 h-4 text-center">💰</span>
-              <span>{formation.price}</span>
-            </div>
-          )}
-        </div>
-
-        {/* RNCP Badge */}
-        {formation.rncp && (
-          <div className="mb-4">
-            <div className="inline-flex items-center gap-2 bg-blue-50 text-primary-blue px-3 py-1.5 rounded-lg text-xs font-semibold">
-              <Award className="w-3 h-3" />
-              <span>{formation.rncp}</span>
-              {formation.rncpUrl && (
-                <Link href={formation.rncpUrl} target="_blank" className="hover:text-primary-yellow transition-colors">
-                  <ExternalLink className="w-3 h-3" />
-                </Link>
-              )}
-            </div>
-          </div>
-        )}
-
-        {/* CTA Button avec animation */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-        >
-          <Link
-            href={`/formations/${formation.slug}`}
-            className="inline-flex items-center justify-center gap-2 w-full bg-gradient-to-r from-primary-blue to-blue-600 text-white px-6 py-3 rounded-xl font-semibold hover:shadow-lg transition-all duration-300 group/btn"
-          >
-            Découvrir la formation
-            <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-          </Link>
-        </motion.div>
-      </div>
-    </motion.div>
-  )
-}
-
-// Composant Carousel horizontal avec navigation
+// Composant Carousel horizontal avec navigation utilisant les cartes existantes
 function FormationsCarousel({ 
   title, 
   formations, 
@@ -230,6 +80,17 @@ function FormationsCarousel({
     setCanScrollLeft(currentIndex > 0)
     setCanScrollRight(currentIndex < formations.length - 3)
   }, [currentIndex, formations.length])
+
+  // Déterminer la catégorie basée sur le titre
+  const getCategory = (title: string): string => {
+    if (title.toLowerCase().includes('alternance')) return 'alternance'
+    if (title.toLowerCase().includes('reconversion')) return 'reconversion'
+    if (title.toLowerCase().includes('vae')) return 'vae'
+    if (title.toLowerCase().includes('entreprise')) return 'entreprise'
+    return 'alternance'
+  }
+
+  const category = getCategory(title)
 
   return (
     <motion.div
@@ -296,7 +157,7 @@ function FormationsCarousel({
         style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
       >
         {formations.map((formation, index) => (
-          <ModernFormationCard key={formation.id} formation={formation} index={index} />
+          <ExistingFormationCard key={formation.id} formation={formation} index={index} category={category} />
         ))}
       </div>
 
@@ -307,7 +168,7 @@ function FormationsCarousel({
             key={index}
             onClick={() => scrollToIndex(index)}
             className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? 'bg-white shadow-lg' : 'bg-white/40'
+              index === currentIndex ? 'bg-gray-700 shadow-lg' : 'bg-gray-400'
             }`}
             whileHover={{ scale: 1.2 }}
             whileTap={{ scale: 0.9 }}
@@ -318,98 +179,212 @@ function FormationsCarousel({
   )
 }
 
+// Composant FormationCard adapté depuis la page formations existante
+function ExistingFormationCard({ formation, index, category }: { formation: any, index: number, category: string }) {
+  const [isExpanded, setIsExpanded] = useState(false)
+  
+  const getCategoryColor = (cat: string) => {
+    switch(cat) {
+      case 'alternance': return 'bg-gradient-to-r from-primary-blue to-blue-600'
+      case 'reconversion': return 'bg-gradient-to-r from-green-600 to-emerald-600'
+      case 'vae': return 'bg-gradient-to-r from-purple-600 to-indigo-600'
+      case 'entreprise': return 'bg-gradient-to-r from-orange-600 to-red-600'
+      default: return 'bg-gradient-primary'
+    }
+  }
+
+  // Helper pour obtenir l'URL France Compétences
+  const getRncpUrl = (rncp?: string, rncpUrl?: string): string | undefined => {
+    if (rncpUrl && rncpUrl.trim() !== '') return rncpUrl
+    if (rncp) {
+      const rncpToUrlMap: Record<string, string> = {
+        'RNCP35503': 'https://www.francecompetences.fr/recherche/rncp/35503/',
+        'RNCP40217': 'https://www.francecompetences.fr/recherche/rncp/40217/',
+        'RNCP41466': 'https://www.francecompetences.fr/recherche/rncp/41466/',
+        'RNCP41368': 'https://www.francecompetences.fr/recherche/rncp/41368/',
+        'RNCP39408': 'https://www.francecompetences.fr/recherche/rncp/39408/',
+        'RNCP41369': 'https://www.francecompetences.fr/recherche/rncp/41369/',
+        'RNCP39469': 'https://www.francecompetences.fr/recherche/rncp/39469/',
+        'RNCP38549': 'https://www.francecompetences.fr/recherche/rncp/38549/',
+      }
+      return rncpToUrlMap[rncp] || undefined
+    }
+    return undefined
+  }
+
+  const rncpUrl = getRncpUrl(formation.rncp, formation.rncpUrl)
+
+  return (
+    <motion.div
+      initial={{ opacity: 0, x: 50 }}
+      whileInView={{ opacity: 1, x: 0 }}
+      transition={{ duration: 0.6, delay: index * 0.1 }}
+      viewport={{ once: true }}
+      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex-shrink-0 w-80"
+    >
+      {/* Image de la formation */}
+      {formation.image && (
+        <div className="relative h-48 overflow-hidden">
+          <img 
+            src={formation.image}
+            alt={formation.title}
+            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
+          />
+          <div className={`absolute inset-0 ${getCategoryColor(category)} opacity-40`} />
+          <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
+            {formation.level}
+          </span>
+        </div>
+      )}
+      
+      <div className={`${!formation.image ? getCategoryColor(category) : ''} ${!formation.image ? 'p-6 text-white' : 'p-4'}`}>
+        {!formation.image && (
+          <>
+            <div className="flex justify-between items-start mb-4">
+              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
+                <GraduationCap className="w-6 h-6 text-white" />
+              </div>
+              <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
+                {formation.level}
+              </span>
+            </div>
+          </>
+        )}
+        
+        <h3 className={`text-xl font-montserrat font-bold mb-2 ${formation.image ? 'text-primary-blue' : ''}`}>
+          {formation.title}
+        </h3>
+        
+        {formation.rncp && (
+          <div className={`flex items-center space-x-2 ${formation.image ? 'text-gray-600' : 'text-white/90'}`}>
+            <Award className="w-4 h-4" />
+            <span className="text-sm">{formation.rncp}</span>
+            {rncpUrl && (
+              <a 
+                href={rncpUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className={`inline-flex items-center space-x-1 text-xs ${formation.image ? 'text-primary-blue hover:text-blue-700' : 'text-white/80 hover:text-white'} transition-colors`}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <ExternalLink className="w-3 h-3" />
+                <span>France Compétences</span>
+              </a>
+            )}
+          </div>
+        )}
+      </div>
+      
+      <div className="p-6 pt-2">
+        <p className="text-gray-600 mb-4">{formation.shortDescription}</p>
+        
+        <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+          {formation.duration && (
+            <div className="flex items-center space-x-2">
+              <Clock className="w-4 h-4 text-primary-yellow" />
+              <span className="text-gray-600">{formation.duration}</span>
+            </div>
+          )}
+          <div className="flex items-center space-x-2">
+            <MapPin className="w-4 h-4 text-primary-yellow" />
+            <span className="text-gray-600">{formation.mode || 'Présentiel'}</span>
+          </div>
+          {formation.rhythm && (
+            <div className="flex items-center space-x-2">
+              <BookOpen className="w-4 h-4 text-primary-yellow" />
+              <span className="text-gray-600 text-xs">{formation.rhythm}</span>
+            </div>
+          )}
+          <div className="flex items-center space-x-2">
+            <Euro className="w-4 h-4 text-primary-yellow" />
+            <span className="text-gray-600 text-xs">{formation.price || 'Prise en charge'}</span>
+          </div>
+        </div>
+        
+        {/* Objectifs principaux */}
+        {formation.objectives && formation.objectives.length > 0 && (
+          <div className="mb-4">
+            <h4 className="font-semibold text-primary-blue mb-2 text-sm">Objectifs principaux :</h4>
+            <ul className="space-y-1 text-xs text-gray-600">
+              {formation.objectives.slice(0, 2).map((obj: string, i: number) => (
+                <li key={i} className="flex items-start space-x-2">
+                  <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
+                  <span>{obj}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+
+        {/* Débouchés principaux */}
+        {formation.opportunities && formation.opportunities.length > 0 && (
+          <div className="mb-4">
+            <h4 className="font-semibold text-primary-blue mb-2 text-sm">Débouchés principaux :</h4>
+            <div className="flex flex-wrap gap-1">
+              {formation.opportunities.slice(0, 2).map((debouche: string, i: number) => (
+                <span key={i} className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs">
+                  {debouche.length > 25 ? debouche.substring(0, 25) + '...' : debouche}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+        
+        <div className="space-y-3">
+          <button 
+            onClick={() => setIsExpanded(!isExpanded)}
+            className="flex items-center space-x-2 text-primary-blue hover:text-primary-yellow transition-colors w-full justify-center py-2 border border-primary-blue/20 rounded-lg hover:bg-primary-blue/5"
+          >
+            <span>{isExpanded ? 'Voir moins' : 'Aperçu'}</span>
+            <ArrowRight className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
+          </button>
+          
+          <Link 
+            href={`/formations/${formation.slug}`}
+            className="flex items-center space-x-2 bg-primary-blue text-white hover:bg-blue-700 transition-colors w-full justify-center py-2 rounded-lg font-semibold"
+          >
+            <span>Voir tous les détails</span>
+            <ArrowRight className="w-4 h-4" />
+          </Link>
+        </div>
+      </div>
+    </motion.div>
+  )
+}
+
 export function FeaturedFormationsClient({ formations }: FeaturedFormationsClientProps) {
-  // Si nous avons des formations depuis Strapi, les afficher
+  // Si nous avons des formations depuis Strapi, les afficher dans un carousel horizontal
   if (formations.length > 0) {
     return (
-      <div className="grid md:grid-cols-3 gap-8 mb-12">
-        {formations.map((formation, index) => (
-          <motion.div
-            key={formation.id}
-            initial={{ opacity: 0, y: 30 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: index * 0.1 }}
-            viewport={{ once: true }}
-            className="group bg-white rounded-2xl overflow-hidden shadow-lg hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 flex flex-col h-full"
-          >
-            {/* Image Container */}
-            <div className="relative h-48 overflow-hidden bg-gradient-to-br from-primary-blue to-blue-600">
-              {formation.image && getStrapiMediaURL(formation.image) ? (
-                <img
-                  src={getStrapiMediaURL(formation.image) || ''}
-                  alt={formation.title || formation.titre || 'Formation'}
-                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center">
-                  <div className="text-white text-center">
-                    <div className="text-4xl mb-2">🏗️</div>
-                    <p className="text-sm font-semibold">{formation.categorie || formation.category?.name || 'Formation BTP'}</p>
-                  </div>
-                </div>
-              )}
-              {/* Overlay Gradient */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              
-              {/* Badge */}
-              <div className="absolute top-4 right-4 bg-primary-yellow text-primary-blue px-3 py-1 rounded-full text-xs font-bold">
-                Populaire
-              </div>
-            </div>
-
-            {/* Content */}
-            <div className="p-6 flex flex-col h-full">
-              {/* Badges Section */}
-              <div className="mb-4 flex flex-wrap gap-2 min-h-[32px]">
-                {(formation.niveauRNCP || formation.level) && (
-                  <span className="inline-block bg-blue-100 text-primary-blue text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                    {formation.niveauRNCP || formation.level}
-                  </span>
-                )}
-                {(formation.categorie || formation.category?.name) && (
-                  <span className="inline-block bg-yellow-100 text-primary-yellow text-xs font-semibold px-3 py-1 rounded-full whitespace-nowrap">
-                    {formation.categorie || formation.category?.name}
-                  </span>
-                )}
-              </div>
-              
-              {/* Title */}
-              <h3 className="text-lg font-bold text-gray-900 mb-6 line-clamp-3 group-hover:text-primary-blue transition-colors flex-grow">
-                {formation.title || formation.titre}
-              </h3>
-
-              {/* CTA Button */}
-              <Link
-                href={`/formations/${formation.slug}`}
-                className="inline-flex items-center gap-2 text-primary-blue font-semibold hover:text-primary-yellow transition-colors group/btn mt-auto"
-              >
-                Découvrir
-                <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-              </Link>
-            </div>
-          </motion.div>
-        ))}
+      <div className="space-y-12">
+        <FormationsCarousel
+          title="Formations Disponibles"
+          formations={formations}
+          icon={GraduationCap}
+          bgGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
+          iconColor="bg-primary-blue"
+        />
       </div>
     )
   }
 
-  // Galerie moderne avec extraits de formations par catégorie
+  // Carousels horizontaux avec les formations existantes par catégorie
   return (
-    <div className="space-y-20">
-      {/* Titre principal de la galerie */}
+    <div className="space-y-16">
+      {/* Titre principal */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="text-center mb-16"
+        className="text-center mb-12"
       >
         <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-blue/10 to-primary-yellow/10 px-6 py-3 rounded-full mb-6">
           <div className="w-2 h-2 bg-primary-blue rounded-full animate-pulse"></div>
-          <span className="text-primary-blue font-semibold text-sm uppercase tracking-wider">Galerie Formations</span>
+          <span className="text-primary-blue font-semibold text-sm uppercase tracking-wider">Nos Formations</span>
           <div className="w-2 h-2 bg-primary-yellow rounded-full animate-pulse"></div>
         </div>
-        <h3 className="text-5xl md:text-6xl font-bold text-gray-900 mb-6 leading-tight">
+        <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
           Découvrez Nos
           <span className="block bg-gradient-to-r from-primary-blue to-primary-yellow bg-clip-text text-transparent">
             Formations d'Excellence
@@ -420,251 +395,126 @@ export function FeaturedFormationsClient({ formations }: FeaturedFormationsClien
         </p>
       </motion.div>
 
-      {/* Galerie Masonry Layout */}
-      <div className="grid lg:grid-cols-12 gap-8">
-        
-        {/* Colonne 1 - Formations Alternance (Grande carte) */}
-        <motion.div
-          initial={{ opacity: 0, x: -50 }}
-          whileInView={{ opacity: 1, x: 0 }}
-          transition={{ duration: 0.8 }}
-          viewport={{ once: true }}
-          className="lg:col-span-6 group"
-        >
-          <div className="relative h-[600px] bg-gradient-to-br from-blue-600 via-indigo-600 to-purple-700 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
-            {/* Background Pattern */}
-            <div className="absolute inset-0 opacity-10">
-              <div className="absolute inset-0" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/svg%3E")`,
-              }} />
-            </div>
+      {/* Carousel Formations Alternance */}
+      <FormationsCarousel
+        title="Formations en Alternance"
+        formations={formationsAlternance}
+        icon={GraduationCap}
+        bgGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
+        iconColor="bg-primary-blue"
+      />
 
-            {/* Content */}
-            <div className="relative z-10 p-8 h-full flex flex-col justify-between text-white">
-              {/* Header */}
-              <div>
-                <div className="flex items-center gap-3 mb-6">
-                  <div className="bg-white/20 backdrop-blur-sm p-3 rounded-2xl">
-                    <GraduationCap className="w-8 h-8" />
-                  </div>
-                  <div>
-                    <h4 className="text-3xl font-bold">Formations en Alternance</h4>
-                    <p className="text-blue-100 mt-1">Théorie + Pratique en entreprise</p>
-                  </div>
-                </div>
+      {/* Carousel Formations Reconversion */}
+      <FormationsCarousel
+        title="Reconversion Professionnelle"
+        formations={formationsReconversion}
+        icon={Users}
+        bgGradient="bg-gradient-to-br from-green-50 to-emerald-100"
+        iconColor="bg-green-600"
+      />
 
-                {/* Extraits de formations */}
-                <div className="space-y-4 mb-8">
-                  {formationsAlternance.slice(0, 3).map((formation, index) => (
-                    <motion.div
-                      key={formation.id}
-                      initial={{ opacity: 0, x: -20 }}
-                      whileInView={{ opacity: 1, x: 0 }}
-                      transition={{ duration: 0.5, delay: index * 0.1 }}
-                      viewport={{ once: true }}
-                      className="bg-white/10 backdrop-blur-sm rounded-xl p-4 hover:bg-white/20 transition-all duration-300"
-                    >
-                      <h5 className="font-semibold mb-2 line-clamp-1">{formation.title}</h5>
-                      <div className="flex items-center gap-4 text-sm text-blue-100">
-                        <span className="flex items-center gap-1">
-                          <Clock className="w-3 h-3" />
-                          {formation.duration}
-                        </span>
-                        <span className="flex items-center gap-1">
-                          <Award className="w-3 h-3" />
-                          {formation.level}
-                        </span>
-                      </div>
-                    </motion.div>
-                  ))}
-                </div>
-              </div>
-
-              {/* CTA */}
-              <div className="space-y-4">
-                <div className="text-center">
-                  <div className="text-4xl font-bold text-primary-yellow mb-2">{formationsAlternance.length}</div>
-                  <div className="text-blue-100">Formations disponibles</div>
-                </div>
-                <Link
-                  href="/formations"
-                  className="block w-full bg-white text-primary-blue px-6 py-4 rounded-xl font-semibold text-center hover:bg-blue-50 transition-all duration-300 group/btn"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    Explorer l'Alternance
-                    <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-              </div>
-            </div>
-          </div>
-        </motion.div>
-
-        {/* Colonne 2 - Reconversion + VAE */}
-        <div className="lg:col-span-6 space-y-8">
-          
-          {/* Reconversion Professionnelle */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.2 }}
-            viewport={{ once: true }}
-            className="group"
-          >
-            <div className="relative h-[280px] bg-gradient-to-br from-green-500 via-emerald-600 to-teal-700 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M20 20c0-5.5-4.5-10-10-10s-10 4.5-10 10 4.5 10 10 10 10-4.5 10-10z'/%3E%3C/g%3E%3C/svg%3E")`,
-                }} />
-              </div>
-
-              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="bg-white/20 backdrop-blur-sm p-2 rounded-xl">
-                      <Users className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-2xl font-bold">Reconversion</h4>
-                      <p className="text-green-100 text-sm">Nouvelle carrière BTP</p>
-                    </div>
-                  </div>
-
-                  {/* Extrait formation reconversion */}
-                  <div className="bg-white/10 backdrop-blur-sm rounded-xl p-3 mb-4">
-                    <h5 className="font-semibold text-sm mb-1 line-clamp-1">
-                      {formationsReconversion[0]?.title}
-                    </h5>
-                    <p className="text-xs text-green-100 line-clamp-2">
-                      {formationsReconversion[0]?.shortDescription}
-                    </p>
-                  </div>
-                </div>
-
-                <Link
-                  href="/formations/reconversion-btp"
-                  className="bg-white text-green-600 px-4 py-3 rounded-xl font-semibold text-center text-sm hover:bg-green-50 transition-all duration-300 group/btn"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    Découvrir
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-
-          {/* VAE */}
-          <motion.div
-            initial={{ opacity: 0, x: 50 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.8, delay: 0.4 }}
-            viewport={{ once: true }}
-            className="group"
-          >
-            <div className="relative h-[280px] bg-gradient-to-br from-purple-600 via-violet-600 to-indigo-700 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500 hover:scale-[1.02]">
-              {/* Background Pattern */}
-              <div className="absolute inset-0 opacity-10">
-                <div className="absolute inset-0" style={{
-                  backgroundImage: `url("data:image/svg+xml,%3Csvg width='50' height='50' viewBox='0 0 50 50' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpolygon points='25 0 30 20 50 25 30 30 25 50 20 30 0 25 20 20'/%3E%3C/g%3E%3C/svg%3E")`,
-                }} />
-              </div>
-
-              <div className="relative z-10 p-6 h-full flex flex-col justify-between text-white">
-                <div>
-                  <div className="flex items-center gap-3 mb-4">
-                    <div className="bg-white/20 backdrop-blur-sm p-2 rounded-xl">
-                      <Award className="w-6 h-6" />
-                    </div>
-                    <div>
-                      <h4 className="text-2xl font-bold">VAE</h4>
-                      <p className="text-purple-100 text-sm">Validation des acquis</p>
-                    </div>
-                  </div>
-
-                  {/* Extraits certifications VAE */}
-                  <div className="space-y-2 mb-4">
-                    {vaeCertifications.niveau5.slice(0, 2).map((cert, index) => (
-                      <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-2">
-                        <h5 className="font-semibold text-xs mb-1 line-clamp-1">{cert.titre}</h5>
-                        <div className="flex items-center gap-2">
-                          <span className="bg-purple-200 text-purple-800 px-2 py-0.5 rounded-full text-xs font-bold">
-                            Niveau 5
-                          </span>
-                          <span className="text-xs text-purple-100">{cert.rncp}</span>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </div>
-
-                <Link
-                  href="/formations/vae-btp"
-                  className="bg-white text-purple-600 px-4 py-3 rounded-xl font-semibold text-center text-sm hover:bg-purple-50 transition-all duration-300 group/btn"
-                >
-                  <span className="flex items-center justify-center gap-2">
-                    Découvrir la VAE
-                    <ArrowRight className="w-4 h-4 group-hover/btn:translate-x-1 transition-transform" />
-                  </span>
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Section Formations Entreprises - Pleine largeur */}
+      {/* Section VAE - Cartes statiques */}
       <motion.div
-        initial={{ opacity: 0, y: 50 }}
+        initial={{ opacity: 0, y: 40 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.6 }}
+        transition={{ duration: 0.8 }}
         viewport={{ once: true }}
-        className="group"
+        className="bg-gradient-to-br from-purple-50 to-indigo-100 rounded-3xl p-8 shadow-2xl"
       >
-        <div className="relative bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-600 rounded-3xl overflow-hidden shadow-2xl hover:shadow-3xl transition-all duration-500">
-          {/* Background Pattern */}
-          <div className="absolute inset-0 opacity-10">
-            <div className="absolute inset-0" style={{
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='80' height='80' viewBox='0 0 80 80' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.1'%3E%3Cpath d='M40 40h40v40H40V40zm20 20h20v20H60V60z'/%3E%3C/g%3E%3C/svg%3E")`,
-            }} />
+        <div className="flex items-center gap-4 mb-8">
+          <div className="bg-purple-600 p-4 rounded-2xl shadow-lg">
+            <Award className="w-8 h-8 text-white" />
           </div>
+          <div>
+            <h3 className="text-3xl font-bold text-gray-900">VAE - Validation des Acquis</h3>
+            <p className="text-gray-600 mt-1">Transformez votre expérience en certification</p>
+          </div>
+        </div>
 
-          <div className="relative z-10 p-8 lg:p-12">
-            <div className="grid lg:grid-cols-2 gap-8 items-center">
-              {/* Contenu */}
-              <div className="text-white">
-                <div className="flex items-center gap-4 mb-6">
-                  <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl">
-                    <Building2 className="w-10 h-10" />
-                  </div>
-                  <div>
-                    <h4 className="text-4xl font-bold">Formations Entreprises</h4>
-                    <p className="text-orange-100 mt-2">Solutions sur mesure pour vos équipes</p>
-                  </div>
-                </div>
-
-                <p className="text-lg text-orange-100 mb-8 leading-relaxed">
-                  Développez les compétences de vos collaborateurs avec nos formations personnalisées. 
-                  Du Lean Construction au BIM collaboratif, nous adaptons nos programmes à vos enjeux.
-                </p>
-
-                <div className="flex flex-wrap gap-3 mb-8">
-                  {entrepriseThematiques.slice(0, 3).map((thematique, index) => (
-                    <div key={index} className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold">
-                      {thematique}
-                    </div>
-                  ))}
-                </div>
-
-                <Link
-                  href="/formations/entreprises"
-                  className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-300 group/btn"
-                >
-                  Découvrir nos solutions
-                  <ArrowRight className="w-5 h-5 group-hover/btn:translate-x-1 transition-transform" />
-                </Link>
+        <div className="grid md:grid-cols-2 gap-6 mb-8">
+          {vaeCertifications.niveau5.slice(0, 4).map((cert, index) => (
+            <motion.div
+              key={index}
+              initial={{ opacity: 0, x: -20 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.5, delay: index * 0.1 }}
+              viewport={{ once: true }}
+              className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300"
+            >
+              <h4 className="font-semibold text-gray-900 mb-2">{cert.titre}</h4>
+              <div className="flex items-center gap-2 mb-3">
+                <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold">
+                  Niveau 5
+                </span>
+                <span className="text-sm text-gray-600">{cert.rncp}</span>
               </div>
+              {cert.rncpUrl && (
+                <a 
+                  href={cert.rncpUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1 text-primary-blue hover:text-blue-700 text-sm transition-colors"
+                >
+                  <ExternalLink className="w-3 h-3" />
+                  France Compétences
+                </a>
+              )}
+            </motion.div>
+          ))}
+        </div>
+
+        <div className="text-center">
+          <Link
+            href="/formations/vae-btp"
+            className="inline-flex items-center gap-3 bg-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-purple-700 transition-all duration-300 group"
+          >
+            Découvrir la VAE
+            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+          </Link>
+        </div>
+      </motion.div>
+
+      {/* Section Formations Entreprises */}
+      <motion.div
+        initial={{ opacity: 0, y: 40 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8 }}
+        viewport={{ once: true }}
+        className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-600 rounded-3xl p-8 lg:p-12 shadow-2xl text-white"
+      >
+        <div className="grid lg:grid-cols-2 gap-8 items-center">
+          <div>
+            <div className="flex items-center gap-4 mb-6">
+              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl">
+                <Building2 className="w-10 h-10" />
+              </div>
+              <div>
+                <h3 className="text-4xl font-bold">Formations Entreprises</h3>
+                <p className="text-orange-100 mt-2">Solutions sur mesure pour vos équipes</p>
+              </div>
+            </div>
+
+            <p className="text-lg text-orange-100 mb-8 leading-relaxed">
+              Développez les compétences de vos collaborateurs avec nos formations personnalisées. 
+              Du Lean Construction au BIM collaboratif, nous adaptons nos programmes à vos enjeux.
+            </p>
+
+            <div className="flex flex-wrap gap-3 mb-8">
+              {entrepriseThematiques.slice(0, 3).map((thematique, index) => (
+                <div key={index} className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold">
+                  {thematique}
+                </div>
+              ))}
+            </div>
+
+            <Link
+              href="/formations/entreprises"
+              className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-300 group"
+            >
+              Découvrir nos solutions
+              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            </Link>
+          </div>
 
               {/* Statistiques */}
               <div className="grid grid-cols-2 gap-6 text-white">
