@@ -436,8 +436,10 @@ export default function FormationsPage() {
   useEffect(() => {
     async function loadFormations() {
       try {
-        // Charger les formations depuis Strapi uniquement (pas de fallback statique)
+        // Charger les formations depuis Strapi
         const data = await getFormations()
+        console.log('📦 Données Strapi reçues:', data?.length || 0, 'formations')
+        
         if (data && Array.isArray(data) && data.length > 0) {
           // Filtrer par catégorie (slug de la catégorie)
           const alternance = (data as any[]).filter((f) => 
@@ -446,13 +448,19 @@ export default function FormationsPage() {
           const reconversion = (data as any[]).filter((f) => 
             f.category?.slug === 'reconversion' || f.category?.slug === 'reconversion-btp'
           )
-          // Mettre à jour avec les données Strapi (tableau vide si aucune formation)
+          
+          console.log('✅ Alternance:', alternance.length, '| Reconversion:', reconversion.length)
+          
+          // Mettre à jour avec les données Strapi
           setFormationsAlternance(alternance)
           setFormationsReconversion(reconversion)
         } else {
-          // Si Strapi ne retourne rien, afficher des tableaux vides
-          setFormationsAlternance([])
-          setFormationsReconversion([])
+          // Fallback vers données statiques si Strapi ne retourne rien
+          console.warn('⚠️ Strapi vide, utilisation des données statiques')
+          const { formationsAlternance: staticAlt, formationsReconversion: staticReconv } = await import('@/data/formations-static')
+          setFormationsAlternance(staticAlt || [])
+          setFormationsReconversion(staticReconv || [])
+        }
         }
 
         // Charger les formules VAE
@@ -472,10 +480,17 @@ export default function FormationsPage() {
           }
         }
       } catch (error) {
-        console.error('Erreur chargement Strapi:', error)
-        // En cas d'erreur, afficher des tableaux vides (pas de fallback statique)
-        setFormationsAlternance([])
-        setFormationsReconversion([])
+        console.error('❌ Erreur chargement Strapi:', error)
+        // Fallback vers données statiques en cas d'erreur
+        try {
+          const { formationsAlternance: staticAlt, formationsReconversion: staticReconv } = await import('@/data/formations-static')
+          setFormationsAlternance(staticAlt || [])
+          setFormationsReconversion(staticReconv || [])
+          console.log('✅ Fallback statique chargé')
+        } catch (e) {
+          setFormationsAlternance([])
+          setFormationsReconversion([])
+        }
       } finally {
         setLoading(false)
       }

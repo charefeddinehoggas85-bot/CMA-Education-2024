@@ -1,5 +1,12 @@
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'
+// URL Strapi Railway - hardcodée pour production
+const PRODUCTION_STRAPI_URL = 'https://cma-education-strapi-production.up.railway.app'
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || PRODUCTION_STRAPI_URL
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN
+
+// Log pour debug en production
+if (typeof window !== 'undefined') {
+  console.log('🔗 Strapi URL utilisée:', STRAPI_URL)
+}
 
 export function getStrapiURL(path = '') {
   return `${STRAPI_URL}${path}`
@@ -27,8 +34,22 @@ export function getStrapiMediaURL(media: any): string | null {
   return null
 }
 
+// Images locales par défaut pour les formations (Railway n'a pas de stockage persistant)
+const DEFAULT_FORMATION_IMAGES: Record<string, string> = {
+  'charge-affaires-batiment': '/images/formations/charge-affaires.jpg',
+  'charge-affaires-reconversion': '/images/formations/charge-affaires.jpg',
+  'conducteur-travaux-batiment': '/images/formations/conducteur-travaux.jpg',
+  'conducteur-travaux-vrd': '/images/formations/conducteur-travaux-vrd.jpg',
+  'conducteur-travaux-vrd-2ans': '/images/formations/conducteur-travaux-vrd.jpg',
+  'chef-chantier-vrd': '/images/formations/chef-chantier-vrd.jpg',
+  'chef-projets-btp': '/images/formations/chef-projets.jpg',
+  'chef-projets-btp-1an': '/images/formations/chef-projets.jpg',
+  'responsable-travaux-bim': '/images/formations/bim.jpg',
+  'default': '/images/formations/formations-hero.jpg'
+}
+
 // Helper pour obtenir l'URL d'une image avec fallback amélioré
-export function getImageURL(strapiMedia: any, fallbackPath?: string): string {
+export function getImageURL(strapiMedia: any, fallbackPath?: string, slug?: string): string {
   // Validation stricte : ne jamais retourner un objet
   const validateURL = (url: any): string | null => {
     if (typeof url === 'string' && url.length > 0 && !url.includes('[object') && !url.includes('undefined')) {
@@ -37,26 +58,33 @@ export function getImageURL(strapiMedia: any, fallbackPath?: string): string {
     return null
   }
 
-  // Priorité 1: Image Strapi valide
+  // Vérifier si l'URL Strapi est accessible (Railway perd les uploads)
+  const isRailwayUpload = (url: string): boolean => {
+    return url.includes('railway.app/uploads/') || url.includes('/uploads/')
+  }
+
+  // Priorité 1: Image Strapi valide (sauf si c'est un upload Railway qui sera 404)
   const strapiURL = getStrapiMediaURL(strapiMedia)
   const validStrapiURL = validateURL(strapiURL)
-  if (validStrapiURL) {
-    console.log('✅ Image Strapi trouvée:', validStrapiURL)
+  if (validStrapiURL && !isRailwayUpload(validStrapiURL)) {
     return validStrapiURL
   }
   
-  // Priorité 2: Fallback path valide (doit être une string)
+  // Priorité 2: Image locale basée sur le slug de la formation
+  if (slug && DEFAULT_FORMATION_IMAGES[slug]) {
+    return DEFAULT_FORMATION_IMAGES[slug]
+  }
+  
+  // Priorité 3: Fallback path valide (doit être une string)
   if (fallbackPath && typeof fallbackPath === 'string') {
     const validFallback = validateURL(fallbackPath)
     if (validFallback) {
-      console.log('⚠️ Utilisation du fallback:', validFallback)
       return validFallback
     }
   }
   
-  // Priorité 3: Image par défaut pour éviter les erreurs
-  console.log('❌ Aucune image valide trouvée, utilisation de l\'image par défaut')
-  return '/images/placeholder-avatar.svg'
+  // Priorité 4: Image par défaut pour éviter les erreurs
+  return DEFAULT_FORMATION_IMAGES['default'] || '/images/placeholder-avatar.svg'
 }
 
 export async function fetchAPI(path: string, options: RequestInit = {}) {
