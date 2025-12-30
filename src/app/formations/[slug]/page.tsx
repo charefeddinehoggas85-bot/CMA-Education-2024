@@ -4,6 +4,10 @@ import { getFormation } from '@/lib/strapi'
 import { formationsAlternance, formationsReconversion } from '@/data/formations-static'
 import FormationContent from './FormationContent'
 
+// Force le rendu dynamique (SSR) pour toujours récupérer les données fraîches de Strapi
+export const dynamic = 'force-dynamic'
+export const revalidate = 0
+
 interface Formation {
   id: number
   title: string

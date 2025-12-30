@@ -99,9 +99,8 @@ export async function fetchAPI(path: string, options: RequestInit = {}) {
 
   // Only add Next.js specific options on the server-side
   if (typeof window === 'undefined') {
-    // Cache plus court en développement, plus long en production
-    const revalidateSeconds = process.env.NODE_ENV === 'development' ? 5 : 60;
-    (defaultOptions as any).next = { revalidate: revalidateSeconds }
+    // Désactiver le cache pour toujours récupérer les données fraîches de Strapi
+    (defaultOptions as any).cache = 'no-store'
   }
 
   const mergedOptions = {
