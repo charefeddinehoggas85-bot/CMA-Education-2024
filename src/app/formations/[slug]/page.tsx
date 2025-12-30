@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
-import { getFormation } from '@/lib/strapi'
 import { formationsAlternance, formationsReconversion } from '@/data/formations-static'
 import FormationContent from './FormationContent'
 
@@ -74,121 +73,191 @@ function findStaticFormation(slug: string): Formation | null {
   }
 }
 
-// Server-side data fetching
-async function getFormationData(slug: string): Promise<Formation | null> {
-  console.log('🔍 SSR: Chargement formation pour slug:', slug)
-  console.log('   - STRAPI_URL:', process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app')
+// FETCH STRAPI DIRECT - sans passer par le module strapi.ts
+async function fetchStrapiDirect(slug: string): Promise<{ formation: Formation | null; error: string | null; debug: any }> {
+  const STRAPI_URL = 'https://cma-education-strapi-production.up.railway.app'
+  const apiUrl = `${STRAPI_URL}/api/formations?filters[slug][$eq]=${slug}&populate=*`
+  
+  const debug: any = {
+    url: apiUrl,
+    timestamp: new Date().toISOString(),
+    fetchAttempted: false,
+    responseStatus: null,
+    responseOk: null,
+    dataReceived: false,
+    formationFound: false
+  }
   
   try {
-    // Priorité 1: Essayer Strapi
-    const strapiFormation = await getFormation(slug)
+    debug.fetchAttempted = true
     
-    // Vérifier que la formation Strapi a des données valides
-    if (strapiFormation && strapiFormation.id && strapiFormation.title) {
-      console.log('✅ SSR: Formation Strapi VALIDE trouvée!')
-      console.log('   - ID:', strapiFormation.id)
-      console.log('   - Titre:', strapiFormation.title)
-      console.log('   - Durée:', strapiFormation.duree)
-      console.log('   - Objectifs count:', Array.isArray(strapiFormation.objectifs) ? strapiFormation.objectifs.length : 'N/A')
-      console.log('   - Débouchés count:', Array.isArray(strapiFormation.debouches) ? strapiFormation.debouches.length : 'N/A')
-      
-      // Retourner les données Strapi
-      return strapiFormation as Formation
+    const response = await fetch(apiUrl, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      cache: 'no-store',
+      // Timeout de 10 secondes
+      signal: AbortSignal.timeout(10000)
+    })
+    
+    debug.responseStatus = response.status
+    debug.responseOk = response.ok
+    
+    if (!response.ok) {
+      return { 
+        formation: null, 
+        error: `HTTP ${response.status}: ${response.statusText}`,
+        debug 
+      }
     }
     
-    console.log('⚠️ SSR: Formation Strapi invalide ou non trouvée, fallback vers statique')
-    console.log('   - strapiFormation:', strapiFormation ? 'exists but invalid' : 'null')
+    const data = await response.json()
+    debug.dataReceived = true
+    debug.dataLength = data?.data?.length || 0
     
-  } catch (error) {
-    console.error('❌ SSR: Erreur Strapi:', error)
+    if (!data?.data?.[0]) {
+      return { 
+        formation: null, 
+        error: 'Aucune formation trouvée dans la réponse Strapi',
+        debug 
+      }
+    }
+    
+    debug.formationFound = true
+    const item = data.data[0]
+    const attrs = item.attributes || {}
+    
+    // Construire l'objet formation
+    const formation: Formation = {
+      id: item.id,
+      title: attrs.title,
+      slug: attrs.slug,
+      level: attrs.level,
+      rncp: attrs.rncp,
+      rncpUrl: attrs.rncpUrl,
+      shortDescription: attrs.shortDesc || attrs.shortDescription,
+      shortDesc: attrs.shortDesc,
+      fullDescription: attrs.fullDesc || attrs.fullDescription,
+      fullDesc: attrs.fullDesc,
+      metierDesc: attrs.metierDesc,
+      duree: attrs.duree,
+      volumeHoraire: attrs.volumeHoraire,
+      repartition: attrs.repartition,
+      rythme: attrs.rythme,
+      modalite: attrs.modalite,
+      typeContrat: attrs.typeContrat,
+      effectif: attrs.effectif,
+      cout: attrs.cout,
+      financement: attrs.financement,
+      certificateur: attrs.certificateur,
+      objectifs: attrs.objectifs,
+      programme: attrs.programme,
+      debouches: attrs.debouches,
+      prerequis: attrs.prerequis,
+      evaluation: attrs.evaluation,
+      poursuiteEtudes: attrs.poursuiteEtudes,
+      entreprisesPartenaires: attrs.entreprisesPartenaires,
+      tauxReussite: attrs.tauxReussite,
+      tauxInsertion: attrs.tauxInsertion,
+      publicCible: attrs.publicCible,
+      contact: attrs.contact,
+      isActive: attrs.isActive,
+      image: attrs.image?.data?.attributes?.url,
+      imageData: attrs.image
+    }
+    
+    debug.formationId = formation.id
+    debug.formationTitle = formation.title
+    debug.objectifsCount = Array.isArray(formation.objectifs) ? formation.objectifs.length : 0
+    debug.debouchesCount = Array.isArray(formation.debouches) ? formation.debouches.length : 0
+    debug.programmeCount = Array.isArray(formation.programme) ? formation.programme.length : 0
+    
+    return { formation, error: null, debug }
+    
+  } catch (error: any) {
+    debug.errorType = error.name
+    debug.errorMessage = error.message
+    
+    return { 
+      formation: null, 
+      error: `${error.name}: ${error.message}`,
+      debug 
+    }
+  }
+}
+
+// Server-side data fetching
+async function getFormationData(slug: string): Promise<{ formation: Formation | null; source: string; error: string | null; debug: any }> {
+  // Essayer Strapi en premier avec fetch direct
+  const strapiResult = await fetchStrapiDirect(slug)
+  
+  if (strapiResult.formation) {
+    return {
+      formation: strapiResult.formation,
+      source: 'STRAPI',
+      error: null,
+      debug: strapiResult.debug
+    }
   }
   
-  // Priorité 2: Fallback vers données statiques (seulement si Strapi échoue)
+  // Fallback vers données statiques
   const staticFormation = findStaticFormation(slug)
+  
   if (staticFormation) {
-    console.log('⚠️ SSR: Utilisation données STATIQUES (fallback)')
-    console.log('   - Titre:', staticFormation.title)
-    return staticFormation
+    return {
+      formation: staticFormation,
+      source: 'STATIQUE',
+      error: strapiResult.error,
+      debug: { ...strapiResult.debug, fallbackUsed: true }
+    }
   }
   
-  console.log('❌ SSR: Aucune formation trouvée (ni Strapi ni statique)')
-  return null
+  return {
+    formation: null,
+    source: 'NONE',
+    error: strapiResult.error || 'Formation non trouvée',
+    debug: strapiResult.debug
+  }
 }
 
 // Page principale avec SSR
 export default async function FormationDetailPage({ params }: { params: { slug: string } }) {
-  const formation = await getFormationData(params.slug)
+  const { formation, source, error, debug } = await getFormationData(params.slug)
   
   if (!formation) {
     notFound()
   }
 
-  // Déterminer la source des données
-  const isFromStrapi = formation.id < 1000 && Array.isArray(formation.objectifs) && formation.objectifs.length > 3
-  const dataSource = isFromStrapi ? 'STRAPI' : 'STATIQUE'
-
   return (
     <PageLayout>
-      {/* Indicateur de source de données - TOUJOURS visible pour debug */}
-      <div className="fixed bottom-4 left-4 bg-black/80 text-white p-3 rounded-lg text-xs z-50 max-w-xs">
-        <div className="font-bold text-yellow-400">📊 Source: {dataSource}</div>
-        <div>ID: {formation.id}</div>
-        <div>Objectifs: {Array.isArray(formation.objectifs) ? formation.objectifs.length : 'N/A'}</div>
-        <div>Débouchés: {Array.isArray(formation.debouches) ? formation.debouches.length : 'N/A'}</div>
-        <div>Programme: {Array.isArray(formation.programme) ? formation.programme.length : 'N/A'}</div>
-        <div>Durée: {formation.duree || 'N/A'}</div>
+      {/* Indicateur de debug AMÉLIORÉ - visible en production */}
+      <div className="fixed bottom-4 left-4 bg-black text-white p-4 rounded-lg text-xs z-[9999] max-w-sm shadow-2xl border-2 border-yellow-400">
+        <div className="font-bold text-lg mb-2" style={{ color: source === 'STRAPI' ? '#22c55e' : '#ef4444' }}>
+          📊 {source}
+        </div>
+        <div className="space-y-1">
+          <div><span className="text-gray-400">ID:</span> {formation.id}</div>
+          <div><span className="text-gray-400">Slug:</span> {params.slug}</div>
+          <div><span className="text-gray-400">Durée:</span> {formation.duree || 'N/A'}</div>
+          <div><span className="text-gray-400">Objectifs:</span> {Array.isArray(formation.objectifs) ? formation.objectifs.length : 'N/A'}</div>
+          <div><span className="text-gray-400">Débouchés:</span> {Array.isArray(formation.debouches) ? formation.debouches.length : 'N/A'}</div>
+          <div><span className="text-gray-400">Programme:</span> {Array.isArray(formation.programme) ? formation.programme.length : 'N/A'}</div>
+        </div>
+        {error && (
+          <div className="mt-2 p-2 bg-red-900/50 rounded text-red-300 text-[10px] break-all">
+            <div className="font-bold">Erreur Strapi:</div>
+            {error}
+          </div>
+        )}
+        <div className="mt-2 text-[10px] text-gray-500">
+          Fetch: {debug.fetchAttempted ? '✓' : '✗'} | 
+          Status: {debug.responseStatus || 'N/A'} | 
+          Data: {debug.dataReceived ? '✓' : '✗'}
+        </div>
       </div>
       
       <FormationContent formation={formation} />
     </PageLayout>
   )
 }
-
-// DÉSACTIVÉ: generateStaticParams force la génération statique au build time
-// ce qui empêche le chargement dynamique des données Strapi
-// Pour réactiver la génération statique, décommenter cette fonction
-/*
-export async function generateStaticParams() {
-  try {
-    // Récupérer toutes les formations depuis Strapi
-    const { getFormations } = await import('@/lib/strapi')
-    const strapiFormations = await getFormations()
-    
-    // Formations statiques comme fallback
-    const staticFormations = [...formationsAlternance, ...formationsReconversion]
-    
-    // Combiner les slugs Strapi et statiques
-    const allSlugs = new Set()
-    
-    // Ajouter les slugs Strapi
-    if (strapiFormations && Array.isArray(strapiFormations)) {
-      strapiFormations.forEach((formation: any) => {
-        if (formation.slug) {
-          allSlugs.add(formation.slug)
-        }
-      })
-    }
-    
-    // Ajouter les slugs statiques
-    staticFormations.forEach((formation) => {
-      allSlugs.add(formation.slug)
-    })
-    
-    const params = Array.from(allSlugs).map((slug) => ({
-      slug: slug as string,
-    }))
-    
-    console.log('✅ SSR: Génération de', params.length, 'pages statiques')
-    return params
-    
-  } catch (error) {
-    console.error('Erreur génération params statiques:', error)
-    
-    // Fallback vers formations statiques uniquement
-    const staticFormations = [...formationsAlternance, ...formationsReconversion]
-    return staticFormations.map((formation) => ({
-      slug: formation.slug,
-    }))
-  }
-}
-*/
