@@ -51,41 +51,71 @@ export default function BrochurePage() {
     setIsLoading(true)
 
     try {
-      console.log('🔄 Téléchargement de la brochure via API proxy...');
+      console.log('🔄 Téléchargement direct de la brochure depuis Strapi...');
       
-      // Utiliser notre API proxy pour télécharger la brochure
-      const response = await fetch('/api/download-brochure', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify({
-          formationId: selectedFormation.id,
-          userData: formData
-        })
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || 'Erreur lors du téléchargement');
+      // Récupérer les détails de la formation avec brochure
+      const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app';
+      const formationResponse = await fetch(`${strapiUrl}/api/formations/${selectedFormation.id}?populate=brochure`);
+      
+      if (!formationResponse.ok) {
+        throw new Error('Formation non trouvée');
       }
 
-      // Récupérer le PDF en tant que blob
-      const pdfBlob = await response.blob();
+      const formationData = await formationResponse.json();
+      const formation = formationData.data;
       
-      // Créer un lien de téléchargement
-      const url = window.URL.createObjectURL(pdfBlob);
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = `brochure-${selectedFormation.slug || 'formation'}-${formData.nom}-${formData.prenom}.pdf`;
-      document.body.appendChild(link);
-      link.click();
-      document.body.removeChild(link);
-      
-      // Nettoyer l'URL temporaire
-      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      if (!formation.attributes.brochure?.data?.attributes?.url) {
+        throw new Error('Brochure non disponible pour cette formation');
+      }
 
-      console.log('✅ Brochure téléchargée avec succès !');
+      const brochureData = formation.attributes.brochure.data.attributes;
+      const brochureUrl = `${strapiUrl}${brochureData.url}`;
+      
+      console.log('📄 URL brochure:', brochureUrl);
+
+      // Essayer de télécharger directement depuis Strapi avec CORS
+      try {
+        const pdfResponse = await fetch(brochureUrl, {
+          method: 'GET',
+          mode: 'cors',
+          headers: {
+            'Accept': 'application/pdf',
+          },
+        });
+
+        if (pdfResponse.ok) {
+          const pdfBlob = await pdfResponse.blob();
+          
+          // Créer un lien de téléchargement
+          const url = window.URL.createObjectURL(pdfBlob);
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `brochure-${selectedFormation.slug || 'formation'}-${formData.nom}-${formData.prenom}.pdf`;
+          document.body.appendChild(link);
+          link.click();
+          document.body.removeChild(link);
+          
+          // Nettoyer l'URL temporaire
+          setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+          
+          console.log('✅ Brochure téléchargée avec succès !');
+        } else {
+          throw new Error(`Erreur ${pdfResponse.status}: ${pdfResponse.statusText}`);
+        }
+      } catch (fetchError) {
+        console.log('⚠️ Téléchargement direct échoué, ouverture dans un nouvel onglet...');
+        
+        // Fallback: ouvrir dans un nouvel onglet
+        const link = document.createElement('a');
+        link.href = brochureUrl;
+        link.target = '_blank';
+        link.download = brochureData.name;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+        console.log('📂 Brochure ouverte dans un nouvel onglet');
+      }
 
       // Envoyer les données par EmailJS
       await emailjs.send(
@@ -101,7 +131,7 @@ export default function BrochurePage() {
           user_email: formData.email,
           user_telephone: formData.telephone,
           date: new Date().toLocaleDateString('fr-FR'),
-          brochure_type: 'Strapi PDF via Proxy'
+          brochure_type: 'Strapi PDF Direct'
         },
         'tdRwM2nw_IxILeGS-'
       )
