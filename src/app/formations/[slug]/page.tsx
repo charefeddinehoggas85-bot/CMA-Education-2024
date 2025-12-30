@@ -123,30 +123,31 @@ export default async function FormationDetailPage({ params }: { params: { slug: 
     notFound()
   }
 
+  // Déterminer la source des données
+  const isFromStrapi = formation.id < 1000 && Array.isArray(formation.objectifs) && formation.objectifs.length > 3
+  const dataSource = isFromStrapi ? 'STRAPI' : 'STATIQUE'
+
   return (
     <PageLayout>
-      {/* Debug Info - Visible uniquement en développement */}
-      {process.env.NODE_ENV === 'development' && (
-        <div className="fixed top-4 right-4 bg-green-600 text-white p-4 rounded-lg text-xs z-50 max-w-sm">
-          <div><strong>✅ SSR FORMATION CHARGÉE</strong></div>
-          <div>Slug: {params.slug}</div>
-          <div>ID: {formation.id}</div>
-          <div>Titre: {formation.title?.substring(0, 20)}...</div>
-          <div>Niveau: {formation.level?.substring(0, 15)}...</div>
-          <div>RNCP: {formation.rncp || 'Non défini'}</div>
-          <div>Durée: {formation.duree || 'Non définie'}</div>
-          <div>Objectifs: {formation.objectifs ? formation.objectifs.length : 'Null'}</div>
-          <div>Débouchés: {formation.debouches ? formation.debouches.length : 'Null'}</div>
-          <div>Source: {formation.id > 1000 ? 'Statique' : 'Strapi'}</div>
-        </div>
-      )}
+      {/* Indicateur de source de données - TOUJOURS visible pour debug */}
+      <div className="fixed bottom-4 left-4 bg-black/80 text-white p-3 rounded-lg text-xs z-50 max-w-xs">
+        <div className="font-bold text-yellow-400">📊 Source: {dataSource}</div>
+        <div>ID: {formation.id}</div>
+        <div>Objectifs: {Array.isArray(formation.objectifs) ? formation.objectifs.length : 'N/A'}</div>
+        <div>Débouchés: {Array.isArray(formation.debouches) ? formation.debouches.length : 'N/A'}</div>
+        <div>Programme: {Array.isArray(formation.programme) ? formation.programme.length : 'N/A'}</div>
+        <div>Durée: {formation.duree || 'N/A'}</div>
+      </div>
       
       <FormationContent formation={formation} />
     </PageLayout>
   )
 }
 
-// Générer les paramètres statiques pour les formations connues
+// DÉSACTIVÉ: generateStaticParams force la génération statique au build time
+// ce qui empêche le chargement dynamique des données Strapi
+// Pour réactiver la génération statique, décommenter cette fonction
+/*
 export async function generateStaticParams() {
   try {
     // Récupérer toutes les formations depuis Strapi
@@ -190,3 +191,4 @@ export async function generateStaticParams() {
     }))
   }
 }
+*/
