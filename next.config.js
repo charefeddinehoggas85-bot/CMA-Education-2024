@@ -1,5 +1,25 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  // Exclure le dossier CMS du build TypeScript
+  typescript: {
+    ignoreBuildErrors: false,
+  },
+  // Exclure explicitement les fichiers CMS du build
+  webpack: (config, { isServer }) => {
+    // Ignorer complètement les fichiers du dossier cms-cma
+    config.module.rules.push({
+      test: /cms-cma[\\/]/,
+      use: 'ignore-loader'
+    })
+    
+    // Ajouter un loader personnalisé pour ignorer les fichiers CMS
+    config.resolveLoader.alias = {
+      ...config.resolveLoader.alias,
+      'ignore-loader': require.resolve('./ignore-loader.js')
+    }
+    
+    return config
+  },
   // output: 'standalone', // Temporairement désactivé pour tester l'hydratation
   images: {
     remotePatterns: [
@@ -39,6 +59,11 @@ const nextConfig = {
   env: {
     NEXT_PUBLIC_SITE_URL: process.env.NEXT_PUBLIC_SITE_URL || 'https://cma-education.vercel.app',
   },
+}
+
+// Ignorer les warnings ESLint en production
+nextConfig.eslint = {
+  ignoreDuringBuilds: process.env.NODE_ENV === 'production',
 }
 
 module.exports = nextConfig

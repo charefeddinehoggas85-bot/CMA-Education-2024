@@ -70,7 +70,7 @@ export default function BrochureModal({ isOpen, onClose, formation }: BrochureMo
         
         if (formation.brochure?.data?.attributes?.url) {
           // Structure Strapi complète: formation.brochure.data.attributes.url
-          brochureUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${formation.brochure.data.attributes.url}`;
+          brochureUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${formation.brochure.data.attributes.url}`;
         } else if (typeof formation.brochure === 'string') {
           // Si brochure est déjà une URL string
           brochureUrl = formation.brochure;

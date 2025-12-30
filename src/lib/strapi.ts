@@ -1,4 +1,4 @@
-const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'
+const STRAPI_URL = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'
 const STRAPI_API_TOKEN = process.env.STRAPI_API_TOKEN
 
 export function getStrapiURL(path = '') {
@@ -27,11 +27,11 @@ export function getStrapiMediaURL(media: any): string | null {
   return null
 }
 
-// Helper pour obtenir l'URL d'une image avec fallback
+// Helper pour obtenir l'URL d'une image avec fallback amélioré
 export function getImageURL(strapiMedia: any, fallbackPath?: string): string {
   // Validation stricte : ne jamais retourner un objet
   const validateURL = (url: any): string | null => {
-    if (typeof url === 'string' && url.length > 0 && !url.includes('[object')) {
+    if (typeof url === 'string' && url.length > 0 && !url.includes('[object') && !url.includes('undefined')) {
       return url
     }
     return null
@@ -40,16 +40,23 @@ export function getImageURL(strapiMedia: any, fallbackPath?: string): string {
   // Priorité 1: Image Strapi valide
   const strapiURL = getStrapiMediaURL(strapiMedia)
   const validStrapiURL = validateURL(strapiURL)
-  if (validStrapiURL) return validStrapiURL
+  if (validStrapiURL) {
+    console.log('✅ Image Strapi trouvée:', validStrapiURL)
+    return validStrapiURL
+  }
   
   // Priorité 2: Fallback path valide (doit être une string)
   if (fallbackPath && typeof fallbackPath === 'string') {
     const validFallback = validateURL(fallbackPath)
-    if (validFallback) return validFallback
+    if (validFallback) {
+      console.log('⚠️ Utilisation du fallback:', validFallback)
+      return validFallback
+    }
   }
   
-  // Priorité 3: Image par défaut
-  return '/images/formations/formations-hero.jpg'
+  // Priorité 3: Image par défaut pour éviter les erreurs
+  console.log('❌ Aucune image valide trouvée, utilisation de l\'image par défaut')
+  return '/images/placeholder-avatar.svg'
 }
 
 export async function fetchAPI(path: string, options: RequestInit = {}) {

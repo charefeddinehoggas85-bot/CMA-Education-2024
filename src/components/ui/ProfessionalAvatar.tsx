@@ -1,107 +1,148 @@
 'use client'
 
-import Image from 'next/image'
 import { useState, useEffect } from 'react'
+import Image from 'next/image'
 
 interface ProfessionalAvatarProps {
   name: string
-  gender: 'male' | 'female'
+  gender?: 'male' | 'female'
   size?: 'sm' | 'md' | 'lg' | 'xl'
   className?: string
-  showFallback?: boolean
 }
 
 export default function ProfessionalAvatar({ 
   name, 
-  gender, 
-  size = 'md', 
-  className = '',
-  showFallback = true 
+  gender = 'male', 
+  size = 'md',
+  className = '' 
 }: ProfessionalAvatarProps) {
+  const [currentAvatar, setCurrentAvatar] = useState<string>('')
   const [imageError, setImageError] = useState(false)
-  const [currentAvatar, setCurrentAvatar] = useState('')
-  
-  const initials = name.split(' ').map(n => n[0]).join('').toUpperCase()
-  
-  const sizeClasses = {
-    sm: 'w-12 h-12 text-sm',
-    md: 'w-24 h-24 text-lg',
-    lg: 'w-32 h-32 text-xl',
-    xl: 'w-40 h-40 text-2xl'
-  }
-  
-  // Couleurs professionnelles basées sur le nom pour la cohérence
-  const getAvatarColor = (name: string, gender: string) => {
-    const colors = gender === 'female' 
-      ? [
-          'bg-gradient-to-br from-pink-500 to-rose-600',
-          'bg-gradient-to-br from-purple-500 to-indigo-600',
-          'bg-gradient-to-br from-blue-500 to-cyan-600',
-          'bg-gradient-to-br from-emerald-500 to-teal-600'
-        ]
-      : [
-          'bg-gradient-to-br from-blue-600 to-indigo-700',
-          'bg-gradient-to-br from-slate-600 to-gray-700',
-          'bg-gradient-to-br from-emerald-600 to-green-700',
-          'bg-gradient-to-br from-orange-600 to-red-700'
-        ]
-    
-    const index = name.length % colors.length
-    return colors[index]
+  const [isLoading, setIsLoading] = useState(true)
+
+  // Mapping spécifique des formateurs avec leurs fichiers SVG réels
+  const formateurSVGMapping: Record<string, string> = {
+    'abdel bouchouia': 'abdel-bouchouia.svg',
+    'julien pichonnier': 'pichonnier-julien.svg', 
+    'ratiba sidrouhou': 'sidrouhou-ratiba.svg',
+    // Ajouter d'autres mappings si nécessaire
   }
 
-  // URLs d'avatars professionnels - d'abord chercher localement, puis fallback
+  const getAvatarColor = (name: string, gender: string) => {
+    const colors: Record<string, string[]> = {
+      male: [
+        'bg-gradient-to-br from-blue-500 to-blue-700',
+        'bg-gradient-to-br from-green-500 to-green-700',
+        'bg-gradient-to-br from-purple-500 to-purple-700',
+        'bg-gradient-to-br from-indigo-500 to-indigo-700',
+        'bg-gradient-to-br from-teal-500 to-teal-700'
+      ],
+      female: [
+        'bg-gradient-to-br from-pink-500 to-pink-700',
+        'bg-gradient-to-br from-rose-500 to-rose-700',
+        'bg-gradient-to-br from-purple-500 to-purple-700',
+        'bg-gradient-to-br from-indigo-500 to-indigo-700',
+        'bg-gradient-to-br from-violet-500 to-violet-700'
+      ]
+    }
+    
+    const colorArray = colors[gender] || colors.male
+    const hash = name.split('').reduce((a, b) => {
+      a = ((a << 5) - a) + b.charCodeAt(0)
+      return a & a
+    }, 0)
+    
+    return colorArray[Math.abs(hash) % colorArray.length]
+  }
+
   const getAvatarUrl = (name: string) => {
-    // Convertir le nom en slug pour le fichier
-    const slug = name.toLowerCase()
+    const normalizedName = name.toLowerCase().trim()
+    
+    // Vérifier si on a un mapping spécifique pour ce formateur
+    const svgFile = formateurSVGMapping[normalizedName]
+    
+    if (svgFile) {
+      return {
+        localAvatar: `/images/formateurs/${svgFile}`,
+        hasLocalFile: true
+      }
+    }
+    
+    // Fallback: générer le slug standard
+    const slug = normalizedName
       .replace(/\s+/g, '-')
       .replace(/[^a-z0-9-]/g, '')
     
-    // D'abord essayer l'avatar local
-    const localAvatar = `/images/formateurs/${slug}.svg`
-    
-    // Fallback vers avatar généré
-    const seed = name.toLowerCase().replace(/\s+/g, '')
-    const generatedAvatar = `https://api.dicebear.com/7.x/professional/svg?seed=${seed}&backgroundColor=1e40af,1e3a8a,3730a3&clothingColor=1f2937,374151,4b5563`
-    
-    return { localAvatar, generatedAvatar }
+    return {
+      localAvatar: `/images/formateurs/${slug}.svg`,
+      hasLocalFile: false
+    }
+  }
+
+  const getInitials = (name: string) => {
+    return name
+      .split(' ')
+      .map(n => n.charAt(0))
+      .join('')
+      .toUpperCase()
+      .slice(0, 2)
+  }
+
+  const getSizeClasses = () => {
+    switch (size) {
+      case 'sm': return 'w-8 h-8 text-xs'
+      case 'md': return 'w-12 h-12 text-sm'
+      case 'lg': return 'w-16 h-16 text-base'
+      case 'xl': return 'w-24 h-24 text-lg'
+      default: return 'w-12 h-12 text-sm'
+    }
   }
 
   const colorClass = getAvatarColor(name, gender)
   const avatarUrls = getAvatarUrl(name)
+  const initials = getInitials(name)
 
   // Initialiser l'avatar au premier rendu
   useEffect(() => {
     setCurrentAvatar(avatarUrls.localAvatar)
+    setIsLoading(true)
+    setImageError(false)
   }, [avatarUrls.localAvatar])
 
-  const handleImageError = () => {
-    if (currentAvatar === avatarUrls.localAvatar) {
-      // Essayer l'avatar généré
-      setCurrentAvatar(avatarUrls.generatedAvatar)
-    } else {
-      // Utiliser le fallback avec initiales
-      setImageError(true)
-    }
+  const handleImageLoad = () => {
+    setIsLoading(false)
   }
 
-  if (imageError || !showFallback) {
+  const handleImageError = () => {
+    setIsLoading(false)
+    setImageError(true)
+  }
+
+  // Si erreur d'image ou pas de fichier local, afficher les initiales
+  if (imageError || !avatarUrls.hasLocalFile) {
     return (
-      <div className={`${sizeClasses[size]} ${colorClass} rounded-2xl flex items-center justify-center text-white font-bold shadow-lg ${className}`}>
+      <div className={`${getSizeClasses()} rounded-full ${colorClass} flex items-center justify-center text-white font-bold shadow-lg ${className}`}>
         {initials}
       </div>
     )
   }
 
   return (
-    <div className={`${sizeClasses[size]} rounded-2xl overflow-hidden shadow-lg ${className}`}>
+    <div className={`${getSizeClasses()} rounded-full overflow-hidden shadow-lg ${className}`}>
+      {isLoading && (
+        <div className={`w-full h-full ${colorClass} flex items-center justify-center text-white font-bold animate-pulse`}>
+          {initials}
+        </div>
+      )}
       <Image
         src={currentAvatar}
         alt={`Avatar de ${name}`}
-        width={size === 'xl' ? 160 : size === 'lg' ? 128 : size === 'md' ? 96 : 48}
-        height={size === 'xl' ? 160 : size === 'lg' ? 128 : size === 'md' ? 96 : 48}
-        className="w-full h-full object-cover"
+        width={96}
+        height={96}
+        className={`w-full h-full object-cover ${isLoading ? 'opacity-0' : 'opacity-100'} transition-opacity duration-300`}
+        onLoad={handleImageLoad}
         onError={handleImageError}
+        priority={size === 'xl'}
       />
     </div>
   )

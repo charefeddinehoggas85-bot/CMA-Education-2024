@@ -6,7 +6,7 @@ import Link from 'next/link'
 // Fonction pour récupérer les formations côté serveur
 async function getFormationsSSR() {
   try {
-    const response = await fetch('http://localhost:1337/api/formations?populate=*&sort=ordre:asc', {
+    const response = await fetch('https://cma-education-strapi-production.up.railway.app/api/formations?populate=*&sort=ordre:asc', {
       cache: 'no-store' // Pas de cache pour avoir les données fraîches
     })
     

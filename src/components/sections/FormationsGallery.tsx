@@ -38,8 +38,8 @@ const FormationsGallery = () => {
         try {
           const [formationsResponse, categoriesResponse] = await Promise.race([
             Promise.all([
-              fetch('http://localhost:1337/api/formations?populate=*&sort=ordre:asc'),
-              fetch('http://localhost:1337/api/formation-categories?populate=*&sort=ordre:asc')
+              fetch('https://cma-education-strapi-production.up.railway.app/api/formations?populate=*&sort=ordre:asc'),
+              fetch('https://cma-education-strapi-production.up.railway.app/api/formation-categories?populate=*&sort=ordre:asc')
             ]),
             new Promise((_, reject) => setTimeout(() => reject(new Error('Timeout')), 1500))
           ]) as Response[]

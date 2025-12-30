@@ -53,7 +53,7 @@ export default function BrochurePage() {
     try {
       // Construire l'URL de la brochure
       const brochureUrl = selectedFormation.brochure || 
-                         `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}${(selectedFormation as any).brochureData.data.attributes.url}`;
+                         `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}${(selectedFormation as any).brochureData.data.attributes.url}`;
       
       // Télécharger la brochure
       const link = document.createElement('a');

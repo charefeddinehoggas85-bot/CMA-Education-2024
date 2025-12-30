@@ -19,7 +19,7 @@ export default function TestSimplePage() {
         setError(null)
         
         // Test direct de l'API Strapi
-        const response = await fetch(`http://localhost:1337/api/formations?filters[slug][$eq]=${slug}&populate=*`)
+        const response = await fetch(`https://cma-education-strapi-production.up.railway.app/api/formations?filters[slug][$eq]=${slug}&populate=*`)
         console.log('📡 Réponse Strapi:', response.ok, response.status)
         
         if (!response.ok) {

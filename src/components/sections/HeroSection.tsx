@@ -49,7 +49,7 @@ const HeroSection = () => {
     loadSiteSettings()
   }, [])
 
-  const videoUrl = 'http://localhost:1337/uploads/Design_sans_titre_4_d438e047b5.mp4'
+  const videoUrl = 'https://cma-education-strapi-production.up.railway.app/uploads/Design_sans_titre_4_d438e047b5.mp4'
 
   const handleCandidater = () => {
     window.open('https://construction-management-academy.ymag.cloud/index.php/preinscription/', '_blank')

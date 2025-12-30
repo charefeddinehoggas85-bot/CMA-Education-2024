@@ -46,6 +46,9 @@ self.addEventListener('fetch', (event) => {
   // Ignorer les requêtes non-GET
   if (request.method !== 'GET') return
 
+  // Ignorer les requêtes chrome-extension:// pour éviter les erreurs de cache
+  if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') return
+
   // Images - Cache First
   if (request.destination === 'image') {
     event.respondWith(cacheFirst(request, DYNAMIC_CACHE))
@@ -70,6 +73,12 @@ self.addEventListener('fetch', (event) => {
 
 // Cache First Strategy
 async function cacheFirst(request, cacheName) {
+  // Vérifier si l'URL est valide pour le cache
+  const url = new URL(request.url)
+  if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') {
+    return fetch(request)
+  }
+
   const cache = await caches.open(cacheName)
   const cached = await cache.match(request)
   

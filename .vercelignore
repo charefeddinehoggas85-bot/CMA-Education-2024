@@ -1,0 +1,22 @@
+# Exclure le CMS Strapi du build frontend
+cms-cma/**
+cms-cma/
+
+# Exclure les fichiers de documentation
+*.md
+!README.md
+
+# Exclure les scripts de développement
+scripts/**
+scripts/
+
+# Exclure les dossiers de contenu
+Formations/**
+Formations/
+brochures/**
+brochures/
+
+# Exclure les fichiers de configuration locale
+.env.local
+.env.example
+.env.production

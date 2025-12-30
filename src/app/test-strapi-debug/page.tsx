@@ -19,7 +19,7 @@ export default function TestStrapiDebug() {
       
       try {
         // Test 1: Fetch direct
-        const testUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'http://localhost:1337'}/api/formations?filters[slug][$eq]=charge-affaires-batiment-alternance&populate=*`
+        const testUrl = `${process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app'}/api/formations?filters[slug][$eq]=charge-affaires-batiment-alternance&populate=*`
         addLog(`🔍 URL de test: ${testUrl}`)
         
         const testResponse = await fetch(testUrl)

@@ -16,7 +16,7 @@ export default function TestSimpleStrapi() {
         console.log('🔍 Test fetch direct Strapi...')
         console.log('Slug:', slug)
         
-        const url = `http://localhost:1337/api/formations?filters[slug][$eq]=${slug}&populate=*`
+        const url = `https://cma-education-strapi-production.up.railway.app/api/formations?filters[slug][$eq]=${slug}&populate=*`
         console.log('URL:', url)
         
         const response = await fetch(url)

@@ -11,7 +11,7 @@ export default function TestSimplePage() {
     async function testFetch() {
       try {
         console.log('📡 Test fetch vers Strapi...')
-        const response = await fetch('http://localhost:1337/api/formations?populate=*')
+        const response = await fetch('https://cma-education-strapi-production.up.railway.app/api/formations?populate=*')
         console.log('✅ Réponse:', response.ok, response.status)
         
         if (response.ok) {

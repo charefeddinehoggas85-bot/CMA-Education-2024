@@ -23,9 +23,29 @@ interface FormatorCardProps {
 }
 
 export default function FormatorCard({ formateur, index, variant = 'card' }: FormatorCardProps) {
-  // Récupérer l'URL de la photo si disponible
-  const photoUrl = formateur.photoData ? getImageURL(formateur.photoData) : null
-  const hasPhoto = photoUrl && !photoUrl.includes('formations-hero')
+    // Récupérer l'URL de la photo avec validation améliorée
+  const getValidPhotoUrl = () => {
+    if (!formateur.photoData) return null
+    
+    try {
+      const photoUrl = getImageURL(formateur.photoData)
+      // Vérifier que l'URL est valide et ne contient pas de mots-clés problématiques
+      if (photoUrl && 
+          typeof photoUrl === 'string' && 
+          !photoUrl.includes('formations-hero') && 
+          !photoUrl.includes('[object') &&
+          !photoUrl.includes('undefined')) {
+        return photoUrl
+      }
+    } catch (error) {
+    console.warn('Erreur lors de la récupération de la photo:', error)
+    }
+    
+    return null
+  }
+  
+  const photoUrl = getValidPhotoUrl()
+  const hasPhoto = !!photoUrl
 
   if (variant === 'hero') {
     return (
