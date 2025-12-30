@@ -81,7 +81,7 @@ export default function BlogPage() {
             contenu: a.contenu || '',
             datePublication: a.datePublication || new Date().toISOString(),
             auteur: a.auteur || 'Équipe Construction Management Academy',
-            imagePrincipale: getImageURL(a.imageData, '/images/blog/default.jpg'),
+            imagePrincipale: getImageURL(a.imagePrincipaleData || a.imageData, '/images/blog/default.jpg'),
             categorie: a.categorie,
             featured: a.featured || false
           }))
@@ -98,7 +98,7 @@ export default function BlogPage() {
             contenu: a.contenu || '',
             datePublication: a.datePublication || new Date().toISOString(),
             auteur: a.auteur || 'Équipe Construction Management Academy',
-            imagePrincipale: getImageURL(a.imageData, '/images/blog/default.jpg'),
+            imagePrincipale: getImageURL(a.imagePrincipaleData || a.imageData, '/images/blog/default.jpg'),
             categorie: a.categorie,
             featured: true
           }))

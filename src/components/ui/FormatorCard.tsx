@@ -1,6 +1,8 @@
 'use client';
 
 import { Calendar, Briefcase, Linkedin, Award, CheckCircle } from 'lucide-react';
+import Image from 'next/image';
+import { getImageURL } from '@/lib/strapi';
 
 interface FormatorCardProps {
   formateur: {
@@ -21,14 +23,31 @@ interface FormatorCardProps {
 
 export default function FormatorCard({ formateur, index, variant = 'card' }: FormatorCardProps) {
   const initials = formateur.name.split(' ').map(n => n[0]).join('').toUpperCase();
+  
+  // Obtenir l'URL de la photo depuis Strapi ou utiliser un placeholder
+  const photoUrl = getImageURL(formateur.photoData, '/images/placeholder-avatar.svg');
+  const hasPhoto = formateur.photoData?.data?.attributes?.url;
 
   if (variant === 'hero' && formateur.isDirector) {
     return (
       <div className="bg-gradient-to-r from-primary-blue to-blue-800 rounded-3xl p-8 md:p-12 text-white shadow-2xl">
         <div className="flex flex-col md:flex-row items-center gap-8">
-          <div className="w-32 h-32 md:w-40 md:h-40 bg-primary-yellow rounded-full flex items-center justify-center flex-shrink-0">
-            <span className="text-primary-blue font-bold text-2xl md:text-3xl">{initials}</span>
-          </div>
+          {hasPhoto ? (
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full overflow-hidden flex-shrink-0 border-4 border-primary-yellow">
+              <Image
+                src={photoUrl}
+                alt={formateur.name}
+                width={160}
+                height={160}
+                className="w-full h-full object-cover"
+                unoptimized
+              />
+            </div>
+          ) : (
+            <div className="w-32 h-32 md:w-40 md:h-40 bg-primary-yellow rounded-full flex items-center justify-center flex-shrink-0">
+              <span className="text-primary-blue font-bold text-2xl md:text-3xl">{initials}</span>
+            </div>
+          )}
           <div className="text-center md:text-left flex-1">
             <div className="flex items-center justify-center md:justify-start gap-3 mb-2">
               <Award className="w-6 h-6 text-primary-yellow" />
@@ -59,9 +78,22 @@ export default function FormatorCard({ formateur, index, variant = 'card' }: For
     <div className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100 hover:border-primary-blue/20 h-full group">
       <div className="text-center mb-6">
         <div className="relative inline-block mb-4">
-          <div className="w-24 h-24 bg-primary-blue rounded-full mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
-            <span className="text-primary-yellow font-bold text-lg">{initials}</span>
-          </div>
+          {hasPhoto ? (
+            <div className="w-24 h-24 rounded-full mx-auto overflow-hidden group-hover:scale-110 transition-transform duration-300 border-2 border-primary-blue">
+              <Image
+                src={photoUrl}
+                alt={formateur.name}
+                width={96}
+                height={96}
+                className="w-full h-full object-cover"
+                unoptimized
+              />
+            </div>
+          ) : (
+            <div className="w-24 h-24 bg-primary-blue rounded-full mx-auto flex items-center justify-center group-hover:scale-110 transition-transform duration-300">
+              <span className="text-primary-yellow font-bold text-lg">{initials}</span>
+            </div>
+          )}
           <div className="absolute -bottom-2 -right-2 w-8 h-8 bg-primary-blue rounded-lg flex items-center justify-center">
             <Briefcase className="w-4 h-4 text-white" />
           </div>

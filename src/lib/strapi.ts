@@ -58,19 +58,14 @@ export function getImageURL(strapiMedia: any, fallbackPath?: string, slug?: stri
     return null
   }
 
-  // Vérifier si l'URL Strapi est accessible (Railway perd les uploads)
-  const isRailwayUpload = (url: string): boolean => {
-    return url.includes('railway.app/uploads/') || url.includes('/uploads/')
-  }
-
-  // Priorité 1: Image Strapi valide (sauf si c'est un upload Railway qui sera 404)
+  // Priorité 1: Image Strapi valide - TOUJOURS utiliser les images Strapi si disponibles
   const strapiURL = getStrapiMediaURL(strapiMedia)
   const validStrapiURL = validateURL(strapiURL)
-  if (validStrapiURL && !isRailwayUpload(validStrapiURL)) {
+  if (validStrapiURL) {
     return validStrapiURL
   }
   
-  // Priorité 2: Image locale basée sur le slug de la formation
+  // Priorité 2: Image locale basée sur le slug de la formation (fallback)
   if (slug && DEFAULT_FORMATION_IMAGES[slug]) {
     return DEFAULT_FORMATION_IMAGES[slug]
   }
