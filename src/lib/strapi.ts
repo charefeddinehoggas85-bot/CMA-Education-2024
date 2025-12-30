@@ -252,12 +252,21 @@ export async function getFormations() {
 }
 
 export async function getFormation(slug: string): Promise<Record<string, any> | null> {
-  const data = await fetchAPI(`/api/formations?filters[slug][$eq]=${slug}&populate=brochure,image,category`)
+  // Utiliser populate=* pour récupérer TOUS les champs (programme, objectifs, debouches, etc.)
+  const data = await fetchAPI(`/api/formations?filters[slug][$eq]=${slug}&populate=*`)
   const transformed = transformStrapiData<Record<string, any>>(data.data?.[0])
   
   // Mapper explicitement les données de brochure si présentes
   if (transformed && data.data?.[0]?.attributes?.brochure?.data) {
     transformed.brochure = data.data[0].attributes.brochure
+  }
+  
+  // Log pour debug
+  if (transformed) {
+    console.log('✅ Formation Strapi chargée:', transformed.title)
+    console.log('   - Objectifs:', transformed.objectifs?.length || 0)
+    console.log('   - Programme:', transformed.programme?.length || 0)
+    console.log('   - Débouchés:', transformed.debouches?.length || 0)
   }
   
   return transformed
