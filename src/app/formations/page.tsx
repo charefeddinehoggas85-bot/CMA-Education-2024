@@ -458,8 +458,8 @@ export default function FormationsPage() {
           // Fallback vers données statiques si Strapi ne retourne rien
           console.warn('⚠️ Strapi vide, utilisation des données statiques')
           const { formationsAlternance: staticAlt, formationsReconversion: staticReconv } = await import('@/data/formations-static')
-          setFormationsAlternance(staticAlt || [])
-          setFormationsReconversion(staticReconv || [])
+          setFormationsAlternance(staticAlt as any[] || [])
+          setFormationsReconversion(staticReconv as any[] || [])
         }
 
         // Charger les formules VAE
