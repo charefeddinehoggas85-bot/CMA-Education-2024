@@ -34,8 +34,8 @@ interface FeaturedFormationsClientProps {
   formations: Formation[]
 }
 
-// Composant Carousel horizontal avec navigation utilisant les cartes existantes
-function FormationsCarousel({ 
+// Composant Carousel horizontal moderne et artistique
+function ArtisticFormationsCarousel({ 
   title, 
   formations, 
   icon: Icon, 
@@ -55,7 +55,7 @@ function FormationsCarousel({
 
   const scrollToIndex = (index: number) => {
     if (carouselRef.current) {
-      const cardWidth = 320 // 80 * 4 (w-80 = 320px)
+      const cardWidth = 288 // w-72 = 288px (plus compact)
       const scrollPosition = index * cardWidth
       carouselRef.current.scrollTo({
         left: scrollPosition,
@@ -71,14 +71,14 @@ function FormationsCarousel({
   }
 
   const scrollRight = () => {
-    const maxIndex = Math.max(0, formations.length - 3)
+    const maxIndex = Math.max(0, formations.length - 4) // Afficher 4 cartes à la fois
     const newIndex = Math.min(maxIndex, currentIndex + 1)
     scrollToIndex(newIndex)
   }
 
   useEffect(() => {
     setCanScrollLeft(currentIndex > 0)
-    setCanScrollRight(currentIndex < formations.length - 3)
+    setCanScrollRight(currentIndex < formations.length - 4)
   }, [currentIndex, formations.length])
 
   // Déterminer la catégorie basée sur le titre
@@ -94,102 +94,123 @@ function FormationsCarousel({
 
   return (
     <motion.div
-      initial={{ opacity: 0, y: 40 }}
+      initial={{ opacity: 0, y: 30 }}
       whileInView={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.8 }}
+      transition={{ duration: 0.6, type: "spring", stiffness: 100 }}
       viewport={{ once: true }}
-      className={`${bgGradient} rounded-3xl p-8 shadow-2xl relative overflow-hidden`}
+      className="relative"
     >
-      {/* Background Pattern */}
-      <div className="absolute inset-0 opacity-5">
-        <div className="absolute inset-0" style={{
-          backgroundImage: `url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23000000' fill-opacity='0.1'%3E%3Ccircle cx='30' cy='30' r='2'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E")`,
-        }} />
-      </div>
-
-      {/* Header avec navigation */}
-      <div className="flex items-center justify-between mb-8 relative z-10">
-        <div className="flex items-center gap-4">
-          <div className={`${iconColor} p-4 rounded-2xl shadow-lg`}>
-            <Icon className="w-8 h-8 text-white" />
-          </div>
-          <div>
-            <h3 className="text-3xl font-bold text-gray-900">{title}</h3>
-            <p className="text-gray-600 mt-1">{formations.length} formations disponibles</p>
-          </div>
-        </div>
-
-        {/* Navigation Controls */}
-        <div className="flex items-center gap-3">
-          <motion.button
-            onClick={scrollLeft}
-            disabled={!canScrollLeft}
-            className={`p-3 rounded-xl transition-all duration-300 ${
-              canScrollLeft 
-                ? 'bg-white text-gray-700 hover:bg-gray-50 shadow-lg hover:shadow-xl' 
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
-            whileHover={canScrollLeft ? { scale: 1.05 } : {}}
-            whileTap={canScrollLeft ? { scale: 0.95 } : {}}
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </motion.button>
-          <motion.button
-            onClick={scrollRight}
-            disabled={!canScrollRight}
-            className={`p-3 rounded-xl transition-all duration-300 ${
-              canScrollRight 
-                ? 'bg-white text-gray-700 hover:bg-gray-50 shadow-lg hover:shadow-xl' 
-                : 'bg-gray-200 text-gray-400 cursor-not-allowed'
-            }`}
-            whileHover={canScrollRight ? { scale: 1.05 } : {}}
-            whileTap={canScrollRight ? { scale: 0.95 } : {}}
-          >
-            <ChevronRight className="w-5 h-5" />
-          </motion.button>
-        </div>
-      </div>
-
-      {/* Carousel des formations */}
-      <div 
-        ref={carouselRef}
-        className="flex gap-6 overflow-x-auto scrollbar-hide pb-4 relative z-10"
-        style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
-      >
-        {formations.map((formation, index) => (
-          <ExistingFormationCard key={formation.id} formation={formation} index={index} category={category} />
-        ))}
-      </div>
-
-      {/* Indicateurs de pagination */}
-      <div className="flex justify-center gap-2 mt-6 relative z-10">
-        {Array.from({ length: Math.max(1, formations.length - 2) }).map((_, index) => (
-          <motion.button
-            key={index}
-            onClick={() => scrollToIndex(index)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              index === currentIndex ? 'bg-gray-700 shadow-lg' : 'bg-gray-400'
-            }`}
-            whileHover={{ scale: 1.2 }}
-            whileTap={{ scale: 0.9 }}
+      {/* Container avec design moderne */}
+      <div className="relative bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 overflow-hidden">
+        {/* Motif de fond artistique */}
+        <div className="absolute inset-0 opacity-5">
+          <div 
+            className="absolute inset-0"
+            style={{
+              backgroundImage: `radial-gradient(circle at 25% 25%, rgba(59, 130, 246, 0.1) 0%, transparent 50%), 
+                               radial-gradient(circle at 75% 75%, rgba(147, 51, 234, 0.1) 0%, transparent 50%)`,
+            }}
           />
-        ))}
+        </div>
+
+        {/* Header compact et moderne */}
+        <div className="flex items-center justify-between mb-6 relative z-10">
+          <div className="flex items-center gap-3">
+            <motion.div 
+              className={`${iconColor} p-3 rounded-2xl shadow-lg`}
+              whileHover={{ scale: 1.05, rotate: 5 }}
+              transition={{ type: "spring", stiffness: 400 }}
+            >
+              <Icon className="w-6 h-6 text-white" />
+            </motion.div>
+            <div>
+              <h3 className="text-2xl font-bold text-gray-900 mb-1">{title}</h3>
+              <p className="text-sm text-gray-600">{formations.length} formations</p>
+            </div>
+          </div>
+
+          {/* Navigation moderne et compacte */}
+          <div className="flex items-center gap-2">
+            <motion.button
+              onClick={scrollLeft}
+              disabled={!canScrollLeft}
+              className={`p-2.5 rounded-xl transition-all duration-300 ${
+                canScrollLeft 
+                  ? 'bg-white/80 text-gray-700 hover:bg-white shadow-lg hover:shadow-xl backdrop-blur-sm' 
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+              whileHover={canScrollLeft ? { scale: 1.05 } : {}}
+              whileTap={canScrollLeft ? { scale: 0.95 } : {}}
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </motion.button>
+            <motion.button
+              onClick={scrollRight}
+              disabled={!canScrollRight}
+              className={`p-2.5 rounded-xl transition-all duration-300 ${
+                canScrollRight 
+                  ? 'bg-white/80 text-gray-700 hover:bg-white shadow-lg hover:shadow-xl backdrop-blur-sm' 
+                  : 'bg-gray-100 text-gray-400 cursor-not-allowed'
+              }`}
+              whileHover={canScrollRight ? { scale: 1.05 } : {}}
+              whileTap={canScrollRight ? { scale: 0.95 } : {}}
+            >
+              <ChevronRight className="w-4 h-4" />
+            </motion.button>
+          </div>
+        </div>
+
+        {/* Carousel des formations */}
+        <div 
+          ref={carouselRef}
+          className="flex gap-4 overflow-x-auto scrollbar-hide pb-2 relative z-10"
+          style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}
+        >
+          {formations.map((formation, index) => (
+            <ArtisticFormationCard key={formation.id} formation={formation} index={index} category={category} />
+          ))}
+        </div>
+
+        {/* Indicateurs minimalistes */}
+        <div className="flex justify-center gap-1.5 mt-4 relative z-10">
+          {Array.from({ length: Math.max(1, formations.length - 3) }).map((_, index) => (
+            <motion.button
+              key={index}
+              onClick={() => scrollToIndex(index)}
+              className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                index === currentIndex ? 'bg-gray-800 w-6' : 'bg-gray-400'
+              }`}
+              whileHover={{ scale: 1.2 }}
+              whileTap={{ scale: 0.9 }}
+            />
+          ))}
+        </div>
       </div>
     </motion.div>
   )
 }
 
-// Composant FormationCard adapté depuis la page formations existante
-function ExistingFormationCard({ formation, index, category }: { formation: any, index: number, category: string }) {
-  const [isExpanded, setIsExpanded] = useState(false)
+// Composant FormationCard moderne et compact avec design artistique
+function ArtisticFormationCard({ formation, index, category }: { formation: any, index: number, category: string }) {
+  const [isHovered, setIsHovered] = useState(false)
   
-  const getCategoryColor = (cat: string) => {
+  const getCategoryGradient = (cat: string) => {
     switch(cat) {
-      case 'alternance': return 'bg-gradient-to-r from-primary-blue to-blue-600'
-      case 'reconversion': return 'bg-gradient-to-r from-green-600 to-emerald-600'
-      case 'vae': return 'bg-gradient-to-r from-purple-600 to-indigo-600'
-      case 'entreprise': return 'bg-gradient-to-r from-orange-600 to-red-600'
-      default: return 'bg-gradient-primary'
+      case 'alternance': return 'from-blue-500 via-indigo-500 to-purple-600'
+      case 'reconversion': return 'from-emerald-500 via-teal-500 to-cyan-600'
+      case 'vae': return 'from-purple-500 via-violet-500 to-fuchsia-600'
+      case 'entreprise': return 'from-orange-500 via-red-500 to-pink-600'
+      default: return 'from-blue-500 to-indigo-600'
+    }
+  }
+
+  const getCategoryIcon = (cat: string) => {
+    switch(cat) {
+      case 'alternance': return '🎓'
+      case 'reconversion': return '🔄'
+      case 'vae': return '🏆'
+      case 'entreprise': return '🏢'
+      default: return '📚'
     }
   }
 
@@ -216,138 +237,142 @@ function ExistingFormationCard({ formation, index, category }: { formation: any,
 
   return (
     <motion.div
-      initial={{ opacity: 0, x: 50 }}
-      whileInView={{ opacity: 1, x: 0 }}
-      transition={{ duration: 0.6, delay: index * 0.1 }}
+      initial={{ opacity: 0, y: 20, scale: 0.95 }}
+      whileInView={{ opacity: 1, y: 0, scale: 1 }}
+      transition={{ 
+        duration: 0.5, 
+        delay: index * 0.1,
+        type: "spring",
+        stiffness: 100
+      }}
       viewport={{ once: true }}
-      className="bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden flex-shrink-0 w-80"
+      onHoverStart={() => setIsHovered(true)}
+      onHoverEnd={() => setIsHovered(false)}
+      className="group relative bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden flex-shrink-0 w-72 h-96 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500"
+      style={{
+        background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)',
+      }}
     >
-      {/* Image de la formation */}
-      {formation.image && (
-        <div className="relative h-48 overflow-hidden">
-          <img 
-            src={formation.image}
-            alt={formation.title}
-            className="w-full h-full object-cover transition-transform duration-500 hover:scale-110"
-          />
-          <div className={`absolute inset-0 ${getCategoryColor(category)} opacity-40`} />
-          <span className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm text-gray-800 px-3 py-1 rounded-full text-sm font-semibold">
-            {formation.level}
-          </span>
-        </div>
-      )}
+      {/* Gradient de fond artistique */}
+      <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryGradient(category)} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
       
-      <div className={`${!formation.image ? getCategoryColor(category) : ''} ${!formation.image ? 'p-6 text-white' : 'p-4'}`}>
-        {!formation.image && (
-          <>
-            <div className="flex justify-between items-start mb-4">
-              <div className="w-12 h-12 bg-white/20 rounded-lg flex items-center justify-center">
-                <GraduationCap className="w-6 h-6 text-white" />
-              </div>
-              <span className="bg-white/20 backdrop-blur-sm text-white px-3 py-1 rounded-full text-sm font-semibold">
-                {formation.level}
-              </span>
-            </div>
-          </>
-        )}
-        
-        <h3 className={`text-xl font-montserrat font-bold mb-2 ${formation.image ? 'text-primary-blue' : ''}`}>
+      {/* Motif géométrique décoratif */}
+      <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
+        <div className={`w-full h-full bg-gradient-to-br ${getCategoryGradient(category)} rounded-full transform rotate-45 scale-150`} />
+      </div>
+
+      {/* Header compact avec icône */}
+      <div className="relative p-4 pb-2">
+        <div className="flex items-start justify-between mb-3">
+          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${getCategoryGradient(category)} flex items-center justify-center text-white text-xl shadow-lg`}>
+            {getCategoryIcon(category)}
+          </div>
+          
+          {formation.level && (
+            <motion.div 
+              className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm"
+              animate={{ scale: isHovered ? 1.05 : 1 }}
+              transition={{ duration: 0.2 }}
+            >
+              <span className="text-xs font-semibold text-gray-700">{formation.level.split(' ')[0]} {formation.level.split(' ')[1]}</span>
+            </motion.div>
+          )}
+        </div>
+
+        {/* Titre compact */}
+        <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
           {formation.title}
         </h3>
-        
+
+        {/* RNCP Badge compact */}
         {formation.rncp && (
-          <div className={`flex items-center space-x-2 ${formation.image ? 'text-gray-600' : 'text-white/90'}`}>
-            <Award className="w-4 h-4" />
-            <span className="text-sm">{formation.rncp}</span>
+          <div className="flex items-center gap-2 mb-3">
+            <div className="flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-lg">
+              <Award className="w-3 h-3 text-blue-600" />
+              <span className="text-xs font-medium text-blue-700">{formation.rncp}</span>
+            </div>
             {rncpUrl && (
               <a 
                 href={rncpUrl}
                 target="_blank"
                 rel="noopener noreferrer"
-                className={`inline-flex items-center space-x-1 text-xs ${formation.image ? 'text-primary-blue hover:text-blue-700' : 'text-white/80 hover:text-white'} transition-colors`}
+                className="text-blue-600 hover:text-blue-800 transition-colors"
                 onClick={(e) => e.stopPropagation()}
               >
                 <ExternalLink className="w-3 h-3" />
-                <span>France Compétences</span>
               </a>
             )}
           </div>
         )}
       </div>
-      
-      <div className="p-6 pt-2">
-        <p className="text-gray-600 mb-4">{formation.shortDescription}</p>
-        
-        <div className="grid grid-cols-2 gap-4 mb-6 text-sm">
+
+      {/* Contenu principal compact */}
+      <div className="px-4 pb-4 flex-1 flex flex-col">
+        {/* Description très courte */}
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
+          {formation.shortDescription?.substring(0, 80)}...
+        </p>
+
+        {/* Informations essentielles en grille compacte */}
+        <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
           {formation.duration && (
-            <div className="flex items-center space-x-2">
-              <Clock className="w-4 h-4 text-primary-yellow" />
-              <span className="text-gray-600">{formation.duration}</span>
+            <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
+              <Clock className="w-3 h-3 text-gray-500" />
+              <span className="text-gray-700 truncate">{formation.duration.split(' ')[0]} {formation.duration.split(' ')[1]}</span>
             </div>
           )}
-          <div className="flex items-center space-x-2">
-            <MapPin className="w-4 h-4 text-primary-yellow" />
-            <span className="text-gray-600">{formation.mode || 'Présentiel'}</span>
-          </div>
-          {formation.rhythm && (
-            <div className="flex items-center space-x-2">
-              <BookOpen className="w-4 h-4 text-primary-yellow" />
-              <span className="text-gray-600 text-xs">{formation.rhythm}</span>
-            </div>
-          )}
-          <div className="flex items-center space-x-2">
-            <Euro className="w-4 h-4 text-primary-yellow" />
-            <span className="text-gray-600 text-xs">{formation.price || 'Prise en charge'}</span>
+          <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
+            <MapPin className="w-3 h-3 text-gray-500" />
+            <span className="text-gray-700 truncate">{formation.mode || 'Présentiel'}</span>
           </div>
         </div>
-        
-        {/* Objectifs principaux */}
+
+        {/* Objectifs compacts */}
         {formation.objectives && formation.objectives.length > 0 && (
-          <div className="mb-4">
-            <h4 className="font-semibold text-primary-blue mb-2 text-sm">Objectifs principaux :</h4>
-            <ul className="space-y-1 text-xs text-gray-600">
+          <div className="mb-3 flex-1">
+            <div className="space-y-1">
               {formation.objectives.slice(0, 2).map((obj: string, i: number) => (
-                <li key={i} className="flex items-start space-x-2">
-                  <CheckCircle className="w-3 h-3 text-green-500 mt-0.5 flex-shrink-0" />
-                  <span>{obj}</span>
-                </li>
+                <div key={i} className="flex items-start gap-2">
+                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
+                  <span className="text-xs text-gray-600 line-clamp-1">{obj}</span>
+                </div>
               ))}
-            </ul>
+            </div>
           </div>
         )}
 
-        {/* Débouchés principaux */}
-        {formation.opportunities && formation.opportunities.length > 0 && (
-          <div className="mb-4">
-            <h4 className="font-semibold text-primary-blue mb-2 text-sm">Débouchés principaux :</h4>
-            <div className="flex flex-wrap gap-1">
-              {formation.opportunities.slice(0, 2).map((debouche: string, i: number) => (
-                <span key={i} className="bg-blue-50 text-blue-700 px-2 py-1 rounded-full text-xs">
-                  {debouche.length > 25 ? debouche.substring(0, 25) + '...' : debouche}
-                </span>
-              ))}
-            </div>
-          </div>
-        )}
-        
-        <div className="space-y-3">
-          <button 
-            onClick={() => setIsExpanded(!isExpanded)}
-            className="flex items-center space-x-2 text-primary-blue hover:text-primary-yellow transition-colors w-full justify-center py-2 border border-primary-blue/20 rounded-lg hover:bg-primary-blue/5"
-          >
-            <span>{isExpanded ? 'Voir moins' : 'Aperçu'}</span>
-            <ArrowRight className={`w-4 h-4 transition-transform ${isExpanded ? 'rotate-90' : ''}`} />
-          </button>
-          
-          <Link 
+        {/* CTA Button moderne et compact */}
+        <motion.div
+          whileHover={{ scale: 1.02 }}
+          whileTap={{ scale: 0.98 }}
+          className="mt-auto"
+        >
+          <Link
             href={`/formations/${formation.slug}`}
-            className="flex items-center space-x-2 bg-primary-blue text-white hover:bg-blue-700 transition-colors w-full justify-center py-2 rounded-lg font-semibold"
+            className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}
           >
-            <span>Voir tous les détails</span>
-            <ArrowRight className="w-4 h-4" />
+            <span className="relative z-10">Découvrir</span>
+            <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
+            
+            {/* Effet de brillance au hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
           </Link>
-        </div>
+        </motion.div>
       </div>
+
+      {/* Effet de bordure animée au hover */}
+      <motion.div
+        className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(category)} opacity-0 group-hover:opacity-20`}
+        style={{ 
+          background: `linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)`,
+          mixBlendMode: 'overlay'
+        }}
+        animate={{ 
+          opacity: isHovered ? 0.1 : 0,
+          scale: isHovered ? 1.02 : 1
+        }}
+        transition={{ duration: 0.3 }}
+      />
     </motion.div>
   )
 }
@@ -356,8 +381,8 @@ export function FeaturedFormationsClient({ formations }: FeaturedFormationsClien
   // Si nous avons des formations depuis Strapi, les afficher dans un carousel horizontal
   if (formations.length > 0) {
     return (
-      <div className="space-y-12">
-        <FormationsCarousel
+      <div className="space-y-8">
+        <ArtisticFormationsCarousel
           title="Formations Disponibles"
           formations={formations}
           icon={GraduationCap}
@@ -368,227 +393,238 @@ export function FeaturedFormationsClient({ formations }: FeaturedFormationsClien
     )
   }
 
-  // Carousels horizontaux avec les formations existantes par catégorie
+  // Carousels horizontaux artistiques avec les formations existantes par catégorie
   return (
-    <div className="space-y-16">
-      {/* Titre principal */}
+    <div className="space-y-12">
+      {/* Titre principal moderne et compact */}
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-center mb-12"
+        className="text-center mb-8"
       >
-        <div className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-blue/10 to-primary-yellow/10 px-6 py-3 rounded-full mb-6">
-          <div className="w-2 h-2 bg-primary-blue rounded-full animate-pulse"></div>
-          <span className="text-primary-blue font-semibold text-sm uppercase tracking-wider">Nos Formations</span>
-          <div className="w-2 h-2 bg-primary-yellow rounded-full animate-pulse"></div>
+        <div className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-500/10 to-purple-500/10 px-4 py-2 rounded-full mb-4 backdrop-blur-sm">
+          <div className="w-1.5 h-1.5 bg-blue-500 rounded-full animate-pulse"></div>
+          <span className="text-blue-700 font-semibold text-sm uppercase tracking-wider">Nos Formations</span>
+          <div className="w-1.5 h-1.5 bg-purple-500 rounded-full animate-pulse"></div>
         </div>
-        <h3 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6 leading-tight">
-          Découvrez Nos
-          <span className="block bg-gradient-to-r from-primary-blue to-primary-yellow bg-clip-text text-transparent">
-            Formations d'Excellence
+        <h3 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4 leading-tight">
+          Formations
+          <span className="block bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+            d'Excellence BTP
           </span>
         </h3>
-        <p className="text-xl text-gray-600 max-w-4xl mx-auto leading-relaxed">
-          Explorez notre catalogue de formations BTP par modalité. Chaque parcours est conçu pour vous mener vers l'excellence professionnelle.
+        <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
+          Découvrez nos parcours certifiants conçus pour votre réussite professionnelle
         </p>
       </motion.div>
 
       {/* Carousel Formations Alternance */}
-      <FormationsCarousel
+      <ArtisticFormationsCarousel
         title="Formations en Alternance"
         formations={formationsAlternance}
         icon={GraduationCap}
         bgGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
-        iconColor="bg-primary-blue"
+        iconColor="bg-gradient-to-r from-blue-500 to-indigo-600"
       />
 
       {/* Carousel Formations Reconversion */}
-      <FormationsCarousel
+      <ArtisticFormationsCarousel
         title="Reconversion Professionnelle"
         formations={formationsReconversion}
         icon={Users}
         bgGradient="bg-gradient-to-br from-green-50 to-emerald-100"
-        iconColor="bg-green-600"
+        iconColor="bg-gradient-to-r from-emerald-500 to-teal-600"
       />
 
-      {/* Section VAE - Cartes statiques */}
+      {/* Section VAE - Design moderne et compact */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="bg-gradient-to-br from-purple-50 to-indigo-100 rounded-3xl p-8 shadow-2xl"
+        className="relative"
       >
-        <div className="flex items-center gap-4 mb-8">
-          <div className="bg-purple-600 p-4 rounded-2xl shadow-lg">
-            <Award className="w-8 h-8 text-white" />
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 overflow-hidden">
+          {/* Motif de fond */}
+          <div className="absolute inset-0 opacity-5">
+            <div 
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), 
+                                 radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)`,
+              }}
+            />
           </div>
-          <div>
-            <h3 className="text-3xl font-bold text-gray-900">VAE - Validation des Acquis</h3>
-            <p className="text-gray-600 mt-1">Transformez votre expérience en certification</p>
-          </div>
-        </div>
 
-        <div className="grid md:grid-cols-2 gap-6 mb-8">
-          {vaeCertifications.niveau5.slice(0, 4).map((cert, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, x: -20 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              viewport={{ once: true }}
-              className="bg-white rounded-xl p-4 shadow-lg hover:shadow-xl transition-all duration-300"
-            >
-              <h4 className="font-semibold text-gray-900 mb-2">{cert.titre}</h4>
-              <div className="flex items-center gap-2 mb-3">
-                <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-xs font-bold">
-                  Niveau 5
-                </span>
-                <span className="text-sm text-gray-600">{cert.rncp}</span>
-              </div>
-              {cert.rncpUrl && (
-                <a 
-                  href={cert.rncpUrl}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1 text-primary-blue hover:text-blue-700 text-sm transition-colors"
-                >
-                  <ExternalLink className="w-3 h-3" />
-                  France Compétences
-                </a>
-              )}
-            </motion.div>
-          ))}
-        </div>
-
-        <div className="text-center">
-          <Link
-            href="/formations/vae-btp"
-            className="inline-flex items-center gap-3 bg-purple-600 text-white px-8 py-4 rounded-xl font-semibold hover:bg-purple-700 transition-all duration-300 group"
-          >
-            Découvrir la VAE
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-          </Link>
-        </div>
-      </motion.div>
-
-      {/* Section Formations Entreprises */}
-      <motion.div
-        initial={{ opacity: 0, y: 40 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8 }}
-        viewport={{ once: true }}
-        className="bg-gradient-to-r from-orange-500 via-amber-500 to-yellow-600 rounded-3xl p-8 lg:p-12 shadow-2xl text-white"
-      >
-        <div className="grid lg:grid-cols-2 gap-8 items-center">
-          <div>
-            <div className="flex items-center gap-4 mb-6">
-              <div className="bg-white/20 backdrop-blur-sm p-4 rounded-2xl">
-                <Building2 className="w-10 h-10" />
-              </div>
+          <div className="relative z-10">
+            <div className="flex items-center gap-3 mb-6">
+              <motion.div 
+                className="bg-gradient-to-r from-purple-500 to-violet-600 p-3 rounded-2xl shadow-lg"
+                whileHover={{ scale: 1.05, rotate: 5 }}
+              >
+                <Award className="w-6 h-6 text-white" />
+              </motion.div>
               <div>
-                <h3 className="text-4xl font-bold">Formations Entreprises</h3>
-                <p className="text-orange-100 mt-2">Solutions sur mesure pour vos équipes</p>
+                <h3 className="text-2xl font-bold text-gray-900 mb-1">VAE - Validation des Acquis</h3>
+                <p className="text-sm text-gray-600">Transformez votre expérience en certification</p>
               </div>
             </div>
 
-            <p className="text-lg text-orange-100 mb-8 leading-relaxed">
-              Développez les compétences de vos collaborateurs avec nos formations personnalisées. 
-              Du Lean Construction au BIM collaboratif, nous adaptons nos programmes à vos enjeux.
-            </p>
-
-            <div className="flex flex-wrap gap-3 mb-8">
-              {entrepriseThematiques.slice(0, 3).map((thematique, index) => (
-                <div key={index} className="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-full text-sm font-semibold">
-                  {thematique}
-                </div>
+            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+              {vaeCertifications.niveau5.slice(0, 4).map((cert, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, delay: index * 0.1 }}
+                  viewport={{ once: true }}
+                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20"
+                >
+                  <h4 className="font-semibold text-gray-900 mb-2 text-sm line-clamp-2">{cert.titre}</h4>
+                  <div className="flex items-center gap-2 mb-2">
+                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-lg text-xs font-bold">
+                      Niveau 5
+                    </span>
+                  </div>
+                  <div className="flex items-center gap-1 text-xs text-gray-600">
+                    <span>{cert.rncp}</span>
+                    {cert.rncpUrl && (
+                      <a 
+                        href={cert.rncpUrl}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="text-purple-600 hover:text-purple-800 transition-colors"
+                      >
+                        <ExternalLink className="w-3 h-3" />
+                      </a>
+                    )}
+                  </div>
+                </motion.div>
               ))}
             </div>
 
-            <Link
-              href="/formations/entreprises"
-              className="inline-flex items-center gap-3 bg-white text-orange-600 px-8 py-4 rounded-xl font-semibold hover:bg-orange-50 transition-all duration-300 group"
-            >
-              Découvrir nos solutions
-              <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
-            </Link>
-          </div>
-
-              {/* Statistiques */}
-              <div className="grid grid-cols-2 gap-6 text-white">
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.8 }}
-                  viewport={{ once: true }}
-                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
-                >
-                  <div className="text-4xl font-bold text-white mb-2">700€</div>
-                  <div className="text-orange-100">À partir de / stagiaire</div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 0.9 }}
-                  viewport={{ once: true }}
-                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
-                >
-                  <div className="text-4xl font-bold text-white mb-2">100%</div>
-                  <div className="text-orange-100">Sur mesure</div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 1.0 }}
-                  viewport={{ once: true }}
-                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
-                >
-                  <div className="text-4xl font-bold text-white mb-2">3</div>
-                  <div className="text-orange-100">Modalités</div>
-                </motion.div>
-                <motion.div
-                  initial={{ opacity: 0, scale: 0.8 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  transition={{ duration: 0.5, delay: 1.1 }}
-                  viewport={{ once: true }}
-                  className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-6"
-                >
-                  <div className="text-4xl font-bold text-white mb-2">5</div>
-                  <div className="text-orange-100">Thématiques</div>
-                </motion.div>
-              </div>
+            <div className="text-center">
+              <Link
+                href="/formations/vae-btp"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-violet-600 text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 group"
+              >
+                Découvrir la VAE
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
             </div>
           </div>
         </div>
       </motion.div>
 
-      {/* Section finale - CTA global */}
+      {/* Section Formations Entreprises - Moderne et compact */}
       <motion.div
-        initial={{ opacity: 0, y: 40 }}
+        initial={{ opacity: 0, y: 30 }}
         whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.8, delay: 0.8 }}
+        transition={{ duration: 0.6 }}
         viewport={{ once: true }}
-        className="text-center bg-gradient-to-r from-gray-50 to-blue-50/30 rounded-3xl p-12"
+        className="relative"
       >
-        <h4 className="text-3xl font-bold text-gray-900 mb-6">
+        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 overflow-hidden">
+          {/* Motif de fond */}
+          <div className="absolute inset-0 opacity-5">
+            <div 
+              className="absolute inset-0"
+              style={{
+                backgroundImage: `radial-gradient(circle at 30% 40%, rgba(249, 115, 22, 0.1) 0%, transparent 50%), 
+                                 radial-gradient(circle at 70% 60%, rgba(234, 88, 12, 0.1) 0%, transparent 50%)`,
+              }}
+            />
+          </div>
+
+          <div className="relative z-10 grid lg:grid-cols-2 gap-6 items-center">
+            <div>
+              <div className="flex items-center gap-3 mb-4">
+                <motion.div 
+                  className="bg-gradient-to-r from-orange-500 to-red-500 p-3 rounded-2xl shadow-lg"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                >
+                  <Building2 className="w-6 h-6 text-white" />
+                </motion.div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900">Formations Entreprises</h3>
+                  <p className="text-sm text-gray-600">Solutions sur mesure</p>
+                </div>
+              </div>
+
+              <p className="text-gray-700 mb-4 leading-relaxed">
+                Développez les compétences de vos équipes avec nos formations personnalisées.
+              </p>
+
+              <div className="flex flex-wrap gap-2 mb-4">
+                {entrepriseThematiques.slice(0, 2).map((thematique, index) => (
+                  <div key={index} className="bg-orange-100 text-orange-800 px-3 py-1 rounded-lg text-sm font-medium">
+                    {thematique.split(':')[0]}
+                  </div>
+                ))}
+              </div>
+
+              <Link
+                href="/formations/entreprises"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-orange-500 to-red-500 text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 group"
+              >
+                Découvrir nos solutions
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+              </Link>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3 text-white">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.1 }}
+                viewport={{ once: true }}
+                className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-4"
+              >
+                <div className="text-2xl font-bold text-white mb-1">700€</div>
+                <div className="text-orange-200 text-xs">À partir de</div>
+              </motion.div>
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4, delay: 0.2 }}
+                viewport={{ once: true }}
+                className="text-center bg-white/10 backdrop-blur-sm rounded-2xl p-4"
+              >
+                <div className="text-2xl font-bold text-white mb-1">100%</div>
+                <div className="text-orange-200 text-xs">Sur mesure</div>
+              </motion.div>
+            </div>
+          </div>
+        </div>
+      </motion.div>
+
+      {/* Section finale - CTA compact */}
+      <motion.div
+        initial={{ opacity: 0, y: 20 }}
+        whileInView={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.6 }}
+        viewport={{ once: true }}
+        className="text-center bg-white/60 backdrop-blur-xl rounded-3xl p-8 shadow-xl border border-white/20"
+      >
+        <h4 className="text-2xl font-bold text-gray-900 mb-4">
           Prêt à transformer votre carrière ?
         </h4>
-        <p className="text-xl text-gray-600 mb-8 max-w-2xl mx-auto">
-          Découvrez toutes nos formations et trouvez celle qui correspond parfaitement à vos ambitions professionnelles.
+        <p className="text-gray-600 mb-6 max-w-xl mx-auto">
+          Découvrez toutes nos formations et trouvez celle qui correspond à vos ambitions.
         </p>
-        <div className="flex flex-col sm:flex-row gap-4 justify-center">
+        <div className="flex flex-col sm:flex-row gap-3 justify-center">
           <Link
             href="/formations"
-            className="inline-flex items-center gap-3 bg-primary-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 transition-all duration-300 group"
+            className="inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 group"
           >
             Voir toutes les formations
-            <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+            <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
           </Link>
           <Link
             href="/contact"
-            className="inline-flex items-center gap-3 bg-white text-primary-blue border-2 border-primary-blue px-8 py-4 rounded-xl font-semibold hover:bg-primary-blue hover:text-white transition-all duration-300"
+            className="inline-flex items-center gap-2 bg-white text-gray-700 border-2 border-gray-200 px-6 py-3 rounded-2xl font-semibold hover:bg-gray-50 transition-all duration-300"
           >
             Nous contacter
           </Link>
