@@ -6,21 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint",
-    "test:responsive": "node scripts/test-responsive-improvements.js",
-    "check:responsive": "node scripts/quick-responsive-check.js",
-    "dev:responsive": "npm run dev & npm run check:responsive",
-    "deploy": "node scripts/deploy-production.js",
-    "deploy:frontend": "vercel --prod",
-    "deploy:strapi": "node scripts/setup-strapi-production.js",
-    "setup:production": "npm run build && npm run deploy",
-    "upload:github": "node scripts/upload-to-github.js",
-    "prepare:upload": "node scripts/prepare-for-upload.js",
-    "postinstall": "echo '✅ Installation terminée'",
-    "prebuild": "echo '🔧 Préparation du build...'",
-    "predev": "echo '🚀 Démarrage en mode développement...'",
-    "build:production": "ESLINT_NO_DEV_ERRORS=true next build",
-    "build:ignore-warnings": "next build --no-lint"
+    "lint": "next lint"
   },
   "dependencies": {
     "@emailjs/browser": "^4.4.1",
@@ -67,5 +53,10 @@
     "lastSync": "2025-12-30T12:40:38.570Z",
     "source": "frontend-optimization",
     "version": "0.1.0"
+  },
+  "productionOptimized": {
+    "cleanedAt": "2025-12-30T12:50:27.711Z",
+    "version": "0.1.0",
+    "environment": "production-ready"
   }
 }
