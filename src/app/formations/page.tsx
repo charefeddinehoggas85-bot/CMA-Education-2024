@@ -461,7 +461,6 @@ export default function FormationsPage() {
           setFormationsAlternance(staticAlt || [])
           setFormationsReconversion(staticReconv || [])
         }
-        }
 
         // Charger les formules VAE
         const vaeFormulesData = await getVAEFormules()
