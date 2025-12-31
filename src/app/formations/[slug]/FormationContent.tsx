@@ -1,9 +1,75 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GraduationCap, Clock, Users, MapPin, CheckCircle, Target, ArrowLeft, Download, Phone, ExternalLink, BookOpen, Award, TrendingUp, Briefcase, FileText, Calendar, Euro, Mail, Building, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { getImageURL } from '@/lib/strapi'
+import { getImageURL, getPageFormationDetail } from '@/lib/strapi'
+
+// Types pour les labels de page
+interface PageLabels {
+  backButtonText: string
+  objectifsSectionTitle: string
+  programmeSectionTitle: string
+  debouchesSectionTitle: string
+  prerequisSectionTitle: string
+  evaluationSectionTitle: string
+  poursuiteEtudesSectionTitle: string
+  sidebarTitle: string
+  repartitionLabel: string
+  financementLabel: string
+  coutLabel: string
+  certificateurLabel: string
+  contactLabel: string
+  entreprisesPartenairesTitle: string
+  candidaterButtonText: string
+  brochureButtonText: string
+  candidaterUrl: string
+  ctaTitle: string
+  ctaSubtitle: string
+  ctaPrimaryButtonText: string
+  ctaSecondaryButtonText: string
+  ctaSecondaryButtonLink: string
+  phoneNumber: string
+  dureeLabel: string
+  heuresLabel: string
+  modaliteLabel: string
+  effectifLabel: string
+  reussiteLabel: string
+  insertionLabel: string
+}
+
+const defaultLabels: PageLabels = {
+  backButtonText: "Retour aux formations",
+  objectifsSectionTitle: "Objectifs de la formation",
+  programmeSectionTitle: "Programme de formation",
+  debouchesSectionTitle: "Débouchés professionnels",
+  prerequisSectionTitle: "Prérequis et admission",
+  evaluationSectionTitle: "Modalités d'évaluation",
+  poursuiteEtudesSectionTitle: "Poursuites d'études",
+  sidebarTitle: "Informations pratiques",
+  repartitionLabel: "Répartition",
+  financementLabel: "Financement",
+  coutLabel: "Coût",
+  certificateurLabel: "Certificateur",
+  contactLabel: "Contact",
+  entreprisesPartenairesTitle: "Entreprises partenaires",
+  candidaterButtonText: "Candidater",
+  brochureButtonText: "Brochure",
+  candidaterUrl: "https://cma-education.ymag.cloud/index.php/preinscription/",
+  ctaTitle: "Prêt à démarrer votre formation ?",
+  ctaSubtitle: "Rejoignez nos diplômés en emploi",
+  ctaPrimaryButtonText: "Candidater maintenant",
+  ctaSecondaryButtonText: "Nous contacter",
+  ctaSecondaryButtonLink: "/contact",
+  phoneNumber: "01 89 70 60 52",
+  dureeLabel: "Durée",
+  heuresLabel: "Heures",
+  modaliteLabel: "Modalité",
+  effectifLabel: "Effectif",
+  reussiteLabel: "Réussite",
+  insertionLabel: "Insertion"
+}
 
 // Mapping des codes RNCP vers les URLs France Compétences
 const rncpToUrlMap: Record<string, string> = {
@@ -62,6 +128,52 @@ interface Formation {
 }
 
 export default function FormationContent({ formation }: { formation: Formation }) {
+  const [labels, setLabels] = useState<PageLabels>(defaultLabels)
+  
+  useEffect(() => {
+    async function loadLabels() {
+      try {
+        const strapiLabels = await getPageFormationDetail()
+        if (strapiLabels) {
+          setLabels({
+            backButtonText: strapiLabels.backButtonText || defaultLabels.backButtonText,
+            objectifsSectionTitle: strapiLabels.objectifsSectionTitle || defaultLabels.objectifsSectionTitle,
+            programmeSectionTitle: strapiLabels.programmeSectionTitle || defaultLabels.programmeSectionTitle,
+            debouchesSectionTitle: strapiLabels.debouchesSectionTitle || defaultLabels.debouchesSectionTitle,
+            prerequisSectionTitle: strapiLabels.prerequisSectionTitle || defaultLabels.prerequisSectionTitle,
+            evaluationSectionTitle: strapiLabels.evaluationSectionTitle || defaultLabels.evaluationSectionTitle,
+            poursuiteEtudesSectionTitle: strapiLabels.poursuiteEtudesSectionTitle || defaultLabels.poursuiteEtudesSectionTitle,
+            sidebarTitle: strapiLabels.sidebarTitle || defaultLabels.sidebarTitle,
+            repartitionLabel: strapiLabels.repartitionLabel || defaultLabels.repartitionLabel,
+            financementLabel: strapiLabels.financementLabel || defaultLabels.financementLabel,
+            coutLabel: strapiLabels.coutLabel || defaultLabels.coutLabel,
+            certificateurLabel: strapiLabels.certificateurLabel || defaultLabels.certificateurLabel,
+            contactLabel: strapiLabels.contactLabel || defaultLabels.contactLabel,
+            entreprisesPartenairesTitle: strapiLabels.entreprisesPartenairesTitle || defaultLabels.entreprisesPartenairesTitle,
+            candidaterButtonText: strapiLabels.candidaterButtonText || defaultLabels.candidaterButtonText,
+            brochureButtonText: strapiLabels.brochureButtonText || defaultLabels.brochureButtonText,
+            candidaterUrl: strapiLabels.candidaterUrl || defaultLabels.candidaterUrl,
+            ctaTitle: strapiLabels.ctaTitle || defaultLabels.ctaTitle,
+            ctaSubtitle: strapiLabels.ctaSubtitle || defaultLabels.ctaSubtitle,
+            ctaPrimaryButtonText: strapiLabels.ctaPrimaryButtonText || defaultLabels.ctaPrimaryButtonText,
+            ctaSecondaryButtonText: strapiLabels.ctaSecondaryButtonText || defaultLabels.ctaSecondaryButtonText,
+            ctaSecondaryButtonLink: strapiLabels.ctaSecondaryButtonLink || defaultLabels.ctaSecondaryButtonLink,
+            phoneNumber: strapiLabels.phoneNumber || defaultLabels.phoneNumber,
+            dureeLabel: strapiLabels.dureeLabel || defaultLabels.dureeLabel,
+            heuresLabel: strapiLabels.heuresLabel || defaultLabels.heuresLabel,
+            modaliteLabel: strapiLabels.modaliteLabel || defaultLabels.modaliteLabel,
+            effectifLabel: strapiLabels.effectifLabel || defaultLabels.effectifLabel,
+            reussiteLabel: strapiLabels.reussiteLabel || defaultLabels.reussiteLabel,
+            insertionLabel: strapiLabels.insertionLabel || defaultLabels.insertionLabel
+          })
+        }
+      } catch (error) {
+        console.error('Erreur chargement labels:', error)
+      }
+    }
+    loadLabels()
+  }, [])
+
   const imageUrl = getImageURL(formation.imageData, formation.image)
   const hasImage = imageUrl && imageUrl !== '/images/formations/formations-hero.jpg'
   const rncpUrl = getRncpUrl(formation.rncp, formation.rncpUrl)
@@ -85,7 +197,7 @@ export default function FormationContent({ formation }: { formation: Formation }
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
             <Link href="/formations" className="inline-flex items-center space-x-2 text-primary-blue hover:text-primary-yellow mb-4">
-              <ArrowLeft className="w-4 h-4" /><span>Retour aux formations</span>
+              <ArrowLeft className="w-4 h-4" /><span>{labels.backButtonText}</span>
             </Link>
             
             <div className="flex flex-wrap items-center gap-3 mb-4">
@@ -113,14 +225,14 @@ export default function FormationContent({ formation }: { formation: Formation }
               <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-primary-blue/10 rounded-full flex items-center justify-center mb-2"><Clock className="w-6 h-6 text-primary-blue" /></div>
                 <div className="font-bold text-gray-900">{formation.duree}</div>
-                <div className="text-xs text-gray-500">Durée</div>
+                <div className="text-xs text-gray-500">{labels.dureeLabel}</div>
               </div>
             )}
             {formation.volumeHoraire && (
               <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 bg-primary-blue/10 rounded-full flex items-center justify-center mb-2"><BookOpen className="w-6 h-6 text-primary-blue" /></div>
                 <div className="font-bold text-gray-900">{formation.volumeHoraire}</div>
-                <div className="text-xs text-gray-500">Heures</div>
+                <div className="text-xs text-gray-500">{labels.heuresLabel}</div>
               </div>
             )}
             <div className="flex flex-col items-center text-center">

@@ -711,3 +711,54 @@ export async function getPageBlog() {
     return null
   }
 }
+
+// Page Formation Detail (singleton) - Textes communs pour les pages de détail formation
+export async function getPageFormationDetail() {
+  try {
+    const data = await fetchAPI('/api/page-formation-detail?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Formation Detail non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      backButtonText: attrs.backButtonText || "Retour aux formations",
+      objectifsSectionTitle: attrs.objectifsSectionTitle || "Objectifs de la formation",
+      programmeSectionTitle: attrs.programmeSectionTitle || "Programme de formation",
+      debouchesSectionTitle: attrs.debouchesSectionTitle || "Débouchés professionnels",
+      prerequisSectionTitle: attrs.prerequisSectionTitle || "Prérequis et admission",
+      evaluationSectionTitle: attrs.evaluationSectionTitle || "Modalités d'évaluation",
+      poursuiteEtudesSectionTitle: attrs.poursuiteEtudesSectionTitle || "Poursuites d'études",
+      sidebarTitle: attrs.sidebarTitle || "Informations pratiques",
+      repartitionLabel: attrs.repartitionLabel || "Répartition",
+      financementLabel: attrs.financementLabel || "Financement",
+      coutLabel: attrs.coutLabel || "Coût",
+      certificateurLabel: attrs.certificateurLabel || "Certificateur",
+      contactLabel: attrs.contactLabel || "Contact",
+      entreprisesPartenairesTitle: attrs.entreprisesPartenairesTitle || "Entreprises partenaires",
+      candidaterButtonText: attrs.candidaterButtonText || "Candidater",
+      brochureButtonText: attrs.brochureButtonText || "Brochure",
+      candidaterUrl: attrs.candidaterUrl || "https://cma-education.ymag.cloud/index.php/preinscription/",
+      ctaTitle: attrs.ctaTitle || "Prêt à démarrer votre formation ?",
+      ctaSubtitle: attrs.ctaSubtitle || "Rejoignez nos diplômés en emploi",
+      ctaPrimaryButtonText: attrs.ctaPrimaryButtonText || "Candidater maintenant",
+      ctaSecondaryButtonText: attrs.ctaSecondaryButtonText || "Nous contacter",
+      ctaSecondaryButtonLink: attrs.ctaSecondaryButtonLink || "/contact",
+      phoneNumber: attrs.phoneNumber || "01 89 70 60 52",
+      dureeLabel: attrs.dureeLabel || "Durée",
+      heuresLabel: attrs.heuresLabel || "Heures",
+      modaliteLabel: attrs.modaliteLabel || "Modalité",
+      effectifLabel: attrs.effectifLabel || "Effectif",
+      reussiteLabel: attrs.reussiteLabel || "Réussite",
+      insertionLabel: attrs.insertionLabel || "Insertion",
+      metaTitle: attrs.metaTitle || "Formation {title} - Construction Management Academy",
+      metaDescription: attrs.metaDescription || "Découvrez notre formation {title}. Formation BTP en alternance avec un taux d'insertion de {tauxInsertion}."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageFormationDetail:', error)
+    return null
+  }
+}
