@@ -100,7 +100,7 @@ export async function POST(request: NextRequest) {
       }
 
     } catch (error) {
-      console.log(`❌ Erreur récupération fichier: ${error.message}`);
+      console.log(`❌ Erreur récupération fichier: ${error instanceof Error ? error.message : 'Erreur inconnue'}`);
     }
 
     // Si nous n'avons pas réussi à récupérer le PDF, générer un PDF de remplacement
