@@ -3,9 +3,9 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import PageLayout from '@/components/layout/PageLayout'
-import { Calendar, User, ArrowRight, Search, Filter, TrendingUp, BookOpen } from 'lucide-react'
+import { Calendar, ArrowRight, Search, Filter, TrendingUp, BookOpen } from 'lucide-react'
 import Link from 'next/link'
-import { getArticlesBlog, getArticlesBlogFeatured, getCategoriesBlog, getImageURL } from '@/lib/strapi'
+import { getArticlesBlog, getArticlesBlogFeatured, getCategoriesBlog, getImageURL, getPageBlog, getStrapiMediaURL } from '@/lib/strapi'
 
 interface Article {
   id: number
@@ -32,16 +32,26 @@ interface PageData {
   heroTitle: string
   heroSubtitle: string
   heroImage: string
+  heroBadgeText: string
   sectionTitle: string
   sectionSubtitle: string
+  featuredSectionTitle: string
+  searchPlaceholder: string
+  noArticlesText: string
+  allCategoriesText: string
 }
 
 const defaultPageData: PageData = {
   heroTitle: 'Blog Construction Management Academy',
   heroSubtitle: 'Découvrez nos derniers articles sur les formations BTP, les tendances du secteur et les conseils de nos experts',
   heroImage: '/images/blog-hero.jpg',
+  heroBadgeText: 'Ressources & Actualités',
   sectionTitle: 'Nos derniers articles',
-  sectionSubtitle: 'Restez informé des actualités du BTP et des conseils pour votre carrière'
+  sectionSubtitle: 'Restez informé des actualités du BTP et des conseils pour votre carrière',
+  featuredSectionTitle: 'Articles en vedette',
+  searchPlaceholder: 'Rechercher un article...',
+  noArticlesText: 'Aucun article trouvé',
+  allCategoriesText: 'Tous'
 }
 
 const defaultArticles: Article[] = [
@@ -60,7 +70,7 @@ const defaultArticles: Article[] = [
 export default function BlogPage() {
   const [articles, setArticles] = useState<Article[]>(defaultArticles)
   const [categories, setCategories] = useState<Categorie[]>([])
-  const [pageData] = useState<PageData>(defaultPageData)
+  const [pageData, setPageData] = useState<PageData>(defaultPageData)
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [isLoading, setIsLoading] = useState(true)
@@ -69,6 +79,24 @@ export default function BlogPage() {
     async function loadData() {
       try {
         setIsLoading(true)
+        
+        // Charger les données de la page depuis Strapi
+        const strapiPageData = await getPageBlog()
+        if (strapiPageData) {
+          setPageData({
+            heroTitle: strapiPageData.heroTitle || defaultPageData.heroTitle,
+            heroSubtitle: strapiPageData.heroSubtitle || defaultPageData.heroSubtitle,
+            heroImage: getStrapiMediaURL(strapiPageData.heroImage) || defaultPageData.heroImage,
+            heroBadgeText: strapiPageData.heroBadgeText || defaultPageData.heroBadgeText,
+            sectionTitle: strapiPageData.sectionTitle || defaultPageData.sectionTitle,
+            sectionSubtitle: strapiPageData.sectionSubtitle || defaultPageData.sectionSubtitle,
+            featuredSectionTitle: strapiPageData.featuredSectionTitle || defaultPageData.featuredSectionTitle,
+            searchPlaceholder: strapiPageData.searchPlaceholder || defaultPageData.searchPlaceholder,
+            noArticlesText: strapiPageData.noArticlesText || defaultPageData.noArticlesText,
+            allCategoriesText: strapiPageData.allCategoriesText || defaultPageData.allCategoriesText
+          })
+        }
+        
         let formattedArticles: Article[] = []
 
         const articlesData = await getArticlesBlog() as any[]
@@ -159,7 +187,7 @@ export default function BlogPage() {
           <motion.div initial={{ opacity: 0, y: 40 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8 }} className="text-center">
             <div className="inline-flex items-center space-x-2 bg-primary-yellow/20 backdrop-blur-sm text-primary-yellow px-4 py-2 rounded-full mb-6 border border-primary-yellow/30">
               <BookOpen className="w-4 h-4" />
-              <span className="text-sm font-bold">Ressources & Actualités</span>
+              <span className="text-sm font-bold">{pageData.heroBadgeText}</span>
             </div>
             <h1 className="text-6xl md:text-7xl font-montserrat font-black mb-6 leading-tight">{pageData.heroTitle}</h1>
             <p className="text-xl md:text-2xl opacity-95 max-w-3xl mx-auto leading-relaxed">{pageData.heroSubtitle}</p>
@@ -172,12 +200,12 @@ export default function BlogPage() {
           <div className="space-y-4">
             <div className="relative">
               <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <input type="text" placeholder="Rechercher un article..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900" />
+              <input type="text" placeholder={pageData.searchPlaceholder} value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="w-full pl-12 pr-4 py-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-slate-900" />
             </div>
             {categories.length > 0 && (
               <div className="flex flex-wrap gap-2 items-center">
                 <Filter className="w-5 h-5 text-gray-600" />
-                <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 rounded-full font-medium transition-all ${selectedCategory === null ? 'bg-slate-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>Tous</button>
+                <button onClick={() => setSelectedCategory(null)} className={`px-4 py-2 rounded-full font-medium transition-all ${selectedCategory === null ? 'bg-slate-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>{pageData.allCategoriesText}</button>
                 {categories.map(cat => (
                   <button key={cat.id} onClick={() => setSelectedCategory(cat.slug)} className={`px-4 py-2 rounded-full font-medium transition-all ${selectedCategory === cat.slug ? 'bg-slate-900 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`}>{cat.nom}</button>
                 ))}
@@ -192,7 +220,7 @@ export default function BlogPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="flex items-center space-x-3 mb-8">
               <TrendingUp className="w-6 h-6 text-primary-yellow" />
-              <h2 className="text-3xl font-montserrat font-bold text-slate-900">Articles en vedette</h2>
+              <h2 className="text-3xl font-montserrat font-bold text-slate-900">{pageData.featuredSectionTitle}</h2>
             </div>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
               {featuredArticles.map((article) => (
@@ -224,7 +252,7 @@ export default function BlogPage() {
           {isLoading ? (
             <div className="text-center py-20"><div className="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div></div>
           ) : regularArticles.length === 0 ? (
-            <div className="text-center py-20"><BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-600">Aucun article trouvé</p></div>
+            <div className="text-center py-20"><BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-600">{pageData.noArticlesText}</p></div>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
               {regularArticles.map((article) => (

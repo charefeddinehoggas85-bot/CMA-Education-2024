@@ -679,3 +679,35 @@ export async function getPageAbout() {
     return null
   }
 }
+
+// Page Blog (singleton)
+export async function getPageBlog() {
+  try {
+    const data = await fetchAPI('/api/page-blog?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Blog non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      heroTitle: attrs.heroTitle || "Blog Construction Management Academy",
+      heroSubtitle: attrs.heroSubtitle || "Découvrez nos derniers articles sur les formations BTP, les tendances du secteur et les conseils de nos experts",
+      heroImage: attrs.heroImage,
+      heroBadgeText: attrs.heroBadgeText || "Ressources & Actualités",
+      sectionTitle: attrs.sectionTitle || "Nos derniers articles",
+      sectionSubtitle: attrs.sectionSubtitle || "Restez informé des actualités du BTP et des conseils pour votre carrière",
+      featuredSectionTitle: attrs.featuredSectionTitle || "Articles en vedette",
+      searchPlaceholder: attrs.searchPlaceholder || "Rechercher un article...",
+      noArticlesText: attrs.noArticlesText || "Aucun article trouvé",
+      allCategoriesText: attrs.allCategoriesText || "Tous",
+      metaTitle: attrs.metaTitle || "Blog - Construction Management Academy",
+      metaDescription: attrs.metaDescription || "Découvrez nos articles sur les formations BTP, les tendances du secteur et les conseils de nos experts pour votre carrière dans le bâtiment."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageBlog:', error)
+    return null
+  }
+}
