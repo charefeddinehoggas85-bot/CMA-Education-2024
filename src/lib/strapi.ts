@@ -607,3 +607,40 @@ export async function getPagePartenaires() {
   const data = await fetchAPI('/api/page-partenaires?populate=*')
   return transformStrapiData(data.data)
 }
+
+// Page Pédagogie (singleton)
+export async function getPagePedagogie() {
+  try {
+    const data = await fetchAPI('/api/page-pedagogie?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Pédagogie non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      heroTitle: attrs.heroTitle || "Notre Pédagogie d'Excellence",
+      heroDescription: attrs.heroDescription || "Une approche innovante qui allie théorie et pratique pour former les professionnels BTP de demain",
+      heroImage: attrs.heroImage,
+      chiffresCles: attrs.chiffresCles || [],
+      valeursPedagogiques: attrs.valeursPedagogiques || [],
+      methodesPedagogiques: attrs.methodesPedagogiques || [],
+      outilsPedagogiques: attrs.outilsPedagogiques || [],
+      environnementTitle: attrs.environnementTitle || "Environnement d'Apprentissage",
+      environnementItems: attrs.environnementItems || [],
+      ctaTitle: attrs.ctaTitle || "Prêt à Rejoindre Notre École d'Excellence ?",
+      ctaDescription: attrs.ctaDescription || "Découvrez comment notre pédagogie innovante peut transformer votre carrière dans le BTP.",
+      ctaPrimaryButtonText: attrs.ctaPrimaryButtonText || "Voir nos formations",
+      ctaPrimaryButtonLink: attrs.ctaPrimaryButtonLink || "/formations",
+      ctaSecondaryButtonText: attrs.ctaSecondaryButtonText || "Nous contacter",
+      ctaSecondaryButtonLink: attrs.ctaSecondaryButtonLink || "/contact",
+      metaTitle: attrs.metaTitle || "Notre Pédagogie - CMA Education",
+      metaDescription: attrs.metaDescription || "Découvrez notre approche pédagogique innovante pour former les professionnels du BTP"
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPagePedagogie:', error)
+    return null
+  }
+}

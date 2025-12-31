@@ -4,39 +4,32 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import PageLayout from '@/components/layout/PageLayout'
 import GallerySection from '@/components/sections/GallerySection'
-import { getSiteSettings, getValeursEcole, getProcessusAdmission, getMethodesPedagogiques, getChiffresCles, getOutilsPedagogiques } from '@/lib/strapi'
+import { getPagePedagogie } from '@/lib/strapi'
 import { 
   BookOpen, Users, Target, Award, CheckCircle, ArrowRight, 
   Lightbulb, Cog, Heart, Star, Clock, TrendingUp 
 } from 'lucide-react'
 import Link from 'next/link'
 
-interface SiteSettings {
-  id: number
-  siteName: string
-  pedagogieTitle?: string
-  pedagogieDescription?: string
+// Types pour le Single Type Page Pédagogie
+interface ChiffreCle {
+  id?: number
+  valeur: string
+  label: string
+  icon?: string
+  ordre: number
 }
 
-interface ValeurEcole {
-  id: number
+interface ValeurPedagogique {
+  id?: number
   titre: string
   description: string
   icon?: string
   ordre: number
-  type?: string
-}
-
-interface ProcessusAdmission {
-  id: number
-  titre: string
-  description: string
-  etape: number
-  ordre: number
 }
 
 interface MethodePedagogique {
-  id: number
+  id?: number
   nom: string
   description: string
   icon?: string
@@ -44,122 +37,115 @@ interface MethodePedagogique {
   ordre: number
 }
 
-interface ChiffreCle {
-  id: number
-  valeur: string
-  label: string
-  icon?: string
-  ordre: number
-}
-
 interface OutilPedagogique {
-  id: number
+  id?: number
   nom: string
   description?: string
   ordre: number
 }
 
+interface EnvironnementItem {
+  id?: number
+  texte: string
+  icon?: string
+  ordre: number
+}
+
+interface PagePedagogieData {
+  heroTitle: string
+  heroDescription: string
+  heroImage?: any
+  chiffresCles: ChiffreCle[]
+  valeursPedagogiques: ValeurPedagogique[]
+  methodesPedagogiques: MethodePedagogique[]
+  outilsPedagogiques: OutilPedagogique[]
+  environnementTitle: string
+  environnementItems: EnvironnementItem[]
+  ctaTitle: string
+  ctaDescription: string
+  ctaPrimaryButtonText: string
+  ctaPrimaryButtonLink: string
+  ctaSecondaryButtonText: string
+  ctaSecondaryButtonLink: string
+}
+
+// Données par défaut (fallback)
+const defaultData: PagePedagogieData = {
+  heroTitle: "Notre Pédagogie d'Excellence",
+  heroDescription: "Une approche innovante qui allie théorie et pratique pour former les professionnels BTP de demain",
+  chiffresCles: [
+    { valeur: "95%", label: "Taux de réussite", icon: "Award", ordre: 1 },
+    { valeur: "20", label: "Étudiants max par classe", icon: "Users", ordre: 2 },
+    { valeur: "70%", label: "Pratique terrain", icon: "Cog", ordre: 3 },
+    { valeur: "15+", label: "Années d'expérience", icon: "Star", ordre: 4 }
+  ],
+  valeursPedagogiques: [
+    { titre: "Pédagogie par projet", description: "Apprentissage concret à travers des projets réels d'entreprises partenaires", icon: "Target", ordre: 1 },
+    { titre: "Accompagnement personnalisé", description: "Suivi individuel avec un formateur référent tout au long du parcours", icon: "Users", ordre: 2 },
+    { titre: "Innovation pédagogique", description: "Outils digitaux, réalité virtuelle et méthodes actives d'apprentissage", icon: "Lightbulb", ordre: 3 },
+    { titre: "Lien entreprise permanent", description: "Immersion en entreprise et projets collaboratifs avec nos partenaires", icon: "Cog", ordre: 4 }
+  ],
+  methodesPedagogiques: [
+    { nom: "Apprentissage par l'action", description: "70% de pratique, 30% de théorie pour un apprentissage efficace", icon: "Cog", couleur: "from-blue-500 to-blue-600", ordre: 1 },
+    { nom: "Pédagogie collaborative", description: "Travail en équipe et projets collectifs pour développer les soft skills", icon: "Users", couleur: "from-green-500 to-green-600", ordre: 2 },
+    { nom: "Mentorat professionnel", description: "Accompagnement par des professionnels expérimentés du secteur", icon: "Heart", couleur: "from-purple-500 to-purple-600", ordre: 3 },
+    { nom: "Innovation technologique", description: "Intégration des dernières technologies BTP et outils digitaux", icon: "Lightbulb", couleur: "from-orange-500 to-orange-600", ordre: 4 }
+  ],
+  outilsPedagogiques: [
+    { nom: "Plateforme e-learning dédiée", ordre: 1 },
+    { nom: "Simulateurs de chantier BTP", ordre: 2 },
+    { nom: "Logiciels professionnels (AutoCAD, Revit, MS Project)", ordre: 3 },
+    { nom: "Réalité virtuelle pour la sécurité", ordre: 4 },
+    { nom: "Études de cas d'entreprises réelles", ordre: 5 },
+    { nom: "Projets collaboratifs inter-promotions", ordre: 6 }
+  ],
+  environnementTitle: "Environnement d'Apprentissage",
+  environnementItems: [
+    { texte: "Salles équipées dernière génération", icon: "Clock", ordre: 1 },
+    { texte: "Laboratoires de simulation BTP", icon: "TrendingUp", ordre: 2 },
+    { texte: "Espaces de travail collaboratif", icon: "Users", ordre: 3 },
+    { texte: "Bibliothèque technique spécialisée", icon: "BookOpen", ordre: 4 }
+  ],
+  ctaTitle: "Prêt à Rejoindre Notre École d'Excellence ?",
+  ctaDescription: "Découvrez comment notre pédagogie innovante peut transformer votre carrière dans le BTP.",
+  ctaPrimaryButtonText: "Voir nos formations",
+  ctaPrimaryButtonLink: "/formations",
+  ctaSecondaryButtonText: "Nous contacter",
+  ctaSecondaryButtonLink: "/contact"
+}
+
 export default function PedagogiePage() {
-  const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null)
-  const [valeursPedagogiques, setValeursPedagogiques] = useState<ValeurEcole[]>([])
-  const [processus, setProcessus] = useState<ProcessusAdmission[]>([])
-  const [methodesPedagogiques, setMethodesPedagogiques] = useState<MethodePedagogique[]>([])
-  const [chiffresCles, setChiffresCles] = useState<ChiffreCle[]>([])
-  const [outilsPedagogiques, setOutilsPedagogiques] = useState<OutilPedagogique[]>([])
+  const [pageData, setPageData] = useState<PagePedagogieData>(defaultData)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
     async function loadPedagogieData() {
       try {
-        const [settingsData, valeursData, processusData, methodesData, chiffresData, outilsData] = await Promise.all([
-          getSiteSettings(),
-          getValeursEcole(),
-          getProcessusAdmission(),
-          getMethodesPedagogiques(),
-          getChiffresCles('pedagogie'),
-          getOutilsPedagogiques()
-        ])
+        const strapiData = await getPagePedagogie()
         
-        setSiteSettings(settingsData as SiteSettings)
-        // Filtrer les valeurs pédagogiques
-        const valeursPedago = (valeursData as ValeurEcole[]).filter(valeur => 
-          !valeur.type || valeur.type === 'pedagogie' || valeur.type === 'methode'
-        )
-        setValeursPedagogiques(valeursPedago)
-        setProcessus(processusData as ProcessusAdmission[])
-        
-        // Méthodes pédagogiques avec fallback
-        if ((methodesData as MethodePedagogique[]).length > 0) {
-          setMethodesPedagogiques(methodesData as MethodePedagogique[])
-        } else {
-          setMethodesPedagogiques([
-            { id: 1, nom: "Apprentissage par l'action", description: "70% de pratique, 30% de théorie pour un apprentissage efficace", icon: "Cog", couleur: "from-blue-500 to-blue-600", ordre: 1 },
-            { id: 2, nom: "Pédagogie collaborative", description: "Travail en équipe et projets collectifs pour développer les soft skills", icon: "Users", couleur: "from-green-500 to-green-600", ordre: 2 },
-            { id: 3, nom: "Mentorat professionnel", description: "Accompagnement par des professionnels expérimentés du secteur", icon: "Heart", couleur: "from-purple-500 to-purple-600", ordre: 3 },
-            { id: 4, nom: "Innovation technologique", description: "Intégration des dernières technologies BTP et outils digitaux", icon: "Lightbulb", couleur: "from-orange-500 to-orange-600", ordre: 4 }
-          ])
-        }
-        
-        // Chiffres clés avec fallback
-        if ((chiffresData as ChiffreCle[]).length > 0) {
-          setChiffresCles(chiffresData as ChiffreCle[])
-        } else {
-          setChiffresCles([
-            { id: 1, valeur: "95%", label: "Taux de réussite", icon: "Award", ordre: 1 },
-            { id: 2, valeur: "20", label: "Étudiants max par classe", icon: "Users", ordre: 2 },
-            { id: 3, valeur: "70%", label: "Pratique terrain", icon: "Cog", ordre: 3 },
-            { id: 4, valeur: "15+", label: "Années d'expérience", icon: "Star", ordre: 4 }
-          ])
-        }
-        
-        // Outils pédagogiques avec fallback
-        if ((outilsData as OutilPedagogique[]).length > 0) {
-          setOutilsPedagogiques(outilsData as OutilPedagogique[])
-        } else {
-          setOutilsPedagogiques([
-            { id: 1, nom: "Plateforme e-learning dédiée", ordre: 1 },
-            { id: 2, nom: "Simulateurs de chantier BTP", ordre: 2 },
-            { id: 3, nom: "Logiciels professionnels (AutoCAD, Revit, MS Project)", ordre: 3 },
-            { id: 4, nom: "Réalité virtuelle pour la sécurité", ordre: 4 },
-            { id: 5, nom: "Études de cas d'entreprises réelles", ordre: 5 },
-            { id: 6, nom: "Projets collaboratifs inter-promotions", ordre: 6 }
-          ])
+        if (strapiData) {
+          // Fusionner les données Strapi avec les valeurs par défaut
+          setPageData({
+            heroTitle: strapiData.heroTitle || defaultData.heroTitle,
+            heroDescription: strapiData.heroDescription || defaultData.heroDescription,
+            heroImage: strapiData.heroImage,
+            chiffresCles: strapiData.chiffresCles?.length > 0 ? strapiData.chiffresCles : defaultData.chiffresCles,
+            valeursPedagogiques: strapiData.valeursPedagogiques?.length > 0 ? strapiData.valeursPedagogiques : defaultData.valeursPedagogiques,
+            methodesPedagogiques: strapiData.methodesPedagogiques?.length > 0 ? strapiData.methodesPedagogiques : defaultData.methodesPedagogiques,
+            outilsPedagogiques: strapiData.outilsPedagogiques?.length > 0 ? strapiData.outilsPedagogiques : defaultData.outilsPedagogiques,
+            environnementTitle: strapiData.environnementTitle || defaultData.environnementTitle,
+            environnementItems: strapiData.environnementItems?.length > 0 ? strapiData.environnementItems : defaultData.environnementItems,
+            ctaTitle: strapiData.ctaTitle || defaultData.ctaTitle,
+            ctaDescription: strapiData.ctaDescription || defaultData.ctaDescription,
+            ctaPrimaryButtonText: strapiData.ctaPrimaryButtonText || defaultData.ctaPrimaryButtonText,
+            ctaPrimaryButtonLink: strapiData.ctaPrimaryButtonLink || defaultData.ctaPrimaryButtonLink,
+            ctaSecondaryButtonText: strapiData.ctaSecondaryButtonText || defaultData.ctaSecondaryButtonText,
+            ctaSecondaryButtonLink: strapiData.ctaSecondaryButtonLink || defaultData.ctaSecondaryButtonLink
+          })
         }
       } catch (error) {
         console.error('Erreur chargement pédagogie:', error)
-        // Fallback avec données statiques
-        setSiteSettings({
-          id: 1,
-          siteName: 'CMA Education',
-          pedagogieTitle: 'Notre Pédagogie d\'Excellence',
-          pedagogieDescription: 'Une approche innovante qui allie théorie et pratique pour former les professionnels BTP de demain'
-        })
-        setValeursPedagogiques([
-          { id: 1, titre: "Pédagogie par projet", description: "Apprentissage concret à travers des projets réels d'entreprises partenaires", icon: "Target", ordre: 1, type: "pedagogie" },
-          { id: 2, titre: "Accompagnement personnalisé", description: "Suivi individuel avec un formateur référent tout au long du parcours", icon: "Users", ordre: 2, type: "pedagogie" },
-          { id: 3, titre: "Innovation pédagogique", description: "Outils digitaux, réalité virtuelle et méthodes actives d'apprentissage", icon: "Lightbulb", ordre: 3, type: "pedagogie" },
-          { id: 4, titre: "Lien entreprise permanent", description: "Immersion en entreprise et projets collaboratifs avec nos partenaires", icon: "Cog", ordre: 4, type: "pedagogie" }
-        ])
-        setMethodesPedagogiques([
-          { id: 1, nom: "Apprentissage par l'action", description: "70% de pratique, 30% de théorie pour un apprentissage efficace", icon: "Cog", couleur: "from-blue-500 to-blue-600", ordre: 1 },
-          { id: 2, nom: "Pédagogie collaborative", description: "Travail en équipe et projets collectifs pour développer les soft skills", icon: "Users", couleur: "from-green-500 to-green-600", ordre: 2 },
-          { id: 3, nom: "Mentorat professionnel", description: "Accompagnement par des professionnels expérimentés du secteur", icon: "Heart", couleur: "from-purple-500 to-purple-600", ordre: 3 },
-          { id: 4, nom: "Innovation technologique", description: "Intégration des dernières technologies BTP et outils digitaux", icon: "Lightbulb", couleur: "from-orange-500 to-orange-600", ordre: 4 }
-        ])
-        setChiffresCles([
-          { id: 1, valeur: "95%", label: "Taux de réussite", icon: "Award", ordre: 1 },
-          { id: 2, valeur: "20", label: "Étudiants max par classe", icon: "Users", ordre: 2 },
-          { id: 3, valeur: "70%", label: "Pratique terrain", icon: "Cog", ordre: 3 },
-          { id: 4, valeur: "15+", label: "Années d'expérience", icon: "Star", ordre: 4 }
-        ])
-        setOutilsPedagogiques([
-          { id: 1, nom: "Plateforme e-learning dédiée", ordre: 1 },
-          { id: 2, nom: "Simulateurs de chantier BTP", ordre: 2 },
-          { id: 3, nom: "Logiciels professionnels (AutoCAD, Revit, MS Project)", ordre: 3 },
-          { id: 4, nom: "Réalité virtuelle pour la sécurité", ordre: 4 },
-          { id: 5, nom: "Études de cas d'entreprises réelles", ordre: 5 },
-          { id: 6, nom: "Projets collaboratifs inter-promotions", ordre: 6 }
-        ])
+        // Utiliser les données par défaut en cas d'erreur
       } finally {
         setLoading(false)
       }
@@ -170,37 +156,27 @@ export default function PedagogiePage() {
 
   const getIcon = (iconName?: string) => {
     switch (iconName) {
-      case 'Target':
-        return <Target className="w-8 h-8" />
-      case 'Users':
-        return <Users className="w-8 h-8" />
-      case 'Lightbulb':
-        return <Lightbulb className="w-8 h-8" />
-      case 'Cog':
-        return <Cog className="w-8 h-8" />
-      case 'Heart':
-        return <Heart className="w-8 h-8" />
-      case 'Award':
-        return <Award className="w-6 h-6" />
-      case 'Star':
-        return <Star className="w-6 h-6" />
-      default:
-        return <BookOpen className="w-8 h-8" />
+      case 'Target': return <Target className="w-8 h-8" />
+      case 'Users': return <Users className="w-8 h-8" />
+      case 'Lightbulb': return <Lightbulb className="w-8 h-8" />
+      case 'Cog': return <Cog className="w-8 h-8" />
+      case 'Heart': return <Heart className="w-8 h-8" />
+      case 'Award': return <Award className="w-6 h-6" />
+      case 'Star': return <Star className="w-6 h-6" />
+      default: return <BookOpen className="w-8 h-8" />
     }
   }
 
   const getIconSmall = (iconName?: string) => {
     switch (iconName) {
-      case 'Award':
-        return <Award className="w-6 h-6" />
-      case 'Users':
-        return <Users className="w-6 h-6" />
-      case 'Cog':
-        return <Cog className="w-6 h-6" />
-      case 'Star':
-        return <Star className="w-6 h-6" />
-      default:
-        return <BookOpen className="w-6 h-6" />
+      case 'Award': return <Award className="w-6 h-6" />
+      case 'Users': return <Users className="w-6 h-6" />
+      case 'Cog': return <Cog className="w-6 h-6" />
+      case 'Star': return <Star className="w-6 h-6" />
+      case 'Clock': return <Clock className="w-5 h-5" />
+      case 'TrendingUp': return <TrendingUp className="w-5 h-5" />
+      case 'BookOpen': return <BookOpen className="w-5 h-5" />
+      default: return <BookOpen className="w-6 h-6" />
     }
   }
 
@@ -231,25 +207,23 @@ export default function PedagogiePage() {
             <div className="flex items-center justify-center space-x-2 mb-6">
               <BookOpen className="w-6 h-6" />
               <span className="bg-white/20 backdrop-blur-sm px-3 py-1 rounded-full text-sm font-semibold">
-                Pédagogie d'Excellence
+                Pédagogie d&apos;Excellence
               </span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-montserrat font-bold mb-6">
-              {siteSettings?.pedagogieTitle || 'Notre Pédagogie d\'Excellence'}
+              {pageData.heroTitle}
             </h1>
             
             <p className="text-xl opacity-90 mb-8">
-              {siteSettings?.pedagogieDescription || 
-                'Une approche innovante qui allie théorie et pratique pour former les professionnels BTP de demain'
-              }
+              {pageData.heroDescription}
             </p>
             
             {/* Chiffres clés */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-              {chiffresCles.map((chiffre, index) => (
+              {pageData.chiffresCles.sort((a, b) => a.ordre - b.ordre).map((chiffre, index) => (
                 <motion.div
-                  key={chiffre.id}
+                  key={chiffre.id || index}
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ delay: index * 0.1 }}
@@ -287,14 +261,14 @@ export default function PedagogiePage() {
               Nos Valeurs Pédagogiques
             </h2>
             <p className="text-lg text-gray-600 max-w-3xl mx-auto">
-              Une pédagogie centrée sur l'apprenant et orientée vers l'employabilité
+              Une pédagogie centrée sur l&apos;apprenant et orientée vers l&apos;employabilité
             </p>
           </motion.div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            {valeursPedagogiques.map((valeur, index) => (
+            {pageData.valeursPedagogiques.sort((a, b) => a.ordre - b.ordre).map((valeur, index) => (
               <motion.div
-                key={valeur.id}
+                key={valeur.id || index}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -331,9 +305,9 @@ export default function PedagogiePage() {
           </motion.div>
 
           <div className="grid md:grid-cols-2 gap-8">
-            {methodesPedagogiques.map((methode, index) => (
+            {pageData.methodesPedagogiques.sort((a, b) => a.ordre - b.ordre).map((methode, index) => (
               <motion.div
-                key={methode.id}
+                key={methode.id || index}
                 initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 transition={{ duration: 0.6, delay: index * 0.1 }}
@@ -364,14 +338,14 @@ export default function PedagogiePage() {
                 Outils et Technologies Pédagogiques
               </h2>
               <p className="text-gray-600 mb-8">
-                Nous utilisons les dernières technologies pour offrir une expérience d'apprentissage 
+                Nous utilisons les dernières technologies pour offrir une expérience d&apos;apprentissage 
                 moderne et immersive, préparant nos étudiants aux réalités du terrain.
               </p>
               
               <div className="space-y-4">
-                {outilsPedagogiques.map((outil, index) => (
+                {pageData.outilsPedagogiques.sort((a, b) => a.ordre - b.ordre).map((outil, index) => (
                   <motion.div
-                    key={outil.id}
+                    key={outil.id || index}
                     initial={{ opacity: 0, x: -20 }}
                     whileInView={{ opacity: 1, x: 0 }}
                     transition={{ delay: index * 0.1 }}
@@ -391,30 +365,20 @@ export default function PedagogiePage() {
               viewport={{ once: true }}
               className="bg-gradient-to-br from-primary-blue to-indigo-600 text-white p-8 rounded-2xl"
             >
-              <h3 className="text-2xl font-bold mb-6">Environnement d'Apprentissage</h3>
+              <h3 className="text-2xl font-bold mb-6">{pageData.environnementTitle}</h3>
               <div className="space-y-4">
-                <div className="flex items-center space-x-3">
-                  <Clock className="w-5 h-5 text-primary-yellow" />
-                  <span>Salles équipées dernière génération</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <TrendingUp className="w-5 h-5 text-primary-yellow" />
-                  <span>Laboratoires de simulation BTP</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <Users className="w-5 h-5 text-primary-yellow" />
-                  <span>Espaces de travail collaboratif</span>
-                </div>
-                <div className="flex items-center space-x-3">
-                  <BookOpen className="w-5 h-5 text-primary-yellow" />
-                  <span>Bibliothèque technique spécialisée</span>
-                </div>
+                {pageData.environnementItems.sort((a, b) => a.ordre - b.ordre).map((item, index) => (
+                  <div key={item.id || index} className="flex items-center space-x-3">
+                    <span className="text-primary-yellow">{getIconSmall(item.icon)}</span>
+                    <span>{item.texte}</span>
+                  </div>
+                ))}
               </div>
               
               <div className="mt-6 pt-6 border-t border-white/20">
                 <p className="text-sm opacity-90">
-                  "Un environnement d'apprentissage optimal pour développer les compétences 
-                  techniques et humaines essentielles au secteur BTP."
+                  &quot;Un environnement d&apos;apprentissage optimal pour développer les compétences 
+                  techniques et humaines essentielles au secteur BTP.&quot;
                 </p>
               </div>
             </motion.div>
@@ -439,24 +403,24 @@ export default function PedagogiePage() {
             viewport={{ once: true }}
           >
             <h2 className="text-3xl font-montserrat font-bold mb-6">
-              Prêt à Rejoindre Notre École d'Excellence ?
+              {pageData.ctaTitle}
             </h2>
             <p className="text-xl opacity-90 mb-8">
-              Découvrez comment notre pédagogie innovante peut transformer votre carrière dans le BTP.
+              {pageData.ctaDescription}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <Link 
-                href="/formations"
+                href={pageData.ctaPrimaryButtonLink}
                 className="bg-primary-yellow text-primary-blue px-8 py-3 rounded-full font-semibold hover:bg-yellow-400 transition-colors inline-flex items-center justify-center"
               >
-                Voir nos formations
+                {pageData.ctaPrimaryButtonText}
                 <ArrowRight className="w-5 h-5 ml-2" />
               </Link>
               <Link 
-                href="/contact"
+                href={pageData.ctaSecondaryButtonLink}
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white hover:text-primary-blue transition-colors"
               >
-                Nous contacter
+                {pageData.ctaSecondaryButtonText}
               </Link>
             </div>
           </motion.div>
