@@ -129,7 +129,7 @@ export async function POST(request: NextRequest) {
         });
         console.log('📧 Notification email envoyée');
       } catch (emailError) {
-        console.log('⚠️ Erreur envoi email:', emailError.message);
+        console.log('⚠️ Erreur envoi email:', emailError instanceof Error ? emailError.message : 'Erreur inconnue');
       }
     }
 
