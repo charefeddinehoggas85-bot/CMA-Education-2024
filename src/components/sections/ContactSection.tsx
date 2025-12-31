@@ -38,9 +38,9 @@ const ContactSection = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     id: 1,
     siteName: 'Construction Management Academy',
-    contactPhone: '01 89 70 60 52',
+    contactPhone: '01 85 09 71 06',
     contactEmail: 'contact.academy@cma-education.com',
-    emailInscription: 'inscription.academy@construction-management-academy.fr',
+    emailInscription: 'inscription.academy@cma-education.com',
     contactAddress: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
     socialMedia: {},
     emailConfig: {
@@ -254,7 +254,7 @@ const ContactSection = () => {
               />
               
               <select name="formation" required className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:border-primary-yellow">
-                <option value="">Formation d'intérêt</option>
+                <option value="">Formation</option>
                 <option value="charge-affaires-batiment-alternance">Chargé d'Affaires du Bâtiment</option>
                 <option value="conducteur-travaux-batiment-alternance">Conducteur de Travaux Bâtiment</option>
                 <option value="chef-chantier-vrd-alternance">Chef de Chantier VRD</option>

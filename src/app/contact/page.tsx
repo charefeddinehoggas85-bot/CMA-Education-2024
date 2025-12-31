@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import PageLayout from '@/components/layout/PageLayout'
-import { getSiteSettings, getContactInfo, getProcessusAdmission, getPartners, getFormations } from '@/lib/strapi'
+import { getSiteSettings, getContactInfo, getProcessusAdmission, getPartners, getFormations, getPageContact } from '@/lib/strapi'
 import { Phone, Mail, MapPin, Clock, CheckCircle, UserPlus } from 'lucide-react'
 import emailjs from '@emailjs/browser'
 import { useRef } from 'react'
@@ -94,16 +94,18 @@ export default function ContactPage() {
   const [partners, setPartners] = useState<Partner[]>([])
   const [formations, setFormations] = useState<Formation[]>([])
   const [loading, setLoading] = useState(true)
+  const [pageData, setPageData] = useState<any>(null)
 
   useEffect(() => {
     async function loadContactData() {
       try {
-        const [settingsData, contactData, stepsData, partnersData, formationsData] = await Promise.all([
+        const [settingsData, contactData, stepsData, partnersData, formationsData, pageContactData] = await Promise.all([
           getSiteSettings(),
           getContactInfo(),
           getProcessusAdmission(),
           getPartners(),
-          getFormations()
+          getFormations(),
+          getPageContact()
         ])
         
         setSiteSettings(settingsData as SiteSettings)
@@ -111,6 +113,10 @@ export default function ContactPage() {
         setAdmissionSteps(stepsData as ProcessusAdmission[])
         setPartners(partnersData as Partner[])
         setFormations(formationsData as Formation[])
+        if (pageContactData) {
+          setPageData(pageContactData)
+          console.log('✅ Page Contact Single Type chargé depuis Strapi')
+        }
       } catch (error) {
         console.error('Erreur chargement contact:', error)
         // Fallback avec données statiques
@@ -212,7 +218,7 @@ export default function ContactPage() {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
           >
-            Rejoignez {siteSettings?.siteName || 'Construction Management Academy'} !
+            {pageData?.heroTitle || `Rejoignez ${siteSettings?.siteName || 'Construction Management Academy'} !`}
           </motion.h1>
           <motion.p 
             className="text-xl opacity-90 max-w-3xl mx-auto"
@@ -220,8 +226,7 @@ export default function ContactPage() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
           >
-            Processus d'admission simplifié, sans concours d'entrée. 
-            L'admission se fait uniquement sur entretien de motivation.
+            {pageData?.heroSubtitle || "Processus d'admission simplifié, sans concours d'entrée. L'admission se fait uniquement sur entretien de motivation."}
           </motion.p>
         </div>
         </div>
@@ -232,10 +237,10 @@ export default function ContactPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
-                Parcours d'admission {siteSettings?.siteName || 'Construction Management Academy'}
+                {pageData?.admissionSectionTitle || `Parcours d'admission ${siteSettings?.siteName || 'Construction Management Academy'}`}
               </h2>
               <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-                Un processus simplifié en {admissionSteps.length} étapes pour intégrer nos formations
+                {(pageData?.admissionSectionSubtitle || "Un processus simplifié en {count} étapes pour intégrer nos formations").replace('{count}', String(admissionSteps.length))}
               </p>
             </div>
             
@@ -252,10 +257,10 @@ export default function ContactPage() {
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div className="text-center mb-16">
               <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
-                Nos partenaires de confiance
+                {pageData?.partnersSectionTitle || "Nos partenaires de confiance"}
               </h2>
               <p className="text-xl text-gray-600">
-                Des entreprises leaders qui recrutent nos diplômés
+                {pageData?.partnersSectionSubtitle || "Des entreprises leaders qui recrutent nos diplômés"}
               </p>
             </div>
             
@@ -311,7 +316,7 @@ export default function ContactPage() {
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-primary-blue/80 to-transparent rounded-2xl flex items-center">
                     <h2 className="text-3xl font-montserrat font-bold text-white ml-8">
-                      Contactez-nous
+                      {pageData?.contactSectionTitle || "Contactez-nous"}
                     </h2>
                   </div>
                 </div>
@@ -322,11 +327,13 @@ export default function ContactPage() {
                       <MapPin className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">Adresse</h3>
+                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.addressLabel || "Adresse"}</h3>
                       <p className="text-gray-600">
-                        {contactInfo?.adressePrincipale ? 
-                          `${contactInfo.adressePrincipale.rue}, ${contactInfo.adressePrincipale.codePostal} ${contactInfo.adressePrincipale.ville}` :
-                          '123 Avenue de la Construction, 75001 Paris'
+                        {pageData?.addressValue || 
+                          (contactInfo?.adressePrincipale ? 
+                            `${contactInfo.adressePrincipale.rue}, ${contactInfo.adressePrincipale.codePostal} ${contactInfo.adressePrincipale.ville}` :
+                            '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne'
+                          )
                         }
                       </p>
                     </div>
@@ -337,9 +344,10 @@ export default function ContactPage() {
                       <Phone className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">Téléphone</h3>
+                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.phoneLabel || "Téléphone"}</h3>
                       <p className="text-gray-600">
-                        {contactInfo?.telephones?.find(t => t.principal)?.numero || 
+                        {pageData?.phoneValue || 
+                         contactInfo?.telephones?.find(t => t.principal)?.numero || 
                          siteSettings?.contactPhone || 
                          '01 89 70 60 52'}
                       </p>
@@ -351,9 +359,10 @@ export default function ContactPage() {
                       <Mail className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">Email</h3>
+                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.emailLabel || "Email"}</h3>
                       <p className="text-gray-600">
-                        {contactInfo?.emails?.find(e => e.type === 'contact')?.email || 
+                        {pageData?.emailValue || 
+                         contactInfo?.emails?.find(e => e.type === 'contact')?.email || 
                          siteSettings?.contactEmail || 
                          'contact.academy@cma-education.com'}
                       </p>
@@ -365,9 +374,10 @@ export default function ContactPage() {
                       <UserPlus className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">Inscription</h3>
+                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.inscriptionLabel || "Inscription"}</h3>
                       <p className="text-gray-600">
-                        {contactInfo?.emails?.find(e => e.type === 'inscription')?.email || 
+                        {pageData?.inscriptionEmail || 
+                         contactInfo?.emails?.find(e => e.type === 'inscription')?.email || 
                          siteSettings?.inscriptionEmail || 
                          'inscription.academy@construction-management-academy.fr'}
                       </p>
@@ -379,9 +389,9 @@ export default function ContactPage() {
                       <Clock className="w-6 h-6 text-white" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">Réactivité</h3>
-                      <p className="text-gray-600">Réponse sous 24h</p>
-                      <p className="text-sm text-gray-500">Décision sous 48h après entretien</p>
+                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.reactiviteLabel || "Réactivité"}</h3>
+                      <p className="text-gray-600">{pageData?.reactiviteValue || "Réponse sous 24h"}</p>
+                      <p className="text-sm text-gray-500">{pageData?.reactiviteDetail || "Décision sous 48h après entretien"}</p>
                     </div>
                   </div>
                 </div>
@@ -389,10 +399,10 @@ export default function ContactPage() {
                 <div className="bg-primary-blue text-white p-6 rounded-xl">
                   <div className="flex items-center space-x-3 mb-2">
                     <CheckCircle className="w-6 h-6 text-primary-yellow" />
-                    <h3 className="font-semibold">Aucun frais de scolarité</h3>
+                    <h3 className="font-semibold">{pageData?.noFeesTitle || "Aucun frais de scolarité"}</h3>
                   </div>
                   <p className="opacity-90">
-                    Aucun frais de scolarité ou d'inscription ne sera demandé à l'alternant.
+                    {pageData?.noFeesDescription || "Aucun frais de scolarité ou d'inscription ne sera demandé à l'alternant."}
                   </p>
                 </div>
               </motion.div>
@@ -405,7 +415,7 @@ export default function ContactPage() {
                 className="bg-white rounded-2xl p-8 shadow-lg"
               >
                 <h3 className="text-2xl font-montserrat font-bold text-primary-blue mb-6">
-                  Formulaire d'inscription
+                  {pageData?.formTitle || "Formulaire d'inscription"}
                 </h3>
                 
                 <form 
@@ -414,20 +424,20 @@ export default function ContactPage() {
                   onSubmit={sendEmail}
                 >
                   {/* Champs cachés pour EmailJS */}
-                  <input type="hidden" name="to_email" value={siteSettings?.inscriptionEmail || "inscription.academy@construction-management-academy.fr"} />
+                  <input type="hidden" name="to_email" value={pageData?.inscriptionEmail || siteSettings?.inscriptionEmail || "inscription.academy@construction-management-academy.fr"} />
                   <input type="hidden" name="from_name" value={`Site Web ${siteSettings?.siteName || 'Construction Management Academy'}`} />
                   <div className="grid md:grid-cols-2 gap-4">
                     <input
                       type="text"
                       name="prenom"
-                      placeholder="Prénom *"
+                      placeholder={pageData?.formPrenomPlaceholder || "Prénom *"}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
                       required
                     />
                     <input
                       type="text"
                       name="nom"
-                      placeholder="Nom *"
+                      placeholder={pageData?.formNomPlaceholder || "Nom *"}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
                       required
                     />
@@ -436,7 +446,7 @@ export default function ContactPage() {
                   <input
                     type="date"
                     name="dateNaissance"
-                    placeholder="Date de naissance *"
+                    placeholder={pageData?.formDateNaissancePlaceholder || "Date de naissance *"}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
                     required
                   />
@@ -445,14 +455,14 @@ export default function ContactPage() {
                     <input
                       type="tel"
                       name="telephone"
-                      placeholder="Téléphone *"
+                      placeholder={pageData?.formTelephonePlaceholder || "Téléphone *"}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
                       required
                     />
                     <input
                       type="email"
                       name="email"
-                      placeholder="Email *"
+                      placeholder={pageData?.formEmailPlaceholder || "Email *"}
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
                       required
                     />
@@ -461,13 +471,13 @@ export default function ContactPage() {
                   <input
                     type="text"
                     name="codePostal"
-                    placeholder="Code postal *"
+                    placeholder={pageData?.formCodePostalPlaceholder || "Code postal *"}
                     className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
                     required
                   />
                   
                   <select name="formation" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue" required>
-                    <option value="">Sélectionner la Formation *</option>
+                    <option value="">{pageData?.formFormationPlaceholder || "Sélectionner la Formation *"}</option>
                     
                     {Object.entries(formationsByCategory).map(([categoryName, categoryFormations]) => (
                       <optgroup key={categoryName} label={categoryName}>
@@ -497,14 +507,14 @@ export default function ContactPage() {
                   <div className="space-y-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Téléverser votre CV
+                        {pageData?.formCvLabel || "Téléverser votre CV"}
                       </label>
                       <input type="file" name="cv" accept=".pdf,.doc,.docx" className="w-full" />
                     </div>
                     
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Téléverser votre dernier diplôme
+                        {pageData?.formDiplomeLabel || "Téléverser votre dernier diplôme"}
                       </label>
                       <input type="file" name="diplome" accept=".pdf,.jpg,.png" className="w-full" />
                     </div>
@@ -513,17 +523,17 @@ export default function ContactPage() {
                   <div className="flex items-start space-x-3">
                     <input type="checkbox" id="consent" className="mt-1" required />
                     <label htmlFor="consent" className="text-sm text-gray-600">
-                      J'accepte être recontacté et que mes données soient collectées par {siteSettings?.siteName || 'Construction Management Academy'}
+                      {pageData?.formConsentText || `J'accepte être recontacté et que mes données soient collectées par ${siteSettings?.siteName || 'Construction Management Academy'}`}
                     </label>
                   </div>
                   
                   <a
-                    href="https://cma-education.ymag.cloud/index.php/preinscription/"
+                    href={pageData?.formSubmitButtonUrl || "https://cma-education.ymag.cloud/index.php/preinscription/"}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="block w-full bg-gradient-primary text-white py-3 rounded-lg font-semibold hover:shadow-xl transition-all duration-300 text-center"
                   >
-                    Accéder à la préinscription
+                    {pageData?.formSubmitButtonText || "Accéder à la préinscription"}
                   </a>
                 </form>
               </motion.div>

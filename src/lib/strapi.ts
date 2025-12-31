@@ -813,3 +813,60 @@ export async function getPageFormations() {
     return null
   }
 }
+
+// Page Contact (singleton) - Page contact/inscription
+export async function getPageContact() {
+  try {
+    const data = await fetchAPI('/api/page-contact?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Contact non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      heroImage: attrs.heroImage,
+      heroTitle: attrs.heroTitle || "Rejoignez Construction Management Academy !",
+      heroSubtitle: attrs.heroSubtitle || "Processus d'admission simplifié, sans concours d'entrée. L'admission se fait uniquement sur entretien de motivation.",
+      admissionSectionTitle: attrs.admissionSectionTitle || "Parcours d'admission Construction Management Academy",
+      admissionSectionSubtitle: attrs.admissionSectionSubtitle || "Un processus simplifié en {count} étapes pour intégrer nos formations",
+      partnersSectionTitle: attrs.partnersSectionTitle || "Nos partenaires de confiance",
+      partnersSectionSubtitle: attrs.partnersSectionSubtitle || "Des entreprises leaders qui recrutent nos diplômés",
+      contactSectionTitle: attrs.contactSectionTitle || "Contactez-nous",
+      contactImage: attrs.contactImage,
+      addressLabel: attrs.addressLabel || "Adresse",
+      addressValue: attrs.addressValue || "67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne",
+      phoneLabel: attrs.phoneLabel || "Téléphone",
+      phoneValue: attrs.phoneValue || "01 89 70 60 52",
+      emailLabel: attrs.emailLabel || "Email",
+      emailValue: attrs.emailValue || "contact.academy@cma-education.com",
+      inscriptionLabel: attrs.inscriptionLabel || "Inscription",
+      inscriptionEmail: attrs.inscriptionEmail || "inscription.academy@construction-management-academy.fr",
+      reactiviteLabel: attrs.reactiviteLabel || "Réactivité",
+      reactiviteValue: attrs.reactiviteValue || "Réponse sous 24h",
+      reactiviteDetail: attrs.reactiviteDetail || "Décision sous 48h après entretien",
+      noFeesTitle: attrs.noFeesTitle || "Aucun frais de scolarité",
+      noFeesDescription: attrs.noFeesDescription || "Aucun frais de scolarité ou d'inscription ne sera demandé à l'alternant.",
+      formTitle: attrs.formTitle || "Formulaire d'inscription",
+      formPrenomPlaceholder: attrs.formPrenomPlaceholder || "Prénom *",
+      formNomPlaceholder: attrs.formNomPlaceholder || "Nom *",
+      formDateNaissancePlaceholder: attrs.formDateNaissancePlaceholder || "Date de naissance *",
+      formTelephonePlaceholder: attrs.formTelephonePlaceholder || "Téléphone *",
+      formEmailPlaceholder: attrs.formEmailPlaceholder || "Email *",
+      formCodePostalPlaceholder: attrs.formCodePostalPlaceholder || "Code postal *",
+      formFormationPlaceholder: attrs.formFormationPlaceholder || "Sélectionner la Formation *",
+      formCvLabel: attrs.formCvLabel || "Téléverser votre CV",
+      formDiplomeLabel: attrs.formDiplomeLabel || "Téléverser votre dernier diplôme",
+      formConsentText: attrs.formConsentText || "J'accepte être recontacté et que mes données soient collectées par Construction Management Academy",
+      formSubmitButtonText: attrs.formSubmitButtonText || "Accéder à la préinscription",
+      formSubmitButtonUrl: attrs.formSubmitButtonUrl || "https://cma-education.ymag.cloud/index.php/preinscription/",
+      metaTitle: attrs.metaTitle || "Contact & Inscription - Construction Management Academy",
+      metaDescription: attrs.metaDescription || "Contactez Construction Management Academy pour votre inscription. Processus d'admission simplifié, sans concours d'entrée. Réponse sous 24h."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageContact:', error)
+    return null
+  }
+}
