@@ -141,8 +141,8 @@ export async function POST(request: NextRequest) {
         'Content-Disposition': `attachment; filename="${brochureData.name}"`,
         'Content-Length': pdfBuffer.byteLength.toString(),
         'Cache-Control': 'public, max-age=3600',
-        'X-Download-Method': successMethod,
-        'X-Original-Filename': brochureData.name,
+        'X-Download-Method': successMethod || 'unknown',
+        'X-Original-Filename': brochureData.name || 'brochure.pdf',
         'X-File-Size': brochureData.size?.toString() || pdfBuffer.byteLength.toString(),
       },
     });
