@@ -6,7 +6,7 @@ import { GraduationCap, Clock, Award, ArrowRight, RefreshCw, CheckCircle, Buildi
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getFormations, getImageURL, getVAEFormules, getVAECertifications } from '@/lib/strapi'
+import { getFormations, getImageURL, getVAEFormules, getVAECertifications, getPageFormations } from '@/lib/strapi'
 import { 
   vaeFormules as staticVaeFormules,
   vaeCertifications as staticVaeCertifications,
@@ -404,6 +404,7 @@ export default function FormationsPage() {
   const [vaeFormules, setVaeFormules] = useState<VAEFormule[]>(staticVaeFormules)
   const [vaeCertifications, setVaeCertifications] = useState<{niveau5: any[], niveau6: any[]}>(staticVaeCertifications)
   const [loading, setLoading] = useState(true)
+  const [pageData, setPageData] = useState<any>(null)
 
   // Helper pour normaliser les données VAE de Strapi
   const normalizeVAEFormule = (formule: any): VAEFormule => {
@@ -478,6 +479,13 @@ export default function FormationsPage() {
             setVaeCertifications({ niveau5, niveau6 })
           }
         }
+
+        // Charger les données de la page depuis Strapi (Single Type)
+        const pageFormationsData = await getPageFormations()
+        if (pageFormationsData) {
+          setPageData(pageFormationsData)
+          console.log('✅ Page Formations Single Type chargé depuis Strapi')
+        }
       } catch (error) {
         console.error('❌ Erreur chargement Strapi:', error)
         // Fallback vers données statiques en cas d'erreur
@@ -523,16 +531,15 @@ export default function FormationsPage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="text-center mb-8">
             <div className="inline-flex items-center space-x-2 bg-primary-blue/10 px-4 py-2 rounded-full mb-6">
               <GraduationCap className="w-5 h-5 text-primary-blue" />
-              <span className="text-sm font-medium text-primary-blue">Formations BTP Certifiantes</span>
+              <span className="text-sm font-medium text-primary-blue">{pageData?.heroBadgeText || "Formations BTP Certifiantes"}</span>
             </div>
             
             <h1 className="text-4xl md:text-5xl font-montserrat font-bold text-primary-blue mb-6">
-              Formations BTP Certifiantes
+              {pageData?.heroTitle || "Formations BTP Certifiantes"}
             </h1>
             
             <p className="text-lg text-gray-700 max-w-4xl mx-auto mb-8">
-              Formation conducteur de travaux, formation chargé d'affaires bâtiment et formation BTP alternance. 
-              Formations certifiantes RNCP avec 98% d'insertion professionnelle. Prise en charge OPCO intégrale.
+              {pageData?.heroDescription || "Formation conducteur de travaux, formation chargé d'affaires bâtiment et formation BTP alternance. Formations certifiantes RNCP avec 98% d'insertion professionnelle. Prise en charge OPCO intégrale."}
             </p>
           </motion.div>
           
@@ -547,29 +554,29 @@ export default function FormationsPage() {
               <div className="w-14 h-14 bg-primary-blue/10 rounded-full flex items-center justify-center mb-3">
                 <GraduationCap className="w-7 h-7 text-primary-blue" />
               </div>
-              <div className="text-2xl font-bold text-gray-900">8</div>
-              <div className="text-sm text-gray-500">Formations diplômantes</div>
+              <div className="text-2xl font-bold text-gray-900">{pageData?.statFormationsCount || "8"}</div>
+              <div className="text-sm text-gray-500">{pageData?.statFormationsLabel || "Formations diplômantes"}</div>
             </div>
             <div className="flex flex-col items-center text-center">
               <div className="w-14 h-14 bg-green-100 rounded-full flex items-center justify-center mb-3">
                 <TrendingUp className="w-7 h-7 text-green-600" />
               </div>
-              <div className="text-2xl font-bold text-gray-900">98%</div>
-              <div className="text-sm text-gray-500">Taux d'insertion</div>
+              <div className="text-2xl font-bold text-gray-900">{pageData?.statInsertionRate || "98%"}</div>
+              <div className="text-sm text-gray-500">{pageData?.statInsertionLabel || "Taux d'insertion"}</div>
             </div>
             <div className="flex flex-col items-center text-center">
               <div className="w-14 h-14 bg-purple-100 rounded-full flex items-center justify-center mb-3">
                 <Euro className="w-7 h-7 text-purple-600" />
               </div>
-              <div className="text-2xl font-bold text-gray-900">100%</div>
-              <div className="text-sm text-gray-500">Prise en charge</div>
+              <div className="text-2xl font-bold text-gray-900">{pageData?.statPriseEnCharge || "100%"}</div>
+              <div className="text-sm text-gray-500">{pageData?.statPriseEnChargeLabel || "Prise en charge"}</div>
             </div>
             <div className="flex flex-col items-center text-center">
               <div className="w-14 h-14 bg-orange-100 rounded-full flex items-center justify-center mb-3">
                 <Building2 className="w-7 h-7 text-orange-600" />
               </div>
-              <div className="text-2xl font-bold text-gray-900">20+</div>
-              <div className="text-sm text-gray-500">Entreprises partenaires</div>
+              <div className="text-2xl font-bold text-gray-900">{pageData?.statPartenairesCount || "20+"}</div>
+              <div className="text-sm text-gray-500">{pageData?.statPartenairesLabel || "Entreprises partenaires"}</div>
             </div>
           </motion.div>
         </div>
@@ -581,19 +588,19 @@ export default function FormationsPage() {
           <div className="flex flex-wrap justify-center gap-3 md:gap-4">
             <a href="#alternance" className="flex items-center space-x-2 bg-primary-blue text-white px-4 py-2 rounded-full hover:bg-blue-700 transition-colors text-sm md:text-base">
               <GraduationCap className="w-4 h-4" />
-              <span>Formation en alternance</span>
+              <span>{pageData?.navAlternanceText || "Formation en alternance"}</span>
             </a>
             <a href="#reconversion" className="flex items-center space-x-2 bg-green-600 text-white px-4 py-2 rounded-full hover:bg-green-700 transition-colors text-sm md:text-base">
               <RefreshCw className="w-4 h-4" />
-              <span>Professionnels en reconversion</span>
+              <span>{pageData?.navReconversionText || "Professionnels en reconversion"}</span>
             </a>
             <a href="#vae" className="flex items-center space-x-2 bg-purple-600 text-white px-4 py-2 rounded-full hover:bg-purple-700 transition-colors text-sm md:text-base">
               <Award className="w-4 h-4" />
-              <span>Professionnels en VAE</span>
+              <span>{pageData?.navVaeText || "Professionnels en VAE"}</span>
             </a>
             <a href="#entreprise" className="flex items-center space-x-2 bg-orange-600 text-white px-4 py-2 rounded-full hover:bg-orange-700 transition-colors text-sm md:text-base">
               <Building2 className="w-4 h-4" />
-              <span>Pour les entreprises</span>
+              <span>{pageData?.navEntrepriseText || "Pour les entreprises"}</span>
             </a>
           </div>
         </div>
@@ -602,8 +609,8 @@ export default function FormationsPage() {
       {/* Formation en alternance */}
       <div id="alternance">
         <CategorySection
-          title="Formation en alternance"
-          subtitle="Formations alliant enseignement théorique et expérience en entreprise pour former des professionnels immédiatement opérationnels"
+          title={pageData?.alternanceTitle || "Formation en alternance"}
+          subtitle={pageData?.alternanceSubtitle || "Formations alliant enseignement théorique et expérience en entreprise pour former des professionnels immédiatement opérationnels"}
           icon={<GraduationCap className="w-6 h-6" />}
           formations={formationsAlternance}
           category="alternance"
@@ -614,8 +621,8 @@ export default function FormationsPage() {
       {/* Professionnels en reconversion */}
       <div id="reconversion" className="bg-gray-50">
         <CategorySection
-          title="Professionnels en reconversion"
-          subtitle="Formations pensées pour consolider votre savoir-faire avec une reconnaissance officielle, en valorisant votre expérience terrain"
+          title={pageData?.reconversionTitle || "Professionnels en reconversion"}
+          subtitle={pageData?.reconversionSubtitle || "Formations pensées pour consolider votre savoir-faire avec une reconnaissance officielle, en valorisant votre expérience terrain"}
           icon={<RefreshCw className="w-6 h-6" />}
           formations={formationsReconversion}
           category="reconversion"
@@ -629,10 +636,10 @@ export default function FormationsPage() {
           <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-purple-600 to-indigo-600 text-white px-6 py-3 rounded-full mb-6">
               <Award className="w-6 h-6" />
-              <h2 className="text-2xl font-montserrat font-bold">Professionnels en VAE</h2>
+              <h2 className="text-2xl font-montserrat font-bold">{pageData?.vaeTitle || "Professionnels en VAE"}</h2>
             </div>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              Transformez votre expérience en certification professionnelle reconnue
+              {pageData?.vaeSubtitle || "Transformez votre expérience en certification professionnelle reconnue"}
             </p>
           </motion.div>
           
@@ -753,10 +760,10 @@ export default function FormationsPage() {
           <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <div className="inline-flex items-center space-x-3 bg-gradient-to-r from-orange-600 to-red-600 text-white px-6 py-3 rounded-full mb-6">
               <Building2 className="w-6 h-6" />
-              <h2 className="text-2xl font-montserrat font-bold">Pour les entreprises</h2>
+              <h2 className="text-2xl font-montserrat font-bold">{pageData?.entrepriseTitle || "Pour les entreprises"}</h2>
             </div>
             <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-              Accompagnement des entreprises pour faire évoluer leurs salariés et développer leurs compétences
+              {pageData?.entrepriseSubtitle || "Accompagnement des entreprises pour faire évoluer leurs salariés et développer leurs compétences"}
             </p>
           </motion.div>
           
@@ -840,24 +847,24 @@ export default function FormationsPage() {
         <div className="relative z-10 max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
           <motion.div initial={{ opacity: 0, y: 30 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}>
             <h2 className="text-3xl font-montserrat font-bold mb-6">
-              Prêt à transformer votre avenir professionnel ?
+              {pageData?.ctaTitle || "Prêt à transformer votre avenir professionnel ?"}
             </h2>
             <p className="text-xl opacity-90 mb-8">
-              Contactez-nous pour un entretien personnalisé et découvrir la formation qui vous correspond
+              {pageData?.ctaSubtitle || "Contactez-nous pour un entretien personnalisé et découvrir la formation qui vous correspond"}
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <button 
-                onClick={handleCandidater} 
+                onClick={() => window.open(pageData?.candidaterUrl || 'https://cma-education.ymag.cloud/index.php/preinscription/', '_blank')} 
                 className="bg-white text-primary-blue px-8 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors flex items-center justify-center space-x-2"
               >
-                <span>Candidater maintenant</span>
+                <span>{pageData?.ctaPrimaryButtonText || "Candidater maintenant"}</span>
                 <ArrowRight className="w-5 h-5" />
               </button>
               <Link 
                 href="/brochure"
                 className="border-2 border-white text-white px-8 py-3 rounded-full font-semibold hover:bg-white/10 transition-colors"
               >
-                Télécharger la brochure
+                {pageData?.ctaSecondaryButtonText || "Télécharger la brochure"}
               </Link>
             </div>
           </motion.div>

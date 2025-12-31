@@ -762,3 +762,54 @@ export async function getPageFormationDetail() {
     return null
   }
 }
+
+// Page Formations (singleton) - Page liste des formations
+export async function getPageFormations() {
+  try {
+    const data = await fetchAPI('/api/page-formations?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Formations non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      heroImage: attrs.heroImage,
+      heroBadgeText: attrs.heroBadgeText || "Formations BTP Certifiantes",
+      heroTitle: attrs.heroTitle || "Formations BTP Certifiantes",
+      heroDescription: attrs.heroDescription || "Formation conducteur de travaux, formation chargé d'affaires bâtiment et formation BTP alternance. Formations certifiantes RNCP avec 98% d'insertion professionnelle. Prise en charge OPCO intégrale.",
+      statFormationsCount: attrs.statFormationsCount || "8",
+      statFormationsLabel: attrs.statFormationsLabel || "Formations diplômantes",
+      statInsertionRate: attrs.statInsertionRate || "98%",
+      statInsertionLabel: attrs.statInsertionLabel || "Taux d'insertion",
+      statPriseEnCharge: attrs.statPriseEnCharge || "100%",
+      statPriseEnChargeLabel: attrs.statPriseEnChargeLabel || "Prise en charge",
+      statPartenairesCount: attrs.statPartenairesCount || "20+",
+      statPartenairesLabel: attrs.statPartenairesLabel || "Entreprises partenaires",
+      alternanceTitle: attrs.alternanceTitle || "Formation en alternance",
+      alternanceSubtitle: attrs.alternanceSubtitle || "Formations alliant enseignement théorique et expérience en entreprise pour former des professionnels immédiatement opérationnels",
+      reconversionTitle: attrs.reconversionTitle || "Professionnels en reconversion",
+      reconversionSubtitle: attrs.reconversionSubtitle || "Formations pensées pour consolider votre savoir-faire avec une reconnaissance officielle, en valorisant votre expérience terrain",
+      vaeTitle: attrs.vaeTitle || "Professionnels en VAE",
+      vaeSubtitle: attrs.vaeSubtitle || "Transformez votre expérience en certification professionnelle reconnue",
+      entrepriseTitle: attrs.entrepriseTitle || "Pour les entreprises",
+      entrepriseSubtitle: attrs.entrepriseSubtitle || "Accompagnement des entreprises pour faire évoluer leurs salariés et développer leurs compétences",
+      ctaTitle: attrs.ctaTitle || "Prêt à transformer votre avenir professionnel ?",
+      ctaSubtitle: attrs.ctaSubtitle || "Contactez-nous pour un entretien personnalisé et découvrir la formation qui vous correspond",
+      ctaPrimaryButtonText: attrs.ctaPrimaryButtonText || "Candidater maintenant",
+      ctaSecondaryButtonText: attrs.ctaSecondaryButtonText || "Télécharger la brochure",
+      candidaterUrl: attrs.candidaterUrl || "https://cma-education.ymag.cloud/index.php/preinscription/",
+      navAlternanceText: attrs.navAlternanceText || "Formation en alternance",
+      navReconversionText: attrs.navReconversionText || "Professionnels en reconversion",
+      navVaeText: attrs.navVaeText || "Professionnels en VAE",
+      navEntrepriseText: attrs.navEntrepriseText || "Pour les entreprises",
+      metaTitle: attrs.metaTitle || "Formations BTP Certifiantes - Construction Management Academy",
+      metaDescription: attrs.metaDescription || "Découvrez nos formations BTP certifiantes RNCP : conducteur de travaux, chargé d'affaires bâtiment, alternance et reconversion. 98% d'insertion professionnelle."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageFormations:', error)
+    return null
+  }
+}
