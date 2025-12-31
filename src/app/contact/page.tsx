@@ -118,7 +118,7 @@ export default function ContactPage() {
           id: 1,
           siteName: 'Construction Management Academy',
           contactPhone: '01 89 70 60 52',
-          contactEmail: 'contact.academy@construction-management-academy.fr',
+          contactEmail: 'contact.academy@cma-education.com',
           inscriptionEmail: 'inscription.academy@construction-management-academy.fr'
         })
         setAdmissionSteps([
@@ -355,7 +355,7 @@ export default function ContactPage() {
                       <p className="text-gray-600">
                         {contactInfo?.emails?.find(e => e.type === 'contact')?.email || 
                          siteSettings?.contactEmail || 
-                         'contact.academy@construction-management-academy.fr'}
+                         'contact.academy@cma-education.com'}
                       </p>
                     </div>
                   </div>

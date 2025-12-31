@@ -28,7 +28,7 @@ const HeroSection = () => {
     heroSubtitle: 'Formations BTP spécialisées',
     heroDescription: 'Alternance, reconversion et VAE. Niveaux 5 à 7 (Bac+2 à Bac+5).',
     contactPhone: '01 89 70 60 52',
-    contactEmail: 'contact.academy@construction-management-academy.fr'
+    contactEmail: 'contact.academy@cma-education.com'
   })
   const [loading, setLoading] = useState(false) // Pas de loading, affichage immédiat
 

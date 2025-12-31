@@ -97,7 +97,7 @@ const Header = () => {
           id: 1,
           siteName: 'Construction Management Academy',
           contactPhone: '01 89 70 60 52',
-          contactEmail: 'contact.academy@construction-management-academy.fr'
+          contactEmail: 'contact.academy@cma-education.com'
         })
         setNavigationItems([
           { id: 1, label: 'Accueil', url: '/', ordre: 1, featured: true, external: false },

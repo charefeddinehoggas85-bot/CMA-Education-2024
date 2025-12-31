@@ -504,7 +504,7 @@ export async function getContactInfo() {
   return {
     id: 1,
     phone: '01 89 70 60 52',
-    email: 'contact.academy@construction-management-academy.fr',
+    email: 'contact.academy@cma-education.com',
     address: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
     emailInscription: 'inscription.academy@construction-management-academy.fr',
     horaires: 'Lundi - Vendredi : 9h00 - 18h00'

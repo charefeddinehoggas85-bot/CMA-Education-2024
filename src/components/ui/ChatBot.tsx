@@ -52,7 +52,7 @@ const ChatBot = () => {
     }
     
     if (message.includes('contact') || message.includes('téléphone') || message.includes('adresse')) {
-      return 'Vous pouvez nous contacter au 01 89 70 60 52 ou par email à contact.academy@construction-management-academy.fr. Notre centre est ouvert du lundi au vendredi de 8h à 18h.'
+      return 'Vous pouvez nous contacter au 01 89 70 60 52 ou par email à contact.academy@cma-education.com. Notre centre est ouvert du lundi au vendredi de 8h à 18h.'
     }
     
     if (message.includes('débouché') || message.includes('emploi') || message.includes('métier')) {

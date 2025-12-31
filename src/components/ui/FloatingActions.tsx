@@ -14,7 +14,7 @@ const FloatingActions = () => {
     {
       icon: <AnimatedIcon variant="bounce" size="sm"><Mail className="w-5 h-5" /></AnimatedIcon>,
       label: "Nous écrire",
-      onClick: () => window.open('mailto:contact.academy@construction-management-academy.fr', '_self')
+      onClick: () => window.open('mailto:contact.academy@cma-education.com', '_self')
     },
     {
       icon: <AnimatedIcon variant="pulse" size="sm"><MessageCircle className="w-5 h-5" /></AnimatedIcon>,

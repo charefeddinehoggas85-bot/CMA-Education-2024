@@ -51,90 +51,81 @@ export default function BrochurePage() {
     setIsLoading(true)
 
     try {
-      console.log('🔄 Téléchargement direct de la brochure depuis Strapi...');
+      console.log('🔄 Téléchargement via API proxy...');
       
-      // Récupérer les détails de la formation avec brochure
-      const strapiUrl = process.env.NEXT_PUBLIC_STRAPI_URL || 'https://cma-education-strapi-production.up.railway.app';
-      const formationResponse = await fetch(`${strapiUrl}/api/formations/${selectedFormation.id}?populate=brochure`);
-      
-      if (!formationResponse.ok) {
-        throw new Error('Formation non trouvée');
+      // Utiliser notre API pour télécharger la brochure
+      const response = await fetch('/api/download-brochure', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          formationId: selectedFormation.id,
+          userData: formData
+        })
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({ error: 'Erreur inconnue' }));
+        throw new Error(errorData.error || `Erreur ${response.status}`);
       }
 
-      const formationData = await formationResponse.json();
-      const formation = formationData.data;
-      
-      if (!formation.attributes.brochure?.data?.attributes?.url) {
-        throw new Error('Brochure non disponible pour cette formation');
+      // Vérifier le type de contenu
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/pdf')) {
+        throw new Error('Le fichier reçu n\'est pas un PDF valide');
       }
 
-      const brochureData = formation.attributes.brochure.data.attributes;
-      const brochureUrl = `${strapiUrl}${brochureData.url}`;
+      // Récupérer le PDF en tant que blob
+      const pdfBlob = await response.blob();
       
-      console.log('📄 URL brochure:', brochureUrl);
-
-      // Essayer de télécharger directement depuis Strapi avec CORS
-      try {
-        const pdfResponse = await fetch(brochureUrl, {
-          method: 'GET',
-          mode: 'cors',
-          headers: {
-            'Accept': 'application/pdf',
-          },
-        });
-
-        if (pdfResponse.ok) {
-          const pdfBlob = await pdfResponse.blob();
-          
-          // Créer un lien de téléchargement
-          const url = window.URL.createObjectURL(pdfBlob);
-          const link = document.createElement('a');
-          link.href = url;
-          link.download = `brochure-${selectedFormation.slug || 'formation'}-${formData.nom}-${formData.prenom}.pdf`;
-          document.body.appendChild(link);
-          link.click();
-          document.body.removeChild(link);
-          
-          // Nettoyer l'URL temporaire
-          setTimeout(() => window.URL.revokeObjectURL(url), 1000);
-          
-          console.log('✅ Brochure téléchargée avec succès !');
-        } else {
-          throw new Error(`Erreur ${pdfResponse.status}: ${pdfResponse.statusText}`);
-        }
-      } catch (fetchError) {
-        console.log('⚠️ Téléchargement direct échoué, ouverture dans un nouvel onglet...');
-        
-        // Fallback: ouvrir dans un nouvel onglet
-        const link = document.createElement('a');
-        link.href = brochureUrl;
-        link.target = '_blank';
-        link.download = brochureData.name;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-        console.log('📂 Brochure ouverte dans un nouvel onglet');
+      if (pdfBlob.size === 0) {
+        throw new Error('Le fichier PDF est vide');
       }
+      
+      // Créer un lien de téléchargement
+      const url = window.URL.createObjectURL(pdfBlob);
+      const link = document.createElement('a');
+      link.href = url;
+      
+      // Nom de fichier personnalisé
+      const fileName = `brochure-${selectedFormation.slug || 'formation'}-${formData.nom}-${formData.prenom}.pdf`;
+      link.download = fileName;
+      
+      // Déclencher le téléchargement
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      
+      // Nettoyer l'URL temporaire
+      setTimeout(() => window.URL.revokeObjectURL(url), 1000);
+      
+      console.log('✅ Brochure téléchargée avec succès !');
 
       // Envoyer les données par EmailJS
-      await emailjs.send(
-        'service_cma2026',
-        'template_n27932h',
-        {
-          to_email: 'contact.academy@cma-education.com',
-          formation_title: selectedFormation.title,
-          formation_id: selectedFormation.id,
-          user_nom: formData.nom,
-          user_prenom: formData.prenom,
-          user_type: formData.type,
-          user_email: formData.email,
-          user_telephone: formData.telephone,
-          date: new Date().toLocaleDateString('fr-FR'),
-          brochure_type: 'Strapi PDF Direct'
-        },
-        'tdRwM2nw_IxILeGS-'
-      )
+      try {
+        await emailjs.send(
+          'service_cma2026',
+          'template_n27932h',
+          {
+            to_email: 'contact.academy@cma-education.com',
+            formation_title: selectedFormation.title,
+            formation_id: selectedFormation.id,
+            user_nom: formData.nom,
+            user_prenom: formData.prenom,
+            user_type: formData.type,
+            user_email: formData.email,
+            user_telephone: formData.telephone,
+            date: new Date().toLocaleDateString('fr-FR'),
+            brochure_type: 'API Proxy Download'
+          },
+          'tdRwM2nw_IxILeGS-'
+        );
+        console.log('📧 Email de notification envoyé');
+      } catch (emailError) {
+        console.warn('⚠️ Erreur envoi email:', emailError);
+        // Ne pas bloquer le téléchargement si l'email échoue
+      }
 
       setIsSuccess(true)
       setTimeout(() => {
@@ -142,9 +133,17 @@ export default function BrochurePage() {
         setFormData({ nom: '', prenom: '', type: '', email: '', telephone: '' })
         setSelectedFormation(null)
       }, 3000)
+      
     } catch (error) {
       console.error('❌ Erreur téléchargement:', error)
-      alert(`Erreur: ${error instanceof Error ? error.message : 'Problème de téléchargement'}`)
+      
+      // Message d'erreur plus informatif
+      let errorMessage = 'Problème de téléchargement';
+      if (error instanceof Error) {
+        errorMessage = error.message;
+      }
+      
+      alert(`Erreur: ${errorMessage}\n\nVeuillez réessayer ou contacter le support.`);
     } finally {
       setIsLoading(false)
     }

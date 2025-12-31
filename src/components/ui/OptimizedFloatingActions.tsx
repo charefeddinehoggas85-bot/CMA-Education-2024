@@ -20,7 +20,7 @@ const OptimizedFloatingActions = memo(() => {
     {
       icon: <Mail className="w-4 h-4" />,
       label: "Email",
-      onClick: () => window.open('mailto:contact.academy@construction-management-academy.fr', '_self'),
+      onClick: () => window.open('mailto:contact.academy@cma-education.com', '_self'),
       color: "bg-blue-500 hover:bg-blue-600"
     },
     {
