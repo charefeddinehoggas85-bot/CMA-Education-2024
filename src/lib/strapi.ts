@@ -644,3 +644,38 @@ export async function getPagePedagogie() {
     return null
   }
 }
+
+// Page About (singleton)
+export async function getPageAbout() {
+  try {
+    const data = await fetchAPI('/api/page-about?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page About non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      heroTitle: attrs.heroTitle || "Qui sommes nous",
+      heroSubtitle: attrs.heroSubtitle || "Centre de formation BTP",
+      heroDescription: attrs.heroDescription || "Un centre de formation BTP reconnu pour son savoir-faire dans la préparation aux métiers de la conduite et du management de travaux.",
+      heroImage: attrs.heroImage,
+      histoireTitle: attrs.histoireTitle || "Notre Histoire",
+      histoireContent: attrs.histoireContent || "",
+      missionTitle: attrs.missionTitle || "Notre Mission",
+      missionDescription: attrs.missionDescription || "À travers des formations concrètes, accessibles et orientées terrain, notre mission est de rendre chaque apprenant immédiatement opérationnel et acteur de la transformation du BTP.",
+      visionTitle: attrs.visionTitle || "Notre Vision",
+      visionDescription: attrs.visionDescription || "Devenir une référence nationale dans la formation BTP, en plaçant l'innovation, la durabilité et la performance au cœur de chaque parcours.",
+      visionDetails: attrs.visionDetails || "Grâce à une veille constante du marché et à l'intervention de professionnels en activité, nos formations évoluent en permanence pour rester en phase avec les réalités du terrain et les attentes des entreprises.",
+      features: attrs.features || [],
+      statistiques: attrs.statistiques || [],
+      metaTitle: attrs.metaTitle || "À Propos - Construction Management Academy",
+      metaDescription: attrs.metaDescription || "Découvrez Construction Management Academy, centre de formation BTP spécialisé dans la conduite et le management de travaux."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageAbout:', error)
+    return null
+  }
+}
