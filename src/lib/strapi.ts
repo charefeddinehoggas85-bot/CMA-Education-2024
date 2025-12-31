@@ -766,7 +766,7 @@ export async function getPageFormationDetail() {
 // Page Formations (singleton) - Page liste des formations
 export async function getPageFormations() {
   try {
-    const data = await fetchAPI('/api/page-formations?populate=*')
+    const data = await fetchAPI('/api/page-formations-list?populate=*')
     if (!data?.data) {
       console.log('⚠️ Page Formations non trouvée dans Strapi, utilisation des fallbacks')
       return null
