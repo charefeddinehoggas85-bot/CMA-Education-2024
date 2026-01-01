@@ -189,7 +189,7 @@ function ArtisticFormationsCarousel({
   )
 }
 
-// Composant FormationCard moderne et compact avec design artistique
+// Composant FormationCard moderne et compact avec design artistique et IMAGES
 function ArtisticFormationCard({ formation, index, category }: { formation: any, index: number, category: string }) {
   const [isHovered, setIsHovered] = useState(false)
   
@@ -234,6 +234,34 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
 
   const rncpUrl = getRncpUrl(formation.rncp, formation.rncpUrl)
 
+  // Helper pour obtenir l'URL de l'image avec fallback
+  const getFormationImageUrl = (formation: any): string => {
+    // Priorité 1: Image Strapi
+    if (formation.imageData?.data?.attributes?.url) {
+      const url = formation.imageData.data.attributes.url
+      return url.startsWith('http') ? url : `https://cma-education-strapi-production.up.railway.app${url}`
+    }
+    
+    // Priorité 2: Image directe
+    if (formation.image && typeof formation.image === 'string') {
+      return formation.image.startsWith('http') ? formation.image : `https://cma-education-strapi-production.up.railway.app${formation.image}`
+    }
+    
+    // Priorité 3: Image par défaut basée sur le slug
+    const defaultImages: Record<string, string> = {
+      'charge-affaires-batiment': '/images/formations/charge-affaires.jpg',
+      'conducteur-travaux-batiment': '/images/formations/conducteur-travaux.jpg',
+      'chef-chantier-vrd': '/images/formations/chef-chantier-vrd.jpg',
+      'responsable-travaux-bim': '/images/formations/bim.jpg',
+      'chef-projets-btp': '/images/formations/chef-projets.jpg',
+      'default': '/images/formations/formations-hero.jpg'
+    }
+    
+    return defaultImages[formation.slug] || defaultImages['default']
+  }
+
+  const imageUrl = getFormationImageUrl(formation)
+
   return (
     <motion.div
       initial={{ opacity: 0, y: 20, scale: 0.95 }}
@@ -247,43 +275,45 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
       viewport={{ once: true }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="group relative bg-white/80 backdrop-blur-sm rounded-3xl overflow-hidden flex-shrink-0 w-72 h-96 border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500"
-      style={{
-        background: 'linear-gradient(135deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.7) 100%)',
-      }}
+      className="group relative bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden flex-shrink-0 w-72 h-[420px] border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500"
     >
-      {/* Gradient de fond artistique */}
-      <div className={`absolute inset-0 bg-gradient-to-br ${getCategoryGradient(category)} opacity-5 group-hover:opacity-10 transition-opacity duration-500`} />
-      
-      {/* Motif géométrique décoratif */}
-      <div className="absolute top-0 right-0 w-32 h-32 opacity-5">
-        <div className={`w-full h-full bg-gradient-to-br ${getCategoryGradient(category)} rounded-full transform rotate-45 scale-150`} />
-      </div>
+      {/* IMAGE DE LA FORMATION */}
+      <div className="relative h-48 overflow-hidden">
+        <img 
+          src={imageUrl}
+          alt={formation.title}
+          className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+          onError={(e) => {
+            // Fallback si l'image ne charge pas
+            (e.target as HTMLImageElement).src = '/images/formations/formations-hero.jpg'
+          }}
+        />
+        {/* Overlay gradient */}
+        <div className={`absolute inset-0 bg-gradient-to-t ${getCategoryGradient(category)} opacity-20 group-hover:opacity-30 transition-opacity duration-500`} />
+        
+        {/* Badge niveau sur l'image */}
+        {formation.level && (
+          <div className="absolute top-4 right-4 bg-white/95 backdrop-blur-sm px-3 py-1 rounded-full shadow-lg">
+            <span className="text-xs font-bold text-gray-800">{formation.level.split(' ')[0]} {formation.level.split(' ')[1]}</span>
+          </div>
+        )}
 
-      {/* Header compact avec icône */}
-      <div className="relative p-4 pb-2">
-        <div className="flex items-start justify-between mb-3">
-          <div className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${getCategoryGradient(category)} flex items-center justify-center text-white text-xl shadow-lg`}>
+        {/* Icône catégorie sur l'image */}
+        <div className="absolute top-4 left-4">
+          <div className={`w-10 h-10 rounded-xl bg-gradient-to-br ${getCategoryGradient(category)} flex items-center justify-center text-white text-lg shadow-lg`}>
             {getCategoryIcon(category)}
           </div>
-          
-          {formation.level && (
-            <motion.div 
-              className="bg-white/90 backdrop-blur-sm px-3 py-1 rounded-full shadow-sm"
-              animate={{ scale: isHovered ? 1.05 : 1 }}
-              transition={{ duration: 0.2 }}
-            >
-              <span className="text-xs font-semibold text-gray-700">{formation.level.split(' ')[0]} {formation.level.split(' ')[1]}</span>
-            </motion.div>
-          )}
         </div>
+      </div>
 
-        {/* Titre compact */}
-        <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+      {/* CONTENU DE LA CARTE */}
+      <div className="p-4 flex-1 flex flex-col">
+        {/* Titre */}
+        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
           {formation.title}
         </h3>
 
-        {/* RNCP Badge compact */}
+        {/* RNCP Badge */}
         {formation.rncp && (
           <div className="flex items-center gap-2 mb-3">
             <div className="flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-lg">
@@ -303,17 +333,14 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
             )}
           </div>
         )}
-      </div>
 
-      {/* Contenu principal compact */}
-      <div className="px-4 pb-4 flex-1 flex flex-col">
-        {/* Description très courte */}
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed">
-          {formation.shortDescription?.substring(0, 80)}...
+        {/* Description */}
+        <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed flex-1">
+          {formation.shortDescription || formation.shortDesc || 'Formation professionnelle certifiante dans le BTP'}
         </p>
 
-        {/* Informations essentielles en grille compacte */}
-        <div className="grid grid-cols-2 gap-2 mb-3 text-xs">
+        {/* Informations pratiques */}
+        <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
           {formation.duration && (
             <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
               <Clock className="w-3 h-3 text-gray-500" />
@@ -322,25 +349,11 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
           )}
           <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
             <MapPin className="w-3 h-3 text-gray-500" />
-            <span className="text-gray-700 truncate">{formation.mode || 'Présentiel'}</span>
+            <span className="text-gray-700 truncate">Présentiel</span>
           </div>
         </div>
 
-        {/* Objectifs compacts */}
-        {formation.objectives && formation.objectives.length > 0 && (
-          <div className="mb-3 flex-1">
-            <div className="space-y-1">
-              {formation.objectives.slice(0, 2).map((obj: string, i: number) => (
-                <div key={i} className="flex items-start gap-2">
-                  <div className="w-1.5 h-1.5 rounded-full bg-green-500 mt-1.5 flex-shrink-0" />
-                  <span className="text-xs text-gray-600 line-clamp-1">{obj}</span>
-                </div>
-              ))}
-            </div>
-          </div>
-        )}
-
-        {/* CTA Button moderne et compact */}
+        {/* BOUTON DÉCOUVRIR - Lien vers la page de formation */}
         <motion.div
           whileHover={{ scale: 1.02 }}
           whileTap={{ scale: 0.98 }}
@@ -348,6 +361,33 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
         >
           <Link
             href={`/formations/${formation.slug}`}
+            className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl w-full`}
+          >
+            <span className="relative z-10">Découvrir</span>
+            <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
+            
+            {/* Effet de brillance au hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+          </Link>
+        </motion.div>
+      </div>
+
+      {/* Effet de bordure animée au hover */}
+      <motion.div
+        className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(category)} opacity-0 group-hover:opacity-10`}
+        style={{ 
+          background: `linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)`,
+          mixBlendMode: 'overlay'
+        }}
+        animate={{ 
+          opacity: isHovered ? 0.1 : 0,
+          scale: isHovered ? 1.02 : 1
+        }}
+        transition={{ duration: 0.3 }}
+      />
+    </motion.div>
+  )
+}
             className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}
           >
             <span className="relative z-10">Découvrir</span>
