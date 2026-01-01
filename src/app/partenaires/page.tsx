@@ -24,9 +24,8 @@ const partners = [
 // Statistiques réelles
 const stats = [
   { icon: Building2, value: '12', label: 'Entreprises partenaires', suffix: '' },
-  { icon: Users, value: '150', label: 'Alternants placés', suffix: '+' },
+  { icon: Users, value: '40', label: 'Alternants placés', suffix: '+' },
   { icon: Briefcase, value: '98', label: "Taux d'insertion", suffix: '%' },
-  { icon: TrendingUp, value: '95', label: 'Satisfaction entreprises', suffix: '%' },
 ]
 
 export default function PartenairesPage() {
