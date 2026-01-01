@@ -892,3 +892,50 @@ export async function getPageContact() {
     return null
   }
 }
+
+
+// Page Footer (singleton) - Footer du site
+export async function getPageFooter() {
+  try {
+    const data = await fetchAPI('/api/page-footer?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Footer non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      logoImage: attrs.logoImage,
+      qualuipoImage: attrs.qualuipoImage,
+      tagline: attrs.tagline || "Former les professionnels qui construisent le monde de demain.",
+      navigationTitle: attrs.navigationTitle || "Navigation",
+      navigationLinks: attrs.navigationLinks || [
+        { name: "Formations", href: "/formations" },
+        { name: "À propos", href: "/about" },
+        { name: "Pédagogie", href: "/pedagogie" },
+        { name: "Partenaires", href: "/partenaires" }
+      ],
+      contactTitle: attrs.contactTitle || "Contact",
+      phoneHoursLabel: attrs.phoneHoursLabel || "Lun-Ven 9h-18h",
+      emailResponseLabel: attrs.emailResponseLabel || "Réponse sous 24h",
+      ctaButtonText: attrs.ctaButtonText || "Rejoignez Construction Management Academy",
+      ctaButtonLink: attrs.ctaButtonLink || "/contact",
+      copyrightText: attrs.copyrightText || "© 2024 Construction Management Academy",
+      legalLinksText: attrs.legalLinksText || "Mentions légales",
+      legalLinksUrl: attrs.legalLinksUrl || "#",
+      privacyLinksText: attrs.privacyLinksText || "Confidentialité",
+      privacyLinksUrl: attrs.privacyLinksUrl || "/confidentialite",
+      socialLinkedIn: attrs.socialLinkedIn || "https://www.linkedin.com/company/construction-management-academy",
+      socialFacebook: attrs.socialFacebook || "https://www.facebook.com/Constructionmanagementacademy",
+      socialInstagram: attrs.socialInstagram || "https://www.instagram.com/construction_management_academy",
+      socialYoutube: attrs.socialYoutube || "https://www.youtube.com/channel/construction-management-academy",
+      socialTiktok: attrs.socialTiktok || "https://www.tiktok.com/@cmaeducation",
+      mapAddress: attrs.mapAddress || "67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne"
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageFooter:', error)
+    return null
+  }
+}
