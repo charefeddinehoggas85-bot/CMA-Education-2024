@@ -939,3 +939,65 @@ export async function getPageFooter() {
     return null
   }
 }
+
+
+// Page Home (singleton) - Page d'accueil et ses sections
+export async function getPageHome() {
+  try {
+    const data = await fetchAPI('/api/page-home?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Home non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      // Hero Section
+      heroTitle: attrs.heroTitle || "Devenez l'acteur du BTP d'aujourd'hui et de demain",
+      heroSubtitle: attrs.heroSubtitle || "Formations BTP spécialisées",
+      heroDescription: attrs.heroDescription || "Alternance, reconversion et VAE. Niveaux 5 à 7 (Bac+2 à Bac+5).",
+      heroVideoUrl: attrs.heroVideoUrl || "https://cma-education-strapi-production.up.railway.app/uploads/Design_sans_titre_4_d438e047b5.mp4",
+      heroCtaText: attrs.heroCtaText || "CANDIDATER MAINTENANT",
+      heroCtaUrl: attrs.heroCtaUrl || "https://construction-management-academy.ymag.cloud/index.php/preinscription/",
+      // Formations Section
+      formationsSectionBadge: attrs.formationsSectionBadge || "Formations Vedette",
+      formationsSectionTitle: attrs.formationsSectionTitle || "Nos Formations Phares",
+      formationsSectionSubtitle: attrs.formationsSectionSubtitle || "Découvrez nos programmes les plus demandés, conçus pour transformer votre carrière dans le BTP",
+      formationsSectionCtaText: attrs.formationsSectionCtaText || "Voir toutes nos formations",
+      formationsSectionCtaUrl: attrs.formationsSectionCtaUrl || "/formations",
+      // Formators Section
+      formatorsSectionBadge: attrs.formatorsSectionBadge || "Notre Équipe",
+      formatorsSectionTitle: attrs.formatorsSectionTitle || "Nos Formateurs d'Excellence",
+      formatorsSectionSubtitle: attrs.formatorsSectionSubtitle || "Des experts du BTP passionnés par la transmission de savoir et l'accompagnement de vos projets",
+      formatorsSectionCtaText: attrs.formatorsSectionCtaText || "Rencontrer l'équipe complète",
+      formatorsSectionCtaUrl: attrs.formatorsSectionCtaUrl || "/formateurs",
+      formatorsBadgeText: attrs.formatorsBadgeText || "Expert BTP",
+      // Partners Section
+      partnersSectionBadge: attrs.partnersSectionBadge || "Nos Partenaires de Confiance",
+      partnersSectionTitle: attrs.partnersSectionTitle || "Ils nous font confiance",
+      partnersSectionSubtitle: attrs.partnersSectionSubtitle || "Des entreprises leaders du BTP qui accueillent nos alternants et participent activement à leur formation professionnelle",
+      partnersStatEntreprises: attrs.partnersStatEntreprises || "Entreprises partenaires",
+      partnersStatAlternants: attrs.partnersStatAlternants || "Alternants placés",
+      partnersStatAlternantsCount: attrs.partnersStatAlternantsCount || "150+",
+      partnersStatInsertion: attrs.partnersStatInsertion || "Taux d'insertion",
+      partnersStatInsertionRate: attrs.partnersStatInsertionRate || "98%",
+      partnersSectionCtaTitle: attrs.partnersSectionCtaTitle || "Découvrez tous nos partenaires",
+      partnersSectionCtaSubtitle: attrs.partnersSectionCtaSubtitle || "Explorez notre réseau complet d'entreprises partenaires et découvrez les opportunités d'alternance et d'emploi qui vous attendent",
+      partnersSectionCtaText: attrs.partnersSectionCtaText || "Voir tous nos partenaires",
+      partnersSectionCtaUrl: attrs.partnersSectionCtaUrl || "/partenaires",
+      // Accessibility Section
+      accessibilityTitle: attrs.accessibilityTitle || "Accessibilité et Inclusion",
+      accessibilityMessage: attrs.accessibilityMessage || "Nos formations sont ouvertes à tous, y compris aux personnes en situation de handicap. Nous mettons en place les aménagements nécessaires pour garantir les meilleures conditions d'apprentissage.",
+      accessibilityReferent: attrs.accessibilityReferent || "notre référent handicap",
+      accessibilityImage: attrs.accessibilityImage,
+      // SEO
+      metaTitle: attrs.metaTitle || "Construction Management Academy - Formations BTP en Alternance",
+      metaDescription: attrs.metaDescription || "Centre de formation BTP spécialisé dans la conduite et le management de travaux. Formations en alternance, reconversion et VAE. Niveaux Bac+2 à Bac+5."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageHome:', error)
+    return null
+  }
+}

@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import Image from 'next/image'
-import { getSiteSettings } from '@/lib/strapi'
+import { getSiteSettings, getPageHome, getImageURL } from '@/lib/strapi'
 
 interface SiteSettings {
   id: number
@@ -12,6 +12,13 @@ interface SiteSettings {
   accessibilityMessage?: string
   accessibilityPhone?: string
   referentHandicap?: string
+}
+
+interface PageHomeData {
+  accessibilityTitle: string
+  accessibilityMessage: string
+  accessibilityReferent: string
+  accessibilityImage?: any
 }
 
 const AccessibilityBanner = () => {
@@ -23,11 +30,29 @@ const AccessibilityBanner = () => {
     accessibilityPhone: '01 89 70 60 52',
     referentHandicap: 'notre référent handicap'
   })
+  const [pageData, setPageData] = useState<PageHomeData>({
+    accessibilityTitle: "Accessibilité et Inclusion",
+    accessibilityMessage: "Nos formations sont ouvertes à tous, y compris aux personnes en situation de handicap. Nous mettons en place les aménagements nécessaires pour garantir les meilleures conditions d'apprentissage.",
+    accessibilityReferent: "notre référent handicap",
+    accessibilityImage: null
+  })
   const [loading, setLoading] = useState(false) // Pas de loading, affichage immédiat
 
   useEffect(() => {
-    async function loadSiteSettings() {
+    async function loadData() {
       try {
+        // Charger les données de la page home
+        const homeData = await getPageHome()
+        if (homeData) {
+          setPageData({
+            accessibilityTitle: homeData.accessibilityTitle || pageData.accessibilityTitle,
+            accessibilityMessage: homeData.accessibilityMessage || pageData.accessibilityMessage,
+            accessibilityReferent: homeData.accessibilityReferent || pageData.accessibilityReferent,
+            accessibilityImage: homeData.accessibilityImage || pageData.accessibilityImage
+          })
+        }
+        
+        // Charger les paramètres du site pour le téléphone
         const data = await getSiteSettings()
         if (data) {
           setSiteSettings(data as SiteSettings)
@@ -37,7 +62,7 @@ const AccessibilityBanner = () => {
       }
     }
 
-    loadSiteSettings()
+    loadData()
   }, [])
 
   if (loading) {
@@ -67,7 +92,7 @@ const AccessibilityBanner = () => {
         >
           <div className="flex-shrink-0">
             <Image 
-              src="/images/handicap.webp" 
+              src={getImageURL(pageData.accessibilityImage, "/images/handicap.webp")} 
               alt="Accessibilité Handicap" 
               width={160} 
               height={160}
@@ -77,12 +102,12 @@ const AccessibilityBanner = () => {
           
           <div className="flex-1 max-w-4xl">
             <h3 className="text-2xl font-bold text-gray-900 mb-3">
-              Accessibilité et Inclusion
+              {pageData.accessibilityTitle}
             </h3>
             <p className="text-gray-700 leading-relaxed">
               <span className="font-semibold text-primary-blue">{siteSettings.siteName} s'engage pour l'accessibilité.</span>{' '}
-              {siteSettings.accessibilityMessage}{' '}
-              Pour toute demande spécifique, contactez {siteSettings.referentHandicap} au{' '}
+              {pageData.accessibilityMessage}{' '}
+              Pour toute demande spécifique, contactez {pageData.accessibilityReferent} au{' '}
               <a 
                 href={`tel:${(siteSettings.accessibilityPhone || siteSettings.contactPhone).replace(/\s/g, '')}`} 
                 className="text-primary-blue font-semibold hover:underline"

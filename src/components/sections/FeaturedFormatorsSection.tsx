@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight, Users } from 'lucide-react'
 import Link from 'next/link'
-import { getFormateurs } from '@/lib/strapi'
+import { getFormateurs, getPageHome } from '@/lib/strapi'
 import { getStrapiMediaURL } from '@/lib/strapi'
 
 interface Formateur {
@@ -17,16 +17,32 @@ interface Formateur {
   slug?: string
 }
 
+interface PageHomeData {
+  formatorsSectionBadge?: string
+  formatorsSectionTitle?: string
+  formatorsSectionSubtitle?: string
+  formatorsSectionCtaText?: string
+  formatorsSectionCtaUrl?: string
+  formatorsBadgeText?: string
+}
+
 const FeaturedFormatorsSection = () => {
   const [formateurs, setFormateurs] = useState<Formateur[]>([])
+  const [pageData, setPageData] = useState<PageHomeData | null>(null)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    async function loadFormateurs() {
+    async function loadData() {
       try {
-        const data = await getFormateurs()
-        if (data && Array.isArray(data)) {
-          setFormateurs((data as Formateur[]).slice(0, 4))
+        const [formateursData, homeData] = await Promise.all([
+          getFormateurs(),
+          getPageHome()
+        ])
+        if (formateursData && Array.isArray(formateursData)) {
+          setFormateurs((formateursData as Formateur[]).slice(0, 4))
+        }
+        if (homeData) {
+          setPageData(homeData as PageHomeData)
         }
       } catch (error) {
         console.error('Erreur chargement formateurs:', error)
@@ -34,8 +50,16 @@ const FeaturedFormatorsSection = () => {
         setLoading(false)
       }
     }
-    loadFormateurs()
+    loadData()
   }, [])
+
+  // Computed values with fallbacks
+  const badgeText = pageData?.formatorsSectionBadge || "Notre Équipe"
+  const sectionTitle = pageData?.formatorsSectionTitle || "Nos Formateurs d'Excellence"
+  const sectionSubtitle = pageData?.formatorsSectionSubtitle || "Des experts du BTP passionnés par la transmission de savoir et l'accompagnement de vos projets"
+  const ctaText = pageData?.formatorsSectionCtaText || "Rencontrer l'équipe complète"
+  const ctaUrl = pageData?.formatorsSectionCtaUrl || "/formateurs"
+  const expertBadgeText = pageData?.formatorsBadgeText || "Expert BTP"
 
   if (loading) {
     return (
@@ -67,13 +91,13 @@ const FeaturedFormatorsSection = () => {
         >
           <div className="flex items-center justify-center gap-2 mb-4">
             <Users className="w-6 h-6 text-primary-blue" />
-            <span className="text-sm font-semibold text-primary-blue uppercase tracking-wider">Notre Équipe</span>
+            <span className="text-sm font-semibold text-primary-blue uppercase tracking-wider">{badgeText}</span>
           </div>
           <h2 className="text-4xl md:text-5xl font-montserrat font-bold text-gray-900 mb-4">
-            Nos Formateurs d'Excellence
+            {sectionTitle}
           </h2>
           <p className="text-xl text-gray-600 max-w-2xl mx-auto">
-            Des experts du BTP passionnés par la transmission de savoir et l'accompagnement de vos projets
+            {sectionSubtitle}
           </p>
         </motion.div>
 
@@ -125,7 +149,7 @@ const FeaturedFormatorsSection = () => {
                 {/* Expertise Badge */}
                 <div className="flex items-center justify-center gap-2 text-xs text-primary-blue font-semibold">
                   <span className="w-2 h-2 bg-primary-yellow rounded-full"></span>
-                  Expert BTP
+                  {expertBadgeText}
                 </div>
               </div>
             </motion.div>
@@ -141,10 +165,10 @@ const FeaturedFormatorsSection = () => {
           className="text-center"
         >
           <Link
-            href="/formateurs"
+            href={ctaUrl}
             className="inline-flex items-center gap-3 bg-gradient-to-r from-primary-yellow to-yellow-500 text-primary-blue px-8 py-4 rounded-xl font-semibold hover:shadow-xl transition-all duration-300 hover:scale-105"
           >
-            Rencontrer l'équipe complète
+            {ctaText}
             <ArrowRight className="w-5 h-5" />
           </Link>
         </motion.div>

@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import OptimizedButton from '@/components/ui/OptimizedButton'
-import { getSiteSettings } from '@/lib/strapi'
+import { getSiteSettings, getPageHome } from '@/lib/strapi'
 
 interface SiteSettings {
   id?: number
@@ -19,6 +19,15 @@ interface SiteSettings {
   [key: string]: any
 }
 
+interface PageHomeData {
+  heroTitle?: string
+  heroSubtitle?: string
+  heroDescription?: string
+  heroVideoUrl?: string
+  heroCtaText?: string
+  heroCtaUrl?: string
+}
+
 const HeroSection = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     id: 1,
@@ -30,29 +39,40 @@ const HeroSection = () => {
     contactPhone: '01 89 70 60 52',
     contactEmail: 'contact.academy@cma-education.com'
   })
+  const [pageData, setPageData] = useState<PageHomeData | null>(null)
   const [loading, setLoading] = useState(false) // Pas de loading, affichage immédiat
 
   useEffect(() => {
-    async function loadSiteSettings() {
+    async function loadData() {
       try {
-        const data = await getSiteSettings()
-        if (data) {
-          console.log('🎬 Site settings loaded:', data)
-          console.log('🎬 Hero video data:', (data as SiteSettings).heroVideo)
-          setSiteSettings(data as SiteSettings)
+        const [settingsData, homeData] = await Promise.all([
+          getSiteSettings(),
+          getPageHome()
+        ])
+        if (settingsData) {
+          setSiteSettings(settingsData as SiteSettings)
+        }
+        if (homeData) {
+          setPageData(homeData as PageHomeData)
         }
       } catch (error) {
         console.error('Strapi non disponible, utilisation des données statiques')
       }
     }
 
-    loadSiteSettings()
+    loadData()
   }, [])
 
-  const videoUrl = 'https://cma-education-strapi-production.up.railway.app/uploads/Design_sans_titre_4_d438e047b5.mp4'
+  // Computed values with fallbacks
+  const heroTitle = pageData?.heroTitle || siteSettings?.heroTitle || 'Devenez l\'acteur du BTP d\'aujourd\'hui et de demain'
+  const heroSubtitle = pageData?.heroSubtitle || siteSettings?.heroSubtitle || 'Formations BTP spécialisées'
+  const heroDescription = pageData?.heroDescription || siteSettings?.heroDescription || 'Alternance, reconversion et VAE. Niveaux 5 à 7 (Bac+2 à Bac+5).'
+  const videoUrl = pageData?.heroVideoUrl || 'https://cma-education-strapi-production.up.railway.app/uploads/Design_sans_titre_4_d438e047b5.mp4'
+  const ctaText = pageData?.heroCtaText || 'CANDIDATER MAINTENANT'
+  const ctaUrl = pageData?.heroCtaUrl || 'https://construction-management-academy.ymag.cloud/index.php/preinscription/'
 
   const handleCandidater = () => {
-    window.open('https://construction-management-academy.ymag.cloud/index.php/preinscription/', '_blank')
+    window.open(ctaUrl, '_blank')
   }
 
   if (loading) {
@@ -103,7 +123,7 @@ const HeroSection = () => {
             transition={{ duration: 1, delay: 0.2 }}
           >
             <span className="block text-transparent bg-clip-text bg-gradient-to-r from-primary-yellow via-orange-400 to-primary-yellow">
-              {siteSettings?.heroTitle || 'Devenez l\'acteur du BTP d\'aujourd\'hui et de demain'}
+              {heroTitle}
             </span>
           </motion.h1>
           
@@ -113,7 +133,7 @@ const HeroSection = () => {
             animate={{ opacity: 1 }}
             transition={{ duration: 0.8, delay: 0.4 }}
           >
-            {siteSettings?.heroSubtitle || 'Formations BTP spécialisées'}
+            {heroSubtitle}
           </motion.p>
           
           <motion.div 
@@ -131,12 +151,7 @@ const HeroSection = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.8, delay: 0.5 }}
         >
-          {siteSettings?.heroDescription || (
-            <>
-              <span className="text-primary-yellow font-semibold">Alternance, reconversion et VAE</span>.
-              <br />Niveaux <span className="text-primary-yellow font-semibold">5 à 7 (Bac+2 à Bac+5)</span>.
-            </>
-          )}
+          {heroDescription}
         </motion.p>
 
         {/* Primary CTA - Single Focus */}
@@ -153,7 +168,7 @@ const HeroSection = () => {
             className="text-xl px-12 py-6 shadow-2xl hover:shadow-primary-yellow/25"
             onClick={handleCandidater}
           >
-            CANDIDATER MAINTENANT
+            {ctaText}
           </OptimizedButton>
         </motion.div>
 

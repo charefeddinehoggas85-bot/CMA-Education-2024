@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { ExternalLink, Building2, Users, TrendingUp, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
-import { getPartners, getImageURL } from '@/lib/strapi'
+import { getPartners, getImageURL, getPageHome } from '@/lib/strapi'
 
 interface Partner {
   id: number
@@ -14,6 +14,21 @@ interface Partner {
   logoData?: any
   imageData?: any
   featured?: boolean
+}
+
+interface PageHomeData {
+  partnersSectionBadge: string
+  partnersSectionTitle: string
+  partnersSectionSubtitle: string
+  partnersStatEntreprises: string
+  partnersStatAlternants: string
+  partnersStatAlternantsCount: string
+  partnersStatInsertion: string
+  partnersStatInsertionRate: string
+  partnersSectionCtaTitle: string
+  partnersSectionCtaSubtitle: string
+  partnersSectionCtaText: string
+  partnersSectionCtaUrl: string
 }
 
 // Partenaires statiques avec leurs logos
@@ -34,12 +49,47 @@ const defaultPartners = [
 
 const FeaturedPartnersSection = () => {
   const [partners, setPartners] = useState<Partner[]>(defaultPartners)
+  const [pageData, setPageData] = useState<PageHomeData>({
+    partnersSectionBadge: "Nos Partenaires de Confiance",
+    partnersSectionTitle: "Ils nous font confiance",
+    partnersSectionSubtitle: "Des entreprises leaders du BTP qui accueillent nos alternants et participent activement à leur formation professionnelle",
+    partnersStatEntreprises: "Entreprises partenaires",
+    partnersStatAlternants: "Alternants placés",
+    partnersStatAlternantsCount: "150+",
+    partnersStatInsertion: "Taux d'insertion",
+    partnersStatInsertionRate: "98%",
+    partnersSectionCtaTitle: "Découvrez tous nos partenaires",
+    partnersSectionCtaSubtitle: "Explorez notre réseau complet d'entreprises partenaires et découvrez les opportunités d'alternance et d'emploi qui vous attendent",
+    partnersSectionCtaText: "Voir tous nos partenaires",
+    partnersSectionCtaUrl: "/partenaires"
+  })
   const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    async function loadPartners() {
+    async function loadData() {
       try {
         setLoading(true)
+        
+        // Charger les données de la page home
+        const homeData = await getPageHome()
+        if (homeData) {
+          setPageData({
+            partnersSectionBadge: homeData.partnersSectionBadge || pageData.partnersSectionBadge,
+            partnersSectionTitle: homeData.partnersSectionTitle || pageData.partnersSectionTitle,
+            partnersSectionSubtitle: homeData.partnersSectionSubtitle || pageData.partnersSectionSubtitle,
+            partnersStatEntreprises: homeData.partnersStatEntreprises || pageData.partnersStatEntreprises,
+            partnersStatAlternants: homeData.partnersStatAlternants || pageData.partnersStatAlternants,
+            partnersStatAlternantsCount: homeData.partnersStatAlternantsCount || pageData.partnersStatAlternantsCount,
+            partnersStatInsertion: homeData.partnersStatInsertion || pageData.partnersStatInsertion,
+            partnersStatInsertionRate: homeData.partnersStatInsertionRate || pageData.partnersStatInsertionRate,
+            partnersSectionCtaTitle: homeData.partnersSectionCtaTitle || pageData.partnersSectionCtaTitle,
+            partnersSectionCtaSubtitle: homeData.partnersSectionCtaSubtitle || pageData.partnersSectionCtaSubtitle,
+            partnersSectionCtaText: homeData.partnersSectionCtaText || pageData.partnersSectionCtaText,
+            partnersSectionCtaUrl: homeData.partnersSectionCtaUrl || pageData.partnersSectionCtaUrl
+          })
+        }
+        
+        // Charger les partenaires
         const partnersData = await getPartners()
         if (partnersData && Array.isArray(partnersData) && partnersData.length > 0) {
           const formattedPartners = partnersData.map((p: any) => ({
@@ -52,13 +102,13 @@ const FeaturedPartnersSection = () => {
           setPartners(formattedPartners)
         }
       } catch (error) {
-        console.error('Erreur chargement partenaires:', error)
+        console.error('Erreur chargement données:', error)
         // Garder les données statiques en cas d'erreur
       } finally {
         setLoading(false)
       }
     }
-    loadPartners()
+    loadData()
   }, [])
 
   // Sélectionner les 6 premiers partenaires pour l'affichage
@@ -84,18 +134,24 @@ const FeaturedPartnersSection = () => {
             className="inline-flex items-center space-x-2 bg-primary-yellow/10 text-primary-yellow px-4 py-2 rounded-full text-sm font-semibold mb-6"
           >
             <Building2 className="w-4 h-4" />
-            <span>Nos Partenaires de Confiance</span>
+            <span>{pageData.partnersSectionBadge}</span>
           </motion.div>
           
           <h2 className="text-4xl md:text-5xl font-montserrat font-black text-slate-900 mb-6">
-            Ils nous font{' '}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-primary-yellow via-orange-500 to-primary-yellow">
-              confiance
-            </span>
+            {pageData.partnersSectionTitle.split(' ').map((word, index, array) => {
+              if (index === array.length - 1) {
+                return (
+                  <span key={index} className="text-transparent bg-clip-text bg-gradient-to-r from-primary-yellow via-orange-500 to-primary-yellow">
+                    {word}
+                  </span>
+                )
+              }
+              return word + ' '
+            })}
           </h2>
           
           <p className="text-xl text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Des entreprises leaders du BTP qui accueillent nos alternants et participent activement à leur formation professionnelle
+            {pageData.partnersSectionSubtitle}
           </p>
         </motion.div>
 
@@ -111,19 +167,19 @@ const FeaturedPartnersSection = () => {
             <div className="text-3xl md:text-4xl font-black text-primary-yellow mb-2">
               {totalPartners}+
             </div>
-            <div className="text-sm text-gray-600 font-medium">Entreprises partenaires</div>
+            <div className="text-sm text-gray-600 font-medium">{pageData.partnersStatEntreprises}</div>
           </div>
           <div className="text-center">
             <div className="text-3xl md:text-4xl font-black text-slate-900 mb-2">
-              150+
+              {pageData.partnersStatAlternantsCount}
             </div>
-            <div className="text-sm text-gray-600 font-medium">Alternants placés</div>
+            <div className="text-sm text-gray-600 font-medium">{pageData.partnersStatAlternants}</div>
           </div>
           <div className="text-center">
             <div className="text-3xl md:text-4xl font-black text-green-600 mb-2">
-              98%
+              {pageData.partnersStatInsertionRate}
             </div>
-            <div className="text-sm text-gray-600 font-medium">Taux d'insertion</div>
+            <div className="text-sm text-gray-600 font-medium">{pageData.partnersStatInsertion}</div>
           </div>
         </motion.div>
 
@@ -216,16 +272,16 @@ const FeaturedPartnersSection = () => {
         >
           <div className="bg-gradient-to-r from-slate-900 via-slate-800 to-slate-900 rounded-2xl p-8 text-white">
             <h3 className="text-2xl font-montserrat font-bold mb-4">
-              Découvrez tous nos partenaires
+              {pageData.partnersSectionCtaTitle}
             </h3>
             <p className="text-gray-300 mb-6 max-w-2xl mx-auto">
-              Explorez notre réseau complet d'entreprises partenaires et découvrez les opportunités d'alternance et d'emploi qui vous attendent
+              {pageData.partnersSectionCtaSubtitle}
             </p>
             <Link
-              href="/partenaires"
+              href={pageData.partnersSectionCtaUrl}
               className="inline-flex items-center space-x-2 bg-primary-yellow text-slate-900 px-8 py-4 rounded-xl font-bold text-lg hover:bg-yellow-400 transition-all transform hover:scale-105 shadow-lg hover:shadow-xl"
             >
-              <span>Voir tous nos partenaires</span>
+              <span>{pageData.partnersSectionCtaText}</span>
               <ArrowRight className="w-5 h-5" />
             </Link>
           </div>
