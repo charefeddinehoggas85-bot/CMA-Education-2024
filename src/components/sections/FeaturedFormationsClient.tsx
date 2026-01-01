@@ -388,33 +388,6 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
     </motion.div>
   )
 }
-            className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-4 py-2.5 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl`}
-          >
-            <span className="relative z-10">Découvrir</span>
-            <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
-            
-            {/* Effet de brillance au hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-          </Link>
-        </motion.div>
-      </div>
-
-      {/* Effet de bordure animée au hover */}
-      <motion.div
-        className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(category)} opacity-0 group-hover:opacity-20`}
-        style={{ 
-          background: `linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)`,
-          mixBlendMode: 'overlay'
-        }}
-        animate={{ 
-          opacity: isHovered ? 0.1 : 0,
-          scale: isHovered ? 1.02 : 1
-        }}
-        transition={{ duration: 0.3 }}
-      />
-    </motion.div>
-  )
-}
 
 export function FeaturedFormationsClient({ formations }: FeaturedFormationsClientProps) {
   const [formationsAlternance, setFormationsAlternance] = useState<any[]>([])
