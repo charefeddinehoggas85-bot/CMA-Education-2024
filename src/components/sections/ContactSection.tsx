@@ -3,10 +3,9 @@
 import { useState, useRef, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
-import { useRouter } from 'next/navigation'
 import ModernButton from '@/components/ui/ModernButton'
 import AnimatedIcon from '@/components/ui/AnimatedIcon'
-import { getSiteSettings } from '@/lib/strapi'
+import { getSiteSettings, getPageContact, getImageURL } from '@/lib/strapi'
 import emailjs from '@emailjs/browser'
 
 interface SiteSettings {
@@ -31,10 +30,34 @@ interface SiteSettings {
   }
 }
 
+interface PageContactData {
+  sectionBackgroundImage?: any
+  sectionTitle?: string
+  sectionSubtitle?: string
+  addressLabel?: string
+  addressValue?: string
+  phoneLabel?: string
+  phoneValue?: string
+  emailLabel?: string
+  emailValue?: string
+  callButtonText?: string
+  chatButtonText?: string
+  candidateFormTitle?: string
+  candidateFormPrenomPlaceholder?: string
+  candidateFormNomPlaceholder?: string
+  candidateFormEmailPlaceholder?: string
+  candidateFormTelephonePlaceholder?: string
+  candidateFormFormationPlaceholder?: string
+  candidateFormMessagePlaceholder?: string
+  candidateFormSubmitText?: string
+  candidateFormSubmitUrl?: string
+  formationOptions?: Array<{ value: string; label: string }>
+}
+
 const ContactSection = () => {
-  const router = useRouter()
   const form = useRef<HTMLFormElement>(null)
   const [isLoading, setIsLoading] = useState(false)
+  const [pageData, setPageData] = useState<PageContactData | null>(null)
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     id: 1,
     siteName: 'Construction Management Academy',
@@ -53,17 +76,23 @@ const ContactSection = () => {
   })
 
   useEffect(() => {
-    async function loadSiteSettings() {
+    async function loadData() {
       try {
-        const data = await getSiteSettings()
-        if (data) {
-          setSiteSettings(data as SiteSettings)
+        const [settingsData, contactData] = await Promise.all([
+          getSiteSettings(),
+          getPageContact()
+        ])
+        if (settingsData) {
+          setSiteSettings(settingsData as SiteSettings)
+        }
+        if (contactData) {
+          setPageData(contactData as PageContactData)
         }
       } catch (error) {
         console.error('Strapi non disponible, utilisation des données statiques')
       }
     }
-    loadSiteSettings()
+    loadData()
   }, [])
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -102,13 +131,43 @@ const ContactSection = () => {
   }
 
   const handleCall = () => {
-    window.open(`tel:${siteSettings.contactPhone.replace(/\s/g, '')}`, '_self')
+    const phone = pageData?.phoneValue || siteSettings.contactPhone
+    window.open(`tel:${phone.replace(/\s/g, '')}`, '_self')
   }
+
+  // Données avec fallback
+  const backgroundImage = getImageURL(pageData?.sectionBackgroundImage, '/images/formations/conducteur-travaux-reconversion.jpg')
+  const sectionTitle = pageData?.sectionTitle || `Rejoignez ${siteSettings.siteName} !`
+  const sectionSubtitle = pageData?.sectionSubtitle || "Faites le premier pas vers une carrière concrète, utile et pleine d'avenir dans le BTP."
+  const addressLabel = pageData?.addressLabel || "Adresse"
+  const addressValue = pageData?.addressValue || siteSettings.contactAddress
+  const phoneLabel = pageData?.phoneLabel || "Téléphone"
+  const phoneValue = pageData?.phoneValue || siteSettings.contactPhone
+  const emailLabel = pageData?.emailLabel || "Email"
+  const emailValue = pageData?.emailValue || siteSettings.contactEmail
+  const callButtonText = pageData?.callButtonText || "Nous appeler"
+  const chatButtonText = pageData?.chatButtonText || "Chat en direct"
+  const candidateFormTitle = pageData?.candidateFormTitle || "Candidater maintenant"
+  const prenomPlaceholder = pageData?.candidateFormPrenomPlaceholder || "Prénom"
+  const nomPlaceholder = pageData?.candidateFormNomPlaceholder || "Nom"
+  const emailPlaceholder = pageData?.candidateFormEmailPlaceholder || "Email"
+  const telephonePlaceholder = pageData?.candidateFormTelephonePlaceholder || "Téléphone"
+  const formationPlaceholder = pageData?.candidateFormFormationPlaceholder || "Formation"
+  const messagePlaceholder = pageData?.candidateFormMessagePlaceholder || "Votre message"
+  const submitText = pageData?.candidateFormSubmitText || "Accéder à la préinscription"
+  const submitUrl = pageData?.candidateFormSubmitUrl || "https://construction-management-academy.ymag.cloud/index.php/preinscription/"
+  const formationOptions = pageData?.formationOptions || [
+    { value: "charge-affaires-batiment-alternance", label: "Chargé d'Affaires du Bâtiment" },
+    { value: "conducteur-travaux-batiment-alternance", label: "Conducteur de Travaux Bâtiment" },
+    { value: "chef-chantier-vrd-alternance", label: "Chef de Chantier VRD" },
+    { value: "double-parcours-bim-alternance", label: "Double Parcours BIM" },
+    { value: "chef-projets-btp-alternance", label: "Chef de Projets BTP" }
+  ]
 
   return (
     <section className="relative py-20 bg-gradient-to-br from-primary-blue to-blue-800 text-white pt-32 overflow-hidden">
       <img 
-        src="/images/formations/conducteur-travaux-reconversion.jpg" 
+        src={backgroundImage} 
         alt="Contact Construction Management Academy"
         className="absolute inset-0 w-full h-full object-cover opacity-90"
       />
@@ -122,10 +181,10 @@ const ContactSection = () => {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-4xl md:text-5xl font-montserrat font-bold mb-6">
-              Rejoignez {siteSettings.siteName} !
+              {sectionTitle}
             </h2>
             <p className="text-xl opacity-90 mb-8">
-              Faites le premier pas vers une carrière concrète, utile et pleine d'avenir dans le BTP.
+              {sectionSubtitle}
             </p>
 
             {/* Contact Info */}
@@ -141,8 +200,8 @@ const ContactSection = () => {
                   <MapPin className="w-6 h-6 text-primary-blue" />
                 </AnimatedIcon>
                 <div>
-                  <p className="font-semibold">Adresse</p>
-                  <p className="opacity-90">{siteSettings.contactAddress}</p>
+                  <p className="font-semibold">{addressLabel}</p>
+                  <p className="opacity-90">{addressValue}</p>
                 </div>
               </div>
 
@@ -157,8 +216,8 @@ const ContactSection = () => {
                   <Phone className="w-6 h-6 text-primary-blue" />
                 </AnimatedIcon>
                 <div>
-                  <p className="font-semibold">Téléphone</p>
-                  <p className="opacity-90">{siteSettings.contactPhone}</p>
+                  <p className="font-semibold">{phoneLabel}</p>
+                  <p className="opacity-90">{phoneValue}</p>
                 </div>
               </div>
 
@@ -173,8 +232,8 @@ const ContactSection = () => {
                   <Mail className="w-6 h-6 text-primary-blue" />
                 </AnimatedIcon>
                 <div>
-                  <p className="font-semibold">Email</p>
-                  <p className="opacity-90">{siteSettings.contactEmail}</p>
+                  <p className="font-semibold">{emailLabel}</p>
+                  <p className="opacity-90">{emailValue}</p>
                 </div>
               </div>
             </div>
@@ -187,7 +246,7 @@ const ContactSection = () => {
                 iconPosition="left"
                 onClick={handleCall}
               >
-                Nous appeler
+                {callButtonText}
               </ModernButton>
               
               <ModernButton
@@ -197,7 +256,7 @@ const ContactSection = () => {
                 iconPosition="left"
                 className="border-2 border-white text-white hover:bg-white hover:text-primary-blue"
               >
-                Chat en direct
+                {chatButtonText}
               </ModernButton>
             </div>
           </motion.div>
@@ -211,7 +270,7 @@ const ContactSection = () => {
             className="bg-white/10 backdrop-blur-sm rounded-2xl p-8"
           >
             <h3 className="text-2xl font-montserrat font-bold mb-6">
-              Candidater maintenant
+              {candidateFormTitle}
             </h3>
             
             <form ref={form} onSubmit={handleSubmit} className="space-y-6">
@@ -224,14 +283,14 @@ const ContactSection = () => {
                 <input
                   type="text"
                   name="prenom"
-                  placeholder="Prénom"
+                  placeholder={prenomPlaceholder}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-primary-yellow"
                 />
                 <input
                   type="text"
                   name="nom"
-                  placeholder="Nom"
+                  placeholder={nomPlaceholder}
                   required
                   className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-primary-yellow"
                 />
@@ -240,7 +299,7 @@ const ContactSection = () => {
               <input
                 type="email"
                 name="email"
-                placeholder="Email"
+                placeholder={emailPlaceholder}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-primary-yellow"
               />
@@ -248,35 +307,33 @@ const ContactSection = () => {
               <input
                 type="tel"
                 name="telephone"
-                placeholder="Téléphone"
+                placeholder={telephonePlaceholder}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-primary-yellow"
               />
               
               <select name="formation" required className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white focus:outline-none focus:border-primary-yellow">
-                <option value="">Formation</option>
-                <option value="charge-affaires-batiment-alternance">Chargé d'Affaires du Bâtiment</option>
-                <option value="conducteur-travaux-batiment-alternance">Conducteur de Travaux Bâtiment</option>
-                <option value="chef-chantier-vrd-alternance">Chef de Chantier VRD</option>
-                <option value="double-parcours-bim-alternance">Double Parcours BIM</option>
-                <option value="chef-projets-btp-alternance">Chef de Projets BTP</option>
+                <option value="">{formationPlaceholder}</option>
+                {formationOptions.map((option) => (
+                  <option key={option.value} value={option.value}>{option.label}</option>
+                ))}
               </select>
               
               <textarea
                 name="message"
-                placeholder="Votre message"
+                placeholder={messagePlaceholder}
                 rows={4}
                 required
                 className="w-full px-4 py-3 rounded-lg bg-white/20 border border-white/30 text-white placeholder-white/70 focus:outline-none focus:border-primary-yellow resize-none"
               ></textarea>
               
               <a
-                href="https://construction-management-academy.ymag.cloud/index.php/preinscription/"
+                href={submitUrl}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block w-full bg-gradient-to-r from-primary-yellow to-yellow-500 text-primary-blue py-3 rounded-lg font-semibold hover:shadow-xl transition-all text-center"
               >
-                Accéder à la préinscription
+                {submitText}
               </a>
             </form>
           </motion.div>

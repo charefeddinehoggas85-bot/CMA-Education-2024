@@ -814,7 +814,7 @@ export async function getPageFormations() {
   }
 }
 
-// Page Contact (singleton) - Page contact/inscription
+// Page Contact (singleton) - Page contact/inscription et ContactSection
 export async function getPageContact() {
   try {
     const data = await fetchAPI('/api/page-contact?populate=*')
@@ -862,6 +862,28 @@ export async function getPageContact() {
       formConsentText: attrs.formConsentText || "J'accepte être recontacté et que mes données soient collectées par Construction Management Academy",
       formSubmitButtonText: attrs.formSubmitButtonText || "Accéder à la préinscription",
       formSubmitButtonUrl: attrs.formSubmitButtonUrl || "https://cma-education.ymag.cloud/index.php/preinscription/",
+      // Champs ContactSection
+      sectionBackgroundImage: attrs.sectionBackgroundImage,
+      sectionTitle: attrs.sectionTitle || "Rejoignez Construction Management Academy !",
+      sectionSubtitle: attrs.sectionSubtitle || "Faites le premier pas vers une carrière concrète, utile et pleine d'avenir dans le BTP.",
+      callButtonText: attrs.callButtonText || "Nous appeler",
+      chatButtonText: attrs.chatButtonText || "Chat en direct",
+      candidateFormTitle: attrs.candidateFormTitle || "Candidater maintenant",
+      candidateFormPrenomPlaceholder: attrs.candidateFormPrenomPlaceholder || "Prénom",
+      candidateFormNomPlaceholder: attrs.candidateFormNomPlaceholder || "Nom",
+      candidateFormEmailPlaceholder: attrs.candidateFormEmailPlaceholder || "Email",
+      candidateFormTelephonePlaceholder: attrs.candidateFormTelephonePlaceholder || "Téléphone",
+      candidateFormFormationPlaceholder: attrs.candidateFormFormationPlaceholder || "Formation",
+      candidateFormMessagePlaceholder: attrs.candidateFormMessagePlaceholder || "Votre message",
+      candidateFormSubmitText: attrs.candidateFormSubmitText || "Accéder à la préinscription",
+      candidateFormSubmitUrl: attrs.candidateFormSubmitUrl || "https://construction-management-academy.ymag.cloud/index.php/preinscription/",
+      formationOptions: attrs.formationOptions || [
+        { value: "charge-affaires-batiment-alternance", label: "Chargé d'Affaires du Bâtiment" },
+        { value: "conducteur-travaux-batiment-alternance", label: "Conducteur de Travaux Bâtiment" },
+        { value: "chef-chantier-vrd-alternance", label: "Chef de Chantier VRD" },
+        { value: "double-parcours-bim-alternance", label: "Double Parcours BIM" },
+        { value: "chef-projets-btp-alternance", label: "Chef de Projets BTP" }
+      ],
       metaTitle: attrs.metaTitle || "Contact & Inscription - Construction Management Academy",
       metaDescription: attrs.metaDescription || "Contactez Construction Management Academy pour votre inscription. Processus d'admission simplifié, sans concours d'entrée. Réponse sous 24h."
     }
