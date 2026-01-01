@@ -359,6 +359,8 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
           whileTap={{ scale: 0.98 }}
           className="mt-auto"
         >
+          console.log('Formation slug:', formation.slug, 'Formation:', formation.title || formation.titre)
+
           <Link
             href={`/formations/${formation.slug}`}
             className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl w-full`}
