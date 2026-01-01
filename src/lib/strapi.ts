@@ -812,6 +812,59 @@ export async function getPageBrochure() {
   }
 }
 
+// Floating Actions (singleton) - Configuration des boutons d'actions flottants
+export async function getFloatingActions() {
+  try {
+    const data = await fetchAPI('/api/floating-actions?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Floating Actions non trouvées dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      // Contact Information
+      phoneNumber: attrs.phoneNumber || "0189706052",
+      phoneLabel: attrs.phoneLabel || "Appeler",
+      phoneFullLabel: attrs.phoneFullLabel || "Nous appeler",
+      email: attrs.email || "contact.academy@cma-education.com",
+      emailLabel: attrs.emailLabel || "Email",
+      emailFullLabel: attrs.emailFullLabel || "Nous écrire",
+      contactLabel: attrs.contactLabel || "RDV",
+      contactFullLabel: attrs.contactFullLabel || "Prendre RDV",
+      contactUrl: attrs.contactUrl || "/contact",
+      brochureLabel: attrs.brochureLabel || "Brochure",
+      brochureFullLabel: attrs.brochureFullLabel || "Télécharger brochure",
+      chatLabel: attrs.chatLabel || "Chat en direct",
+      // WhatsApp Configuration
+      whatsappNumber: attrs.whatsappNumber || "+33185097106",
+      whatsappTitle: attrs.whatsappTitle || "Support Construction Management Academy",
+      whatsappStatus: attrs.whatsappStatus || "En ligne",
+      whatsappMessage: attrs.whatsappMessage || "Besoin d'aide ? Contactez-nous sur WhatsApp pour toutes vos questions sur nos formations BTP !",
+      whatsappButtonText: attrs.whatsappButtonText || "Démarrer la conversation",
+      whatsappDefaultMessage: attrs.whatsappDefaultMessage || "Bonjour, je souhaite obtenir des informations sur les formations Construction Management Academy BTP.",
+      // Enable/Disable Buttons
+      isPhoneEnabled: attrs.isPhoneEnabled !== undefined ? attrs.isPhoneEnabled : true,
+      isEmailEnabled: attrs.isEmailEnabled !== undefined ? attrs.isEmailEnabled : true,
+      isContactEnabled: attrs.isContactEnabled !== undefined ? attrs.isContactEnabled : true,
+      isBrochureEnabled: attrs.isBrochureEnabled !== undefined ? attrs.isBrochureEnabled : true,
+      isWhatsappEnabled: attrs.isWhatsappEnabled !== undefined ? attrs.isWhatsappEnabled : true,
+      // Button Colors
+      mainButtonColor: attrs.mainButtonColor || "bg-gradient-to-r from-primary-blue to-purple-600",
+      phoneButtonColor: attrs.phoneButtonColor || "bg-green-500 hover:bg-green-600",
+      emailButtonColor: attrs.emailButtonColor || "bg-blue-500 hover:bg-blue-600",
+      contactButtonColor: attrs.contactButtonColor || "bg-purple-500 hover:bg-purple-600",
+      brochureButtonColor: attrs.brochureButtonColor || "bg-orange-500 hover:bg-orange-600",
+      whatsappButtonColor: attrs.whatsappButtonColor || "bg-green-500 hover:bg-green-600"
+    }
+  } catch (error) {
+    console.error('❌ Erreur getFloatingActions:', error)
+    return null
+  }
+}
+
 // Page Formations (singleton) - Page liste des formations
 export async function getPageFormations() {
   try {
