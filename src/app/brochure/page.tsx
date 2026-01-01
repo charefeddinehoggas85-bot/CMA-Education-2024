@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import PageLayout from '@/components/layout/PageLayout'
 import { Download, FileText, User, Building, Mail, Phone, CheckCircle, Leaf } from 'lucide-react'
-import { getFormations } from '@/lib/strapi'
+import { getFormations, getPageBrochure } from '@/lib/strapi'
 import emailjs from '@emailjs/browser'
 
 interface Formation {
@@ -15,9 +15,63 @@ interface Formation {
   brochureData?: any
 }
 
+interface PageBrochureData {
+  heroTitle: string
+  heroSubtitle: string
+  heroBadgeText: string
+  formationSectionTitle: string
+  formationAvailableText: string
+  formationLoadingText: string
+  formSectionTitle: string
+  formSelectedText: string
+  formSelectFormationText: string
+  formPrenomLabel: string
+  formNomLabel: string
+  formProfilLabel: string
+  formProfilPlaceholder: string
+  formProfilOptions: Array<{value: string, label: string}>
+  formEmailLabel: string
+  formTelephoneLabel: string
+  environmentTitle: string
+  environmentMessage: string
+  environmentFooterText: string
+  downloadButtonText: string
+  successTitle: string
+  successMessage: string
+}
+
 export default function BrochurePage() {
   const [formations, setFormations] = useState<Formation[]>([])
   const [selectedFormation, setSelectedFormation] = useState<Formation | null>(null)
+  const [pageData, setPageData] = useState<PageBrochureData>({
+    heroTitle: "Télécharger nos brochures",
+    heroSubtitle: "Découvrez en détail nos formations BTP certifiantes. Téléchargez gratuitement les brochures de nos programmes.",
+    heroBadgeText: "Brochures Formations",
+    formationSectionTitle: "Choisir une formation",
+    formationAvailableText: "Brochure PDF disponible",
+    formationLoadingText: "Chargement des formations...",
+    formSectionTitle: "Vos informations",
+    formSelectedText: "Formation sélectionnée :",
+    formSelectFormationText: "Sélectionnez d'abord une formation",
+    formPrenomLabel: "Prénom *",
+    formNomLabel: "Nom *",
+    formProfilLabel: "Profil *",
+    formProfilPlaceholder: "Sélectionnez votre profil",
+    formProfilOptions: [
+      {"value": "etudiant", "label": "Étudiant"},
+      {"value": "entreprise", "label": "Entreprise"},
+      {"value": "particulier", "label": "Particulier"},
+      {"value": "demandeur-emploi", "label": "Demandeur d'emploi"}
+    ],
+    formEmailLabel: "Email *",
+    formTelephoneLabel: "Téléphone *",
+    environmentTitle: "Engagement environnemental",
+    environmentMessage: "Cette brochure est un document numérique. Nous vous encourageons à la consulter en ligne.",
+    environmentFooterText: "Merci de préserver l'environnement en évitant l'impression",
+    downloadButtonText: "Télécharger la brochure",
+    successTitle: "Brochure téléchargée !",
+    successMessage: "Votre brochure a été téléchargée avec succès. Vous devriez également recevoir un email de confirmation."
+  })
   const [formData, setFormData] = useState({
     nom: '',
     prenom: '',
@@ -29,19 +83,26 @@ export default function BrochurePage() {
   const [isSuccess, setIsSuccess] = useState(false)
 
   useEffect(() => {
-    async function loadFormations() {
+    async function loadData() {
       try {
-        const data = await getFormations()
+        // Charger les données de la page depuis Strapi
+        const brochureData = await getPageBrochure()
+        if (brochureData) {
+          setPageData(brochureData)
+        }
+
+        // Charger les formations
+        const formationsData = await getFormations()
         // Filtrer seulement les formations avec brochures
-        const formationsWithBrochures = (data as Formation[]).filter(f => 
+        const formationsWithBrochures = (formationsData as Formation[]).filter(f => 
           (f as any).brochure?.data?.attributes?.url
         )
         setFormations(formationsWithBrochures)
       } catch (error) {
-        console.error('Erreur chargement formations:', error)
+        console.error('Erreur chargement données:', error)
       }
     }
-    loadFormations()
+    loadData()
   }, [])
 
   const handleDownload = async (e: React.FormEvent) => {
@@ -157,13 +218,13 @@ export default function BrochurePage() {
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }}>
             <div className="inline-flex items-center space-x-2 bg-white/10 backdrop-blur-sm px-4 py-2 rounded-full mb-6">
               <Download className="w-5 h-5" />
-              <span className="text-sm font-medium">Brochures Formations</span>
+              <span className="text-sm font-medium">{pageData.heroBadgeText}</span>
             </div>
             <h1 className="text-4xl md:text-5xl font-montserrat font-bold mb-6">
-              Télécharger nos brochures
+              {pageData.heroTitle}
             </h1>
             <p className="text-lg md:text-xl opacity-90 max-w-3xl mx-auto">
-              Découvrez en détail nos formations BTP certifiantes. Téléchargez gratuitement les brochures de nos programmes.
+              {pageData.heroSubtitle}
             </p>
           </motion.div>
         </div>
@@ -181,13 +242,13 @@ export default function BrochurePage() {
               <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
                 <CheckCircle className="w-8 h-8 text-green-600" />
               </div>
-              <h2 className="text-2xl font-bold text-gray-800 mb-4">Brochure téléchargée !</h2>
+              <h2 className="text-2xl font-bold text-gray-800 mb-4">{pageData.successTitle}</h2>
               <p className="text-gray-600 mb-6">
-                Votre brochure a été téléchargée avec succès. Vous devriez également recevoir un email de confirmation.
+                {pageData.successMessage}
               </p>
               <div className="flex items-center justify-center space-x-2 text-green-600">
                 <Leaf className="w-4 h-4" />
-                <span className="text-sm">Merci de préserver l'environnement en évitant l'impression</span>
+                <span className="text-sm">{pageData.environmentFooterText}</span>
               </div>
             </motion.div>
           ) : (
@@ -200,7 +261,7 @@ export default function BrochurePage() {
               >
                 <h2 className="text-xl font-bold text-primary-blue mb-4 flex items-center">
                   <FileText className="w-5 h-5 mr-2" />
-                  Choisir une formation
+                  {pageData.formationSectionTitle}
                 </h2>
                 
                 <div className="space-y-3">
@@ -216,7 +277,7 @@ export default function BrochurePage() {
                     >
                       <div className="font-medium text-gray-800">{formation.title}</div>
                       <div className="text-sm text-gray-500 mt-1">
-                        Brochure PDF disponible
+                        {pageData.formationAvailableText}
                       </div>
                     </button>
                   ))}
@@ -225,7 +286,7 @@ export default function BrochurePage() {
                 {formations.length === 0 && (
                   <div className="text-center py-8 text-gray-500">
                     <FileText className="w-12 h-12 mx-auto mb-4 opacity-50" />
-                    <p>Chargement des formations...</p>
+                    <p>{pageData.formationLoadingText}</p>
                   </div>
                 )}
               </motion.div>
@@ -238,14 +299,14 @@ export default function BrochurePage() {
               >
                 <h2 className="text-xl font-bold text-primary-blue mb-4 flex items-center">
                   <User className="w-5 h-5 mr-2" />
-                  Vos informations
+                  {pageData.formSectionTitle}
                 </h2>
 
                 {selectedFormation ? (
                   <form onSubmit={handleDownload} className="space-y-4">
                     <div className="bg-blue-50 rounded-lg p-4 mb-4">
                       <p className="text-sm text-blue-700">
-                        <strong>Formation sélectionnée :</strong><br />
+                        <strong>{pageData.formSelectedText}</strong><br />
                         {selectedFormation.title}
                       </p>
                     </div>
@@ -253,7 +314,7 @@ export default function BrochurePage() {
                     <div className="grid grid-cols-2 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Prénom *
+                          {pageData.formPrenomLabel}
                         </label>
                         <input
                           type="text"
@@ -265,7 +326,7 @@ export default function BrochurePage() {
                       </div>
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Nom *
+                          {pageData.formNomLabel}
                         </label>
                         <input
                           type="text"
@@ -280,7 +341,7 @@ export default function BrochurePage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         <Building className="w-4 h-4 inline mr-1" />
-                        Profil *
+                        {pageData.formProfilLabel}
                       </label>
                       <select
                         required
@@ -288,18 +349,17 @@ export default function BrochurePage() {
                         onChange={(e) => setFormData({...formData, type: e.target.value})}
                         className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-blue focus:border-transparent"
                       >
-                        <option value="">Sélectionnez votre profil</option>
-                        <option value="etudiant">Étudiant</option>
-                        <option value="entreprise">Entreprise</option>
-                        <option value="particulier">Particulier</option>
-                        <option value="demandeur-emploi">Demandeur d'emploi</option>
+                        <option value="">{pageData.formProfilPlaceholder}</option>
+                        {pageData.formProfilOptions.map((option) => (
+                          <option key={option.value} value={option.value}>{option.label}</option>
+                        ))}
                       </select>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         <Mail className="w-4 h-4 inline mr-1" />
-                        Email *
+                        {pageData.formEmailLabel}
                       </label>
                       <input
                         type="email"
@@ -313,7 +373,7 @@ export default function BrochurePage() {
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
                         <Phone className="w-4 h-4 inline mr-1" />
-                        Téléphone *
+                        {pageData.formTelephoneLabel}
                       </label>
                       <input
                         type="tel"
@@ -327,8 +387,8 @@ export default function BrochurePage() {
                     <div className="bg-green-50 rounded-lg p-4 flex items-start space-x-3">
                       <Leaf className="w-5 h-5 text-green-600 mt-0.5 flex-shrink-0" />
                       <div className="text-sm text-green-700">
-                        <p className="font-medium mb-1">Engagement environnemental</p>
-                        <p>Cette brochure est un document numérique. Nous vous encourageons à la consulter en ligne.</p>
+                        <p className="font-medium mb-1">{pageData.environmentTitle}</p>
+                        <p>{pageData.environmentMessage}</p>
                       </div>
                     </div>
 
@@ -342,7 +402,7 @@ export default function BrochurePage() {
                       ) : (
                         <>
                           <Download className="w-5 h-5" />
-                          <span>Télécharger la brochure</span>
+                          <span>{pageData.downloadButtonText}</span>
                         </>
                       )}
                     </button>
@@ -350,7 +410,7 @@ export default function BrochurePage() {
                 ) : (
                   <div className="text-center py-12 text-gray-500">
                     <FileText className="w-16 h-16 mx-auto mb-4 opacity-50" />
-                    <p>Sélectionnez d'abord une formation</p>
+                    <p>{pageData.formSelectFormationText}</p>
                   </div>
                 )}
               </motion.div>

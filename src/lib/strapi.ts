@@ -763,6 +763,55 @@ export async function getPageFormationDetail() {
   }
 }
 
+// Page Brochure (singleton) - Page de téléchargement des brochures
+export async function getPageBrochure() {
+  try {
+    const data = await fetchAPI('/api/page-brochure?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Brochure non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      heroTitle: attrs.heroTitle || "Télécharger nos brochures",
+      heroSubtitle: attrs.heroSubtitle || "Découvrez en détail nos formations BTP certifiantes. Téléchargez gratuitement les brochures de nos programmes.",
+      heroBadgeText: attrs.heroBadgeText || "Brochures Formations",
+      formationSectionTitle: attrs.formationSectionTitle || "Choisir une formation",
+      formationAvailableText: attrs.formationAvailableText || "Brochure PDF disponible",
+      formationLoadingText: attrs.formationLoadingText || "Chargement des formations...",
+      formSectionTitle: attrs.formSectionTitle || "Vos informations",
+      formSelectedText: attrs.formSelectedText || "Formation sélectionnée :",
+      formSelectFormationText: attrs.formSelectFormationText || "Sélectionnez d'abord une formation",
+      formPrenomLabel: attrs.formPrenomLabel || "Prénom *",
+      formNomLabel: attrs.formNomLabel || "Nom *",
+      formProfilLabel: attrs.formProfilLabel || "Profil *",
+      formProfilPlaceholder: attrs.formProfilPlaceholder || "Sélectionnez votre profil",
+      formProfilOptions: attrs.formProfilOptions || [
+        {"value": "etudiant", "label": "Étudiant"},
+        {"value": "entreprise", "label": "Entreprise"},
+        {"value": "particulier", "label": "Particulier"},
+        {"value": "demandeur-emploi", "label": "Demandeur d'emploi"}
+      ],
+      formEmailLabel: attrs.formEmailLabel || "Email *",
+      formTelephoneLabel: attrs.formTelephoneLabel || "Téléphone *",
+      environmentTitle: attrs.environmentTitle || "Engagement environnemental",
+      environmentMessage: attrs.environmentMessage || "Cette brochure est un document numérique. Nous vous encourageons à la consulter en ligne.",
+      environmentFooterText: attrs.environmentFooterText || "Merci de préserver l'environnement en évitant l'impression",
+      downloadButtonText: attrs.downloadButtonText || "Télécharger la brochure",
+      successTitle: attrs.successTitle || "Brochure téléchargée !",
+      successMessage: attrs.successMessage || "Votre brochure a été téléchargée avec succès. Vous devriez également recevoir un email de confirmation.",
+      metaTitle: attrs.metaTitle || "Télécharger nos brochures - Construction Management Academy",
+      metaDescription: attrs.metaDescription || "Téléchargez gratuitement les brochures de nos formations BTP certifiantes. Découvrez en détail nos programmes en alternance, reconversion et VAE."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageBrochure:', error)
+    return null
+  }
+}
+
 // Page Formations (singleton) - Page liste des formations
 export async function getPageFormations() {
   try {
