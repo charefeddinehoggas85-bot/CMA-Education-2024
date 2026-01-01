@@ -94,11 +94,11 @@ const Navigation = () => {
           <div className="hidden lg:flex items-center space-x-3 xl:space-x-4 flex-shrink-0">
             {/* Téléphone */}
             <a 
-              href="tel:0189706052" 
+              href="tel:01 85 09 71 06" 
               className="flex items-center space-x-2 px-3 py-2 text-ui-sm font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-all duration-200"
             >
               <Phone className="w-4 h-4" />
-              <span className="hidden xl:inline">01 89 70 60 52</span>
+              <span className="hidden xl:inline">01 85 09 71 06</span>
             </a>
             
             {/* Bouton JPO */}
@@ -182,11 +182,11 @@ const Navigation = () => {
             <div className="mt-6 pt-6 border-t border-gray-200 space-y-4">
               {/* Téléphone */}
               <a 
-                href="tel:0189706052" 
+                href="tel:0185097106" 
                 className="flex items-center space-x-3 px-4 py-3 text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-colors"
               >
                 <Phone className="w-5 h-5" />
-                <span className="text-base font-medium">01 89 70 60 52</span>
+                <span className="text-base font-medium">0185097106</span>
               </a>
               
               {/* Bouton JPO mobile */}
