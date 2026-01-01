@@ -994,7 +994,24 @@ export async function getPageHome() {
       accessibilityImage: attrs.accessibilityImage,
       // SEO
       metaTitle: attrs.metaTitle || "Construction Management Academy - Formations BTP en Alternance",
-      metaDescription: attrs.metaDescription || "Centre de formation BTP spécialisé dans la conduite et le management de travaux. Formations en alternance, reconversion et VAE. Niveaux Bac+2 à Bac+5."
+      metaDescription: attrs.metaDescription || "Centre de formation BTP spécialisé dans la conduite et le management de travaux. Formations en alternance, reconversion et VAE. Niveaux Bac+2 à Bac+5.",
+      // Testimonials Section
+      testimonialsTitle: attrs.testimonialsTitle || "Ils Témoignent",
+      testimonialsSubtitle: attrs.testimonialsSubtitle || "Découvrez les parcours inspirants de nos anciens étudiants qui excellent aujourd'hui dans leurs carrières BTP.",
+      testimonialsCtaTitle: attrs.testimonialsCtaTitle || "Rejoignez-les !",
+      testimonialsCtaSubtitle: attrs.testimonialsCtaSubtitle || "Commencez votre parcours vers une carrière réussie dans le BTP",
+      testimonialsCtaButtonText: attrs.testimonialsCtaButtonText || "Candidater maintenant",
+      // Stats Section
+      statsTitle: attrs.statsTitle || "Nos chiffres",
+      statsSubtitle: attrs.statsSubtitle || "d'Excellence",
+      statsDescription: attrs.statsDescription || "Des résultats qui témoignent de notre excellence et de notre engagement envers la réussite de nos étudiants",
+      // Values Section
+      valuesTitle: attrs.valuesTitle || "Nos valeurs chez Construction Management Academy",
+      valuesSubtitle: attrs.valuesSubtitle || "Chez Construction Management Academy, nous croyons que la réussite passe par plus que des compétences techniques. C'est pourquoi nous plaçons l'humain, l'engagement et l'excellence au cœur de notre pédagogie.",
+      valuesCtaText: attrs.valuesCtaText || "Commencer votre nouvelle carrière",
+      valuesCtaDescription: attrs.valuesCtaDescription || "Nous formons des professionnels responsables, passionnés et prêts à relever les défis du secteur du BTP avec rigueur et ambition.",
+      // Social Proof Section
+      socialProofPartnersText: attrs.socialProofPartnersText || "Nos diplômés travaillent dans les plus grandes entreprises du BTP"
     }
   } catch (error) {
     console.error('❌ Erreur getPageHome:', error)
