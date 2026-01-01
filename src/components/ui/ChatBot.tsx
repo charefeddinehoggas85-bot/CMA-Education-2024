@@ -40,7 +40,7 @@ const ChatBot = () => {
     }
     
     if (message.includes('prix') || message.includes('coût') || message.includes('tarif')) {
-      return 'Nos formations sont éligibles au CPF et peuvent être financées par Pôle Emploi. Contactez-nous au 01 23 45 67 89 pour un devis personnalisé.'
+      return 'Nos formations sont éligibles au CPF et peuvent être financées par Pôle Emploi. Contactez-nous au 01 85 09 71 06 pour un devis personnalisé.'
     }
     
     if (message.includes('durée') || message.includes('temps')) {
@@ -52,7 +52,7 @@ const ChatBot = () => {
     }
     
     if (message.includes('contact') || message.includes('téléphone') || message.includes('adresse')) {
-      return 'Vous pouvez nous contacter au 01 89 70 60 52 ou par email à contact.academy@cma-education.com. Notre centre est ouvert du lundi au vendredi de 8h à 18h.'
+      return 'Vous pouvez nous contacter au 01 85 09 71 06 ou par email à contact.academy@cma-education.com. Notre centre est ouvert du lundi au vendredi de 8h à 18h.'
     }
     
     if (message.includes('débouché') || message.includes('emploi') || message.includes('métier')) {

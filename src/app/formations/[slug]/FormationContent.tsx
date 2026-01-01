@@ -56,7 +56,7 @@ const defaultLabels: PageLabels = {
   entreprisesPartenairesTitle: "Entreprises partenaires",
   candidaterButtonText: "Candidater",
   brochureButtonText: "Brochure",
-  candidaterUrl: "https://cma-education.ymag.cloud/index.php/preinscription/",
+  candidaterUrl: "https://cma-education.ymag.cloud/index.php/preinscription",
   ctaTitle: "Prêt à démarrer votre formation ?",
   ctaSubtitle: "Rejoignez nos diplômés en emploi",
   ctaPrimaryButtonText: "Candidater maintenant",

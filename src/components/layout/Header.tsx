@@ -351,7 +351,7 @@ const Header = () => {
 
             {/* Bouton Candidater - Bleu */}
             <a 
-              href="https://construction-management-academy.ymag.cloud/index.php/preinscription/" 
+              href="https://cma-education.ymag.cloud/index.php/preinscription/" 
               target="_blank" 
               rel="noopener noreferrer"
               className="hidden md:inline-block"
@@ -479,7 +479,7 @@ const Header = () => {
               </a>
               
               <a 
-                href="https://construction-management-academy.ymag.cloud/index.php/preinscription/" 
+                href="https://cma-education.ymag.cloud/index.php/preinscription" 
                 target="_blank" 
                 rel="noopener noreferrer"
                 onClick={() => setIsMenuOpen(false)}
