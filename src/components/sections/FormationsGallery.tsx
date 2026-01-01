@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import FormationsCarousel from '@/components/ui/FormationsCarousel'
-import { formationsAlternance, formationsReconversion, vaeFormules } from '@/data/formations-static'
+import { getFormations, getFormationCategories, getVAEFormules } from '@/lib/strapi'
 
 interface Formation {
   id: number
@@ -99,63 +99,103 @@ const FormationsGallery = () => {
           console.log('⚠️ FormationsGallery: Strapi indisponible, fallback statique')
         }
         
-        // Fallback avec données statiques
-        const staticCategories: FormationCategory[] = [
-          {
-            id: 1,
-            nom: 'Formations en Alternance',
-            slug: 'alternance',
-            couleur: 'blue',
-            formations: formationsAlternance.slice(0, 4).map(formation => ({
-              id: formation.id,
-              title: formation.title,
-              slug: formation.slug,
-              level: formation.level,
-              rncp: formation.rncp || '',
-              shortDescription: formation.shortDescription,
-              image: formation.image,
-              isAlternance: true,
-              isReconversion: false
-            }))
-          },
-          {
-            id: 2,
-            nom: 'Formations Reconversion',
-            slug: 'reconversion',
-            couleur: 'green',
-            formations: formationsReconversion.slice(0, 3).map(formation => ({
-              id: formation.id,
-              title: formation.title,
-              slug: formation.slug,
-              level: formation.level,
-              rncp: formation.rncp || '',
-              shortDescription: formation.shortDescription,
-              image: formation.image,
-              isAlternance: false,
-              isReconversion: true
-            }))
-          },
-          {
-            id: 3,
-            nom: 'VAE - Validation des Acquis',
-            slug: 'vae',
-            couleur: 'purple',
-            formations: vaeFormules.slice(0, 2).map((formule, index) => ({
-              id: 200 + index,
-              title: formule.titre,
-              slug: `vae-${formule.titre.toLowerCase().replace(/\s+/g, '-')}`,
-              level: 'Tous niveaux',
-              rncp: 'Multiples certifications',
-              shortDescription: formule.description,
-              image: '/images/formations/vae-default.jpg',
-              isAlternance: false,
-              isReconversion: false
-            }))
+        // Fallback avec données Strapi ou données par défaut
+        try {
+          const [formationsData, vaeData] = await Promise.all([
+            getFormations(),
+            getVAEFormules()
+          ])
+
+          const staticCategories: FormationCategory[] = []
+
+          // Formations en alternance
+          if (formationsData && Array.isArray(formationsData)) {
+            const alternanceFormations = formationsData.filter((f: any) => 
+              f.category?.slug === 'alternance' || f.category?.slug === 'alternance-btp'
+            )
+            
+            if (alternanceFormations.length > 0) {
+              staticCategories.push({
+                id: 1,
+                nom: 'Formations en Alternance',
+                slug: 'alternance',
+                couleur: 'blue',
+                formations: alternanceFormations.slice(0, 4).map((formation: any) => ({
+                  id: formation.id,
+                  title: formation.title,
+                  slug: formation.slug,
+                  level: formation.level,
+                  rncp: formation.rncp || '',
+                  shortDescription: formation.shortDesc || formation.shortDescription || 'Formation professionnelle',
+                  image: '/images/formations/default.jpg',
+                  isAlternance: true,
+                  isReconversion: false
+                }))
+              })
+            }
+
+            // Formations reconversion
+            const reconversionFormations = formationsData.filter((f: any) => 
+              f.category?.slug === 'reconversion' || f.category?.slug === 'reconversion-btp'
+            )
+            
+            if (reconversionFormations.length > 0) {
+              staticCategories.push({
+                id: 2,
+                nom: 'Formations Reconversion',
+                slug: 'reconversion',
+                couleur: 'green',
+                formations: reconversionFormations.slice(0, 3).map((formation: any) => ({
+                  id: formation.id,
+                  title: formation.title,
+                  slug: formation.slug,
+                  level: formation.level,
+                  rncp: formation.rncp || '',
+                  shortDescription: formation.shortDesc || formation.shortDescription || 'Formation professionnelle',
+                  image: '/images/formations/default.jpg',
+                  isAlternance: false,
+                  isReconversion: true
+                }))
+              })
+            }
           }
-        ]
-        
-        console.log('✅ FormationsGallery: Données statiques chargées avec RNCP')
-        setCategories(staticCategories)
+
+          // VAE
+          if (vaeData && Array.isArray(vaeData) && vaeData.length > 0) {
+            staticCategories.push({
+              id: 3,
+              nom: 'VAE - Validation des Acquis',
+              slug: 'vae',
+              couleur: 'purple',
+              formations: vaeData.slice(0, 2).map((formule: any, index: number) => ({
+                id: 200 + index,
+                title: formule.titre,
+                slug: `vae-${formule.titre.toLowerCase().replace(/\s+/g, '-')}`,
+                level: 'Tous niveaux',
+                rncp: 'Multiples certifications',
+                shortDescription: formule.description || 'Validation des acquis de l\'expérience',
+                image: '/images/formations/vae-default.jpg',
+                isAlternance: false,
+                isReconversion: false
+              }))
+            })
+          }
+
+          console.log('✅ FormationsGallery: Données Strapi chargées')
+          setCategories(staticCategories)
+        } catch (error) {
+          console.error('❌ FormationsGallery: Erreur Strapi, données par défaut')
+          // Données par défaut minimales si tout échoue
+          setCategories([
+            {
+              id: 1,
+              nom: 'Formations BTP',
+              slug: 'formations',
+              couleur: 'blue',
+              formations: []
+            }
+          ])
+        }
         
       } catch (error) {
         console.error('❌ FormationsGallery: Erreur de chargement:', error)

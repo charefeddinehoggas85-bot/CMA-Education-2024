@@ -3,8 +3,7 @@
 import { motion, AnimatePresence } from 'framer-motion'
 import { ArrowRight, GraduationCap, Users, Award, Building2, Clock, MapPin, Star, ExternalLink, ChevronLeft, ChevronRight, CheckCircle, BookOpen, Euro } from 'lucide-react'
 import Link from 'next/link'
-import { getStrapiMediaURL } from '@/lib/strapi'
-import { formationsAlternance, formationsReconversion, vaeCertifications, entrepriseThematiques } from '@/data/formations-static'
+import { getStrapiMediaURL, getFormations, getVAECertifications } from '@/lib/strapi'
 import { useState, useRef, useEffect } from 'react'
 
 interface Formation {
@@ -378,7 +377,59 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
 }
 
 export function FeaturedFormationsClient({ formations }: FeaturedFormationsClientProps) {
-  // Si nous avons des formations depuis Strapi, les afficher dans un carousel horizontal
+  const [formationsAlternance, setFormationsAlternance] = useState<any[]>([])
+  const [formationsReconversion, setFormationsReconversion] = useState<any[]>([])
+  const [vaeCertifications, setVaeCertifications] = useState<any>({ niveau5: [], niveau6: [] })
+  const [entrepriseThematiques, setEntrepriseThematiques] = useState<string[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // Charger toutes les formations depuis Strapi
+        const allFormations = await getFormations()
+        
+        if (allFormations && Array.isArray(allFormations)) {
+          // Filtrer par catégorie
+          const alternance = allFormations.filter((f: any) => 
+            f.category?.slug === 'alternance' || f.category?.slug === 'alternance-btp'
+          )
+          const reconversion = allFormations.filter((f: any) => 
+            f.category?.slug === 'reconversion' || f.category?.slug === 'reconversion-btp'
+          )
+          
+          setFormationsAlternance(alternance)
+          setFormationsReconversion(reconversion)
+        }
+
+        // Charger les certifications VAE
+        const vaeCerts = await getVAECertifications()
+        if (vaeCerts && Array.isArray(vaeCerts)) {
+          const niveau5 = vaeCerts.filter((c: any) => c.niveau === 'niveau5')
+          const niveau6 = vaeCerts.filter((c: any) => c.niveau === 'niveau6')
+          setVaeCertifications({ niveau5, niveau6 })
+        }
+
+        // Thématiques entreprises (données statiques pour l'instant)
+        setEntrepriseThematiques([
+          "Lean Construction : optimiser les processus chantier",
+          "Pilotage de projet de rénovation énergétique",
+          "Management financier d'un projet de construction",
+          "Gestion de chantier, coordination, sécurité",
+          "BIM collaboratif – Revit / méthodologie BIM"
+        ])
+
+      } catch (error) {
+        console.error('Erreur chargement données:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
+
+  // Si nous avons des formations depuis Strapi (passées en props), les afficher dans un carousel horizontal
   if (formations.length > 0) {
     return (
       <div className="space-y-8">
@@ -393,7 +444,22 @@ export function FeaturedFormationsClient({ formations }: FeaturedFormationsClien
     )
   }
 
-  // Carousels horizontaux artistiques avec les formations existantes par catégorie
+  if (loading) {
+    return (
+      <div className="space-y-12">
+        <div className="animate-pulse">
+          <div className="h-8 bg-gray-200 rounded w-64 mx-auto mb-8"></div>
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[1, 2, 3].map(i => (
+              <div key={i} className="h-48 bg-gray-200 rounded-xl"></div>
+            ))}
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  // Carousels horizontaux artistiques avec les formations chargées depuis Strapi
   return (
     <div className="space-y-12">
       {/* Titre principal moderne et compact */}
@@ -421,102 +487,108 @@ export function FeaturedFormationsClient({ formations }: FeaturedFormationsClien
       </motion.div>
 
       {/* Carousel Formations Alternance */}
-      <ArtisticFormationsCarousel
-        title="Formations en Alternance"
-        formations={formationsAlternance}
-        icon={GraduationCap}
-        bgGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
-        iconColor="bg-gradient-to-r from-blue-500 to-indigo-600"
-      />
+      {formationsAlternance.length > 0 && (
+        <ArtisticFormationsCarousel
+          title="Formations en Alternance"
+          formations={formationsAlternance}
+          icon={GraduationCap}
+          bgGradient="bg-gradient-to-br from-blue-50 to-indigo-100"
+          iconColor="bg-gradient-to-r from-blue-500 to-indigo-600"
+        />
+      )}
 
       {/* Carousel Formations Reconversion */}
-      <ArtisticFormationsCarousel
-        title="Reconversion Professionnelle"
-        formations={formationsReconversion}
-        icon={Users}
-        bgGradient="bg-gradient-to-br from-green-50 to-emerald-100"
-        iconColor="bg-gradient-to-r from-emerald-500 to-teal-600"
-      />
+      {formationsReconversion.length > 0 && (
+        <ArtisticFormationsCarousel
+          title="Reconversion Professionnelle"
+          formations={formationsReconversion}
+          icon={Users}
+          bgGradient="bg-gradient-to-br from-green-50 to-emerald-100"
+          iconColor="bg-gradient-to-r from-emerald-500 to-teal-600"
+        />
+      )}
 
       {/* Section VAE - Design moderne et compact */}
-      <motion.div
-        initial={{ opacity: 0, y: 30 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="relative"
-      >
-        <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 overflow-hidden">
-          {/* Motif de fond */}
-          <div className="absolute inset-0 opacity-5">
-            <div 
-              className="absolute inset-0"
-              style={{
-                backgroundImage: `radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), 
-                                 radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)`,
-              }}
-            />
-          </div>
+      {vaeCertifications.niveau5.length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.6 }}
+          viewport={{ once: true }}
+          className="relative"
+        >
+          <div className="bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 overflow-hidden">
+            {/* Motif de fond */}
+            <div className="absolute inset-0 opacity-5">
+              <div 
+                className="absolute inset-0"
+                style={{
+                  backgroundImage: `radial-gradient(circle at 20% 80%, rgba(147, 51, 234, 0.1) 0%, transparent 50%), 
+                                   radial-gradient(circle at 80% 20%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)`,
+                }}
+              />
+            </div>
 
-          <div className="relative z-10">
-            <div className="flex items-center gap-3 mb-6">
-              <motion.div 
-                className="bg-gradient-to-r from-purple-500 to-violet-600 p-3 rounded-2xl shadow-lg"
-                whileHover={{ scale: 1.05, rotate: 5 }}
-              >
-                <Award className="w-6 h-6 text-white" />
-              </motion.div>
-              <div>
-                <h3 className="text-2xl font-bold text-gray-900 mb-1">VAE - Validation des Acquis</h3>
-                <p className="text-sm text-gray-600">Transformez votre expérience en certification</p>
+            <div className="relative z-10">
+              <div className="flex items-center gap-3 mb-6">
+                <motion.div 
+                  className="bg-gradient-to-r from-purple-500 to-violet-600 p-3 rounded-2xl shadow-lg"
+                  whileHover={{ scale: 1.05, rotate: 5 }}
+                >
+                  <Award className="w-6 h-6 text-white" />
+                </motion.div>
+                <div>
+                  <h3 className="text-2xl font-bold text-gray-900 mb-1">VAE - Validation des Acquis</h3>
+                  <p className="text-sm text-gray-600">Transformez votre expérience en certification</p>
+                </div>
+              </div>
+
+              <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
+                {vaeCertifications.niveau5.slice(0, 4).map((cert: any, index: number) => (
+                  <motion.div
+                    key={index}
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.4, delay: index * 0.1 }}
+                    viewport={{ once: true }}
+                    className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20"
+                  >
+                    <h4 className="font-semibold text-gray-900 mb-2 text-sm line-clamp-2">{cert.titre}</h4>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-lg text-xs font-bold">
+                        Niveau 5
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-1 text-xs text-gray-600">
+                      <span>{cert.rncp}</span>
+                      {cert.rncpUrl && (
+                        <a 
+                          href={cert.rncpUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="text-purple-600 hover:text-purple-800 transition-colors"
+                        >
+                          <ExternalLink className="w-3 h-3" />
+                        </a>
+                      )}
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+
+              <div className="text-center">
+                <Link
+                  href="/formations/vae-btp"
+                  className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-violet-600 text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 group"
+                >
+                  Découvrir la VAE
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </Link>
               </div>
             </div>
-
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-3 mb-6">
-              {vaeCertifications.niveau5.slice(0, 4).map((cert, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.4, delay: index * 0.1 }}
-                  viewport={{ once: true }}
-                  className="bg-white/80 backdrop-blur-sm rounded-2xl p-4 shadow-lg hover:shadow-xl transition-all duration-300 border border-white/20"
-                >
-                  <h4 className="font-semibold text-gray-900 mb-2 text-sm line-clamp-2">{cert.titre}</h4>
-                  <div className="flex items-center gap-2 mb-2">
-                    <span className="bg-purple-100 text-purple-800 px-2 py-1 rounded-lg text-xs font-bold">
-                      Niveau 5
-                    </span>
-                  </div>
-                  <div className="flex items-center gap-1 text-xs text-gray-600">
-                    <span>{cert.rncp}</span>
-                    {cert.rncpUrl && (
-                      <a 
-                        href={cert.rncpUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-purple-600 hover:text-purple-800 transition-colors"
-                      >
-                        <ExternalLink className="w-3 h-3" />
-                      </a>
-                    )}
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-
-            <div className="text-center">
-              <Link
-                href="/formations/vae-btp"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-purple-500 to-violet-600 text-white px-6 py-3 rounded-2xl font-semibold hover:shadow-lg transition-all duration-300 group"
-              >
-                Découvrir la VAE
-                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-              </Link>
-            </div>
           </div>
-        </div>
-      </motion.div>
+        </motion.div>
+      )}
 
       {/* Section Formations Entreprises - Moderne et compact */}
       <motion.div

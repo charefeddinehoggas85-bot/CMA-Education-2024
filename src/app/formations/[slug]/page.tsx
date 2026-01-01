@@ -1,6 +1,5 @@
 import { notFound } from 'next/navigation'
 import PageLayout from '@/components/layout/PageLayout'
-import { formationsAlternance, formationsReconversion } from '@/data/formations-static'
 import FormationContent from './FormationContent'
 
 // Force le rendu dynamique (SSR) pour toujours récupérer les données fraîches de Strapi
@@ -43,34 +42,6 @@ interface Formation {
   isActive?: boolean
   image?: string
   imageData?: any
-}
-
-// Fonction pour trouver une formation dans les données statiques
-function findStaticFormation(slug: string): Formation | null {
-  const allFormations = [...formationsAlternance, ...formationsReconversion]
-  const found = allFormations.find(f => f.slug === slug)
-  
-  if (!found) return null
-  
-  return {
-    id: found.id,
-    title: found.title,
-    slug: found.slug,
-    level: found.level,
-    rncp: found.rncp,
-    shortDescription: found.shortDescription,
-    fullDescription: found.shortDescription,
-    duree: found.duration,
-    rythme: found.rhythm,
-    modalite: found.mode,
-    cout: found.price,
-    financement: found.price,
-    objectifs: found.objectives,
-    debouches: found.opportunities,
-    prerequis: [],
-    isActive: true,
-    image: found.image
-  }
 }
 
 // FETCH STRAPI DIRECT - sans passer par le module strapi.ts
@@ -187,9 +158,9 @@ async function fetchStrapiDirect(slug: string): Promise<{ formation: Formation |
   }
 }
 
-// Server-side data fetching
+// Server-side data fetching - Uses only Strapi data
 async function getFormationData(slug: string): Promise<{ formation: Formation | null; source: string; error: string | null; debug: any }> {
-  // Essayer Strapi en premier avec fetch direct
+  // Essayer Strapi avec fetch direct
   const strapiResult = await fetchStrapiDirect(slug)
   
   if (strapiResult.formation) {
@@ -201,22 +172,11 @@ async function getFormationData(slug: string): Promise<{ formation: Formation | 
     }
   }
   
-  // Fallback vers données statiques
-  const staticFormation = findStaticFormation(slug)
-  
-  if (staticFormation) {
-    return {
-      formation: staticFormation,
-      source: 'STATIQUE',
-      error: strapiResult.error,
-      debug: { ...strapiResult.debug, fallbackUsed: true }
-    }
-  }
-  
+  // Si pas trouvé dans Strapi, retourner null (plus de fallback statique)
   return {
     formation: null,
     source: 'NONE',
-    error: strapiResult.error || 'Formation non trouvée',
+    error: strapiResult.error || 'Formation non trouvée dans Strapi',
     debug: strapiResult.debug
   }
 }

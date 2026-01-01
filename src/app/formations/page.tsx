@@ -7,14 +7,87 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { getFormations, getImageURL, getVAEFormules, getVAECertifications, getPageFormations } from '@/lib/strapi'
-import { 
-  vaeFormules as staticVaeFormules,
-  vaeCertifications as staticVaeCertifications,
-  entrepriseAvantages,
-  entrepriseThematiques,
-  entrepriseModalites,
-  entrepriseTarif
-} from '@/data/formations-static'
+
+// Données statiques pour VAE et entreprises (à migrer vers Strapi plus tard)
+const staticVaeFormules = [
+  {
+    id: 1,
+    titre: "VAE avec accompagnement",
+    description: "Accompagnement complet pour valider vos acquis",
+    modalites: "Présentiel, visio, téléphone et mail",
+    services: [
+      "Analyse de votre parcours",
+      "Aide à la rédaction du dossier",
+      "Préparation à l'entretien jury"
+    ],
+    prix: "4500 € TTC (3750 € HT)",
+    heures: "Jusqu'à 20 heures d'accompagnement"
+  },
+  {
+    id: 2,
+    titre: "VAE sans accompagnement",
+    description: "Suivi administratif uniquement",
+    modalites: "Suivi administratif",
+    services: [
+      "Vérification de l'éligibilité",
+      "Inscription et convocation jury",
+      "Informations administratives"
+    ],
+    prix: "2760 € TTC (2300 € HT)",
+    heures: null
+  }
+]
+
+const staticVaeCertifications = {
+  niveau5: [
+    { titre: "Conducteur de Travaux Bâtiment et Génie Civil", rncp: "RNCP40217", rncpUrl: "https://www.francecompetences.fr/recherche/rncp/40217/" },
+    { titre: "Chef de Chantier en Voirie et Réseaux Divers", rncp: "RNCP41368", rncpUrl: "https://www.francecompetences.fr/recherche/rncp/41368/" },
+    { titre: "Chargé d'Affaires du Bâtiment", rncp: "RNCP35503", rncpUrl: "https://www.francecompetences.fr/recherche/rncp/35503/" }
+  ],
+  niveau6: [
+    { titre: "Coordinateur BIM du Bâtiment", rncp: "RNCP39408", rncpUrl: "https://www.francecompetences.fr/recherche/rncp/39408/" },
+    { titre: "Conducteur de Travaux Voirie et Réseaux Divers", rncp: "RNCP39469", rncpUrl: "https://www.francecompetences.fr/recherche/rncp/39469/" }
+  ]
+}
+
+const entrepriseAvantages = [
+  {
+    id: 1,
+    titre: "Amélioration des performances internes",
+    description: "Collaborateurs mieux formés = productivité renforcée"
+  },
+  {
+    id: 2,
+    titre: "Adaptation aux évolutions du secteur",
+    description: "Rester compétitif et à la pointe des nouvelles méthodes"
+  },
+  {
+    id: 3,
+    titre: "Fidélisation des talents",
+    description: "Excellent levier de motivation et de fidélité"
+  },
+  {
+    id: 4,
+    titre: "Valorisation image employeur",
+    description: "Entreprise perçue comme innovante et responsable"
+  }
+]
+
+const entrepriseThematiques = [
+  "Lean Construction : optimiser les processus chantier",
+  "Pilotage de projet de rénovation énergétique",
+  "Management financier d'un projet de construction",
+  "Gestion de chantier, coordination, sécurité",
+  "BIM collaboratif – Revit / méthodologie BIM"
+]
+
+const entrepriseModalites = [
+  { type: "Inter-entreprise", description: "Dans nos locaux selon calendrier défini" },
+  { type: "Intra-entreprise", description: "Sur site ou en distanciel" },
+  { type: "100% sur mesure", description: "Programme adapté à vos besoins" }
+]
+
+const entrepriseTarif = "À partir de 700 € HT / Stagiaires"
 
 // Mapping des codes RNCP vers les URLs France Compétences (fallback si non défini dans Strapi)
 const rncpToUrlMap: Record<string, string> = {
@@ -456,11 +529,10 @@ export default function FormationsPage() {
           setFormationsAlternance(alternance)
           setFormationsReconversion(reconversion)
         } else {
-          // Fallback vers données statiques si Strapi ne retourne rien
-          console.warn('⚠️ Strapi vide, utilisation des données statiques')
-          const { formationsAlternance: staticAlt, formationsReconversion: staticReconv } = await import('@/data/formations-static')
-          setFormationsAlternance(staticAlt as any[] || [])
-          setFormationsReconversion(staticReconv as any[] || [])
+          // Si Strapi ne retourne rien, garder les tableaux vides (plus de fallback statique)
+          console.warn('⚠️ Strapi vide, aucune formation disponible')
+          setFormationsAlternance([])
+          setFormationsReconversion([])
         }
 
         // Charger les formules VAE
@@ -488,16 +560,9 @@ export default function FormationsPage() {
         }
       } catch (error) {
         console.error('❌ Erreur chargement Strapi:', error)
-        // Fallback vers données statiques en cas d'erreur
-        try {
-          const { formationsAlternance: staticAlt, formationsReconversion: staticReconv } = await import('@/data/formations-static')
-          setFormationsAlternance((staticAlt || []) as any[])
-          setFormationsReconversion((staticReconv || []) as any[])
-          console.log('✅ Fallback statique chargé')
-        } catch (e) {
-          setFormationsAlternance([])
-          setFormationsReconversion([])
-        }
+        // En cas d'erreur, garder les tableaux vides (plus de fallback statique)
+        setFormationsAlternance([])
+        setFormationsReconversion([])
       } finally {
         setLoading(false)
       }
