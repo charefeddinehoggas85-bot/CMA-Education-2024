@@ -1,34 +1,34 @@
 /* CORRECTION COMPLÈTE RESPONSIVITÉ NAVIGATION - ÉCRANS INTERMÉDIAIRES */
 
-/* Variables pour header centralisé et adaptatif */
+/* Variables pour header compact et responsive */
 :root {
-  /* Hauteurs augmentées pour plus de présence */
-  --nav-height-xs: 60px;
-  --nav-height-sm: 68px;
-  --nav-height-md: 76px;
-  --nav-height-lg: 84px;
-  --nav-height-xl: 92px;
-  --nav-height-2xl: 100px;
+  /* Hauteurs compactes mais visibles */
+  --nav-height-xs: 52px;
+  --nav-height-sm: 56px;
+  --nav-height-md: 60px;
+  --nav-height-lg: 64px;
+  --nav-height-xl: 68px;
+  --nav-height-2xl: 72px;
   
   /* Corrections spécifiques écrans problématiques */
-  --nav-height-1024: 80px;
-  --nav-height-1200: 84px;
-  --nav-height-1366: 88px;
-  --nav-height-1440: 92px;
+  --nav-height-1024: 62px;
+  --nav-height-1200: 64px;
+  --nav-height-1366: 66px;
+  --nav-height-1440: 68px;
   
-  /* Système de typographie fluide */
-  --nav-font-xs: clamp(0.625rem, 2vw, 0.75rem);
-  --nav-font-sm: clamp(0.75rem, 2.2vw, 0.875rem);
-  --nav-font-md: clamp(0.8125rem, 2.4vw, 0.9375rem);
-  --nav-font-lg: clamp(0.875rem, 2.6vw, 1rem);
-  --nav-font-xl: clamp(0.9375rem, 2.8vw, 1.125rem);
+  /* Système de typographie fluide mais compact */
+  --nav-font-xs: clamp(0.75rem, 1.8vw, 0.8125rem);
+  --nav-font-sm: clamp(0.8125rem, 2vw, 0.875rem);
+  --nav-font-md: clamp(0.875rem, 2.2vw, 0.9375rem);
+  --nav-font-lg: clamp(0.9375rem, 2.4vw, 1rem);
+  --nav-font-xl: clamp(1rem, 2.6vw, 1.0625rem);
   
-  /* Espacements centralisés */
-  --nav-gap-xs: clamp(0.25rem, 1vw, 0.5rem);
-  --nav-gap-sm: clamp(0.5rem, 1.5vw, 0.75rem);
-  --nav-gap-md: clamp(0.75rem, 2vw, 1rem);
-  --nav-gap-lg: clamp(1rem, 2.5vw, 1.5rem);
-  --nav-gap-xl: clamp(1.25rem, 3vw, 2rem);
+  /* Espacements compacts */
+  --nav-gap-xs: clamp(0.25rem, 0.8vw, 0.5rem);
+  --nav-gap-sm: clamp(0.5rem, 1.2vw, 0.75rem);
+  --nav-gap-md: clamp(0.75rem, 1.5vw, 1rem);
+  --nav-gap-lg: clamp(1rem, 2vw, 1.25rem);
+  --nav-gap-xl: clamp(1.25rem, 2.5vw, 1.5rem);
 }
 
 /* HEADER PRINCIPAL - Corrections pour tous écrans */
@@ -54,7 +54,7 @@
   padding-right: clamp(0.5rem, 2vw, 2rem);
 }
 
-/* CONTENU NAVIGATION - Hauteurs augmentées et centrage parfait */
+/* CONTENU NAVIGATION - Compact mais bien visible */
 .nav-content-fix {
   display: flex;
   align-items: center;
@@ -64,42 +64,42 @@
   max-width: 100%;
   box-sizing: border-box;
   height: var(--nav-height-md);
-  min-height: 60px;
-  gap: var(--nav-gap-md);
-  padding: 0 clamp(1rem, 3vw, 2rem);
+  min-height: 52px;
+  gap: var(--nav-gap-sm);
+  padding: 0 clamp(0.75rem, 2vw, 1.5rem);
 }
 
-/* LOGO - Tailles augmentées avec proportions parfaites */
+/* LOGO - Tailles équilibrées et visibles */
 .nav-logo-fix {
   flex-shrink: 0;
   width: auto;
-  height: clamp(56px, 10vh, 100px);
-  max-width: clamp(160px, 25vw, 320px);
+  height: clamp(36px, 7vh, 56px);
+  max-width: clamp(120px, 20vw, 200px);
   object-fit: contain;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* NAVIGATION DESKTOP - Centrage et espacement optimisés */
+/* NAVIGATION DESKTOP - Centrage optimal */
 .nav-desktop-fix {
   flex: 1;
   min-width: 0;
   overflow: hidden;
-  margin: 0 var(--nav-gap-lg);
+  margin: 0 var(--nav-gap-sm);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
-/* ITEMS NAVIGATION - Centrage parfait avec espacement fluide */
+/* ITEMS NAVIGATION - Espacement équilibré */
 .nav-items-fix {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--nav-gap-sm);
+  gap: var(--nav-gap-xs);
   overflow-x: auto;
   scrollbar-width: none;
   -ms-overflow-style: none;
-  padding: 0.5rem 0;
+  padding: 0.25rem 0;
   white-space: nowrap;
   max-width: 100%;
 }
@@ -108,14 +108,14 @@
   display: none;
 }
 
-/* ITEM NAVIGATION - Typographie fluide et centrage */
+/* ITEM NAVIGATION - Compact et lisible */
 .nav-item-fix {
   flex-shrink: 0;
   white-space: nowrap;
-  padding: clamp(0.5rem, 1.5vh, 0.75rem) clamp(0.75rem, 2vw, 1.25rem);
-  font-size: var(--nav-font-md);
+  padding: clamp(0.375rem, 1vh, 0.5rem) clamp(0.5rem, 1.5vw, 0.875rem);
+  font-size: var(--nav-font-sm);
   font-weight: 600;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 0;
   overflow: hidden;
@@ -126,25 +126,25 @@
   justify-content: center;
 }
 
-/* ACTIONS - Centrage et espacement optimisés */
+/* ACTIONS - Compact et accessible */
 .nav-actions-fix {
   flex-shrink: 0;
   min-width: 0;
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: var(--nav-gap-sm);
+  gap: var(--nav-gap-xs);
   overflow: hidden;
 }
 
-/* BOUTON ACTION - Tailles augmentées et centrage parfait */
+/* BOUTON ACTION - Tailles optimales */
 .nav-action-btn-fix {
   flex-shrink: 0;
   white-space: nowrap;
-  padding: clamp(0.625rem, 1.5vh, 0.875rem) clamp(0.875rem, 2.5vw, 1.5rem);
-  font-size: var(--nav-font-md);
+  padding: clamp(0.5rem, 1.2vh, 0.625rem) clamp(0.625rem, 2vw, 1rem);
+  font-size: var(--nav-font-sm);
   font-weight: 700;
-  border-radius: 0.75rem;
+  border-radius: 0.5rem;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   min-width: 0;
   overflow: hidden;
@@ -153,7 +153,7 @@
   align-items: center;
   justify-content: center;
   text-align: center;
-  min-height: 44px;
+  min-height: 36px;
 }
 
 /* BOUTON MENU MOBILE - Masqué sur desktop */
@@ -196,18 +196,43 @@
   overflow-x: hidden;
 }
 
-/* CORRECTIONS SPÉCIFIQUES PAR RÉSOLUTION - DESIGN CENTRÉ */
+/* CORRECTIONS SPÉCIFIQUES PAR RÉSOLUTION - DESIGN COMPACT */
 
-/* Écrans très petits (320px - 480px) - Compact mais lisible */
+/* Écrans très petits (320px - 480px) - Ultra compact */
 @media (max-width: 480px) {
   .nav-content-fix {
     height: var(--nav-height-xs);
     gap: var(--nav-gap-xs);
+    padding: 0 0.5rem;
+  }
+  
+  .nav-logo-fix {
+    height: 32px;
+    max-width: 80px;
+  }
+  
+  .nav-item-fix {
+    font-size: var(--nav-font-xs);
+    padding: 0.25rem 0.375rem;
+  }
+  
+  .nav-action-btn-fix {
+    padding: 0.375rem 0.5rem;
+    font-size: var(--nav-font-xs);
+    min-height: 32px;
+  }
+}
+
+/* Écrans petits (480px - 768px) - Compact */
+@media (min-width: 480px) and (max-width: 768px) {
+  .nav-content-fix {
+    height: var(--nav-height-sm);
+    gap: var(--nav-gap-sm);
     padding: 0 0.75rem;
   }
   
   .nav-logo-fix {
-    height: 40px;
+    height: 36px;
     max-width: 100px;
   }
   
@@ -223,61 +248,36 @@
   }
 }
 
-/* Écrans petits (480px - 768px) - Équilibré */
-@media (min-width: 480px) and (max-width: 768px) {
+/* Écrans moyens (768px - 1024px) - Équilibré */
+@media (min-width: 768px) and (max-width: 1024px) {
   .nav-content-fix {
-    height: var(--nav-height-sm);
+    height: var(--nav-height-md);
     gap: var(--nav-gap-sm);
     padding: 0 1rem;
   }
   
   .nav-logo-fix {
-    height: 48px;
-    max-width: 130px;
-  }
-  
-  .nav-item-fix {
-    font-size: var(--nav-font-sm);
-    padding: 0.5rem 0.75rem;
-  }
-  
-  .nav-action-btn-fix {
-    padding: 0.625rem 1rem;
-    font-size: var(--nav-font-sm);
-    min-height: 40px;
-  }
-}
-
-/* Écrans moyens (768px - 1024px) - Tablets optimisés */
-@media (min-width: 768px) and (max-width: 1024px) {
-  .nav-content-fix {
-    height: var(--nav-height-md);
-    gap: var(--nav-gap-md);
-    padding: 0 1.25rem;
-  }
-  
-  .nav-logo-fix {
-    height: 56px;
-    max-width: 160px;
+    height: 40px;
+    max-width: 120px;
   }
   
   .nav-desktop-fix {
-    margin: 0 1rem;
+    margin: 0 0.75rem;
   }
   
   .nav-items-fix {
-    gap: var(--nav-gap-sm);
+    gap: var(--nav-gap-xs);
   }
   
   .nav-item-fix {
-    padding: 0.625rem 1rem;
-    font-size: var(--nav-font-md);
+    padding: 0.5rem 0.75rem;
+    font-size: var(--nav-font-sm);
   }
   
   .nav-action-btn-fix {
-    padding: 0.75rem 1.25rem;
-    font-size: var(--nav-font-md);
-    min-height: 44px;
+    padding: 0.5rem 0.875rem;
+    font-size: var(--nav-font-sm);
+    min-height: 40px;
   }
 }
 
@@ -285,40 +285,40 @@
 @media (min-width: 1024px) and (max-width: 1200px) {
   .nav-content-fix {
     height: var(--nav-height-1024);
-    gap: var(--nav-gap-lg);
-    padding: 0 1.5rem;
+    gap: var(--nav-gap-md);
+    padding: 0 1.25rem;
   }
   
   .nav-logo-fix {
-    height: 64px !important;
-    max-width: 180px !important;
+    height: 44px !important;
+    max-width: 140px !important;
   }
   
   .nav-desktop-fix {
-    margin: 0 1.25rem;
+    margin: 0 1rem;
     flex: 1;
   }
   
   .nav-items-fix {
-    gap: var(--nav-gap-md);
+    gap: var(--nav-gap-sm);
     justify-content: center;
   }
   
   .nav-item-fix {
-    padding: 0.75rem 1.25rem !important;
-    font-size: var(--nav-font-lg) !important;
+    padding: 0.5rem 0.875rem !important;
+    font-size: var(--nav-font-md) !important;
     font-weight: 600 !important;
   }
   
   .nav-actions-fix {
-    gap: var(--nav-gap-sm);
+    gap: var(--nav-gap-xs);
   }
   
   .nav-action-btn-fix {
-    padding: 0.875rem 1.5rem !important;
-    font-size: var(--nav-font-lg) !important;
+    padding: 0.5rem 1rem !important;
+    font-size: var(--nav-font-md) !important;
     font-weight: 700 !important;
-    min-height: 48px !important;
+    min-height: 40px !important;
   }
 }
 
@@ -326,36 +326,36 @@
 @media (min-width: 1200px) and (max-width: 1366px) {
   .nav-content-fix {
     height: var(--nav-height-1200);
-    gap: var(--nav-gap-lg);
-    padding: 0 1.75rem;
+    gap: var(--nav-gap-md);
+    padding: 0 1.5rem;
   }
   
   .nav-logo-fix {
-    height: 68px !important;
-    max-width: 200px !important;
+    height: 48px !important;
+    max-width: 160px !important;
   }
   
   .nav-desktop-fix {
-    margin: 0 1.5rem;
+    margin: 0 1.25rem;
   }
   
   .nav-items-fix {
-    gap: var(--nav-gap-md);
+    gap: var(--nav-gap-sm);
   }
   
   .nav-item-fix {
-    padding: 0.875rem 1.5rem !important;
-    font-size: var(--nav-font-lg) !important;
+    padding: 0.5rem 1rem !important;
+    font-size: var(--nav-font-md) !important;
   }
   
   .nav-actions-fix {
-    gap: var(--nav-gap-md);
+    gap: var(--nav-gap-sm);
   }
   
   .nav-action-btn-fix {
-    padding: 1rem 1.75rem !important;
-    font-size: var(--nav-font-lg) !important;
-    min-height: 52px !important;
+    padding: 0.625rem 1.25rem !important;
+    font-size: var(--nav-font-md) !important;
+    min-height: 42px !important;
   }
 }
 
@@ -363,36 +363,36 @@
 @media (min-width: 1366px) and (max-width: 1440px) {
   .nav-content-fix {
     height: var(--nav-height-1366);
-    gap: var(--nav-gap-xl);
-    padding: 0 2rem;
+    gap: var(--nav-gap-lg);
+    padding: 0 1.75rem;
   }
   
   .nav-logo-fix {
-    height: 72px !important;
-    max-width: 220px !important;
+    height: 52px !important;
+    max-width: 180px !important;
   }
   
   .nav-desktop-fix {
-    margin: 0 1.75rem;
+    margin: 0 1.5rem;
   }
   
   .nav-items-fix {
-    gap: var(--nav-gap-lg);
+    gap: var(--nav-gap-sm);
   }
   
   .nav-item-fix {
-    padding: 1rem 1.75rem !important;
-    font-size: var(--nav-font-xl) !important;
+    padding: 0.625rem 1.125rem !important;
+    font-size: var(--nav-font-lg) !important;
   }
   
   .nav-actions-fix {
-    gap: var(--nav-gap-md);
+    gap: var(--nav-gap-sm);
   }
   
   .nav-action-btn-fix {
-    padding: 1.125rem 2rem !important;
-    font-size: var(--nav-font-xl) !important;
-    min-height: 56px !important;
+    padding: 0.75rem 1.5rem !important;
+    font-size: var(--nav-font-lg) !important;
+    min-height: 44px !important;
   }
 }
 
@@ -400,13 +400,52 @@
 @media (min-width: 1440px) and (max-width: 1600px) {
   .nav-content-fix {
     height: var(--nav-height-1440);
-    gap: var(--nav-gap-xl);
-    padding: 0 2.25rem;
+    gap: var(--nav-gap-lg);
+    padding: 0 2rem;
   }
   
   .nav-logo-fix {
-    height: 76px !important;
-    max-width: 240px !important;
+    height: 56px !important;
+    max-width: 200px !important;
+  }
+  
+  .nav-desktop-fix {
+    margin: 0 1.75rem;
+  }
+  
+  .nav-items-fix {
+    gap: var(--nav-gap-md);
+  }
+  
+  .nav-item-fix {
+    padding: 0.75rem 1.25rem !important;
+    font-size: var(--nav-font-lg) !important;
+  }
+  
+  .nav-actions-fix {
+    gap: var(--nav-gap-sm);
+  }
+  
+  .nav-action-btn-fix {
+    padding: 0.875rem 1.75rem !important;
+    font-size: var(--nav-font-lg) !important;
+    min-height: 46px !important;
+  }
+}
+
+/* Écrans larges (1600px+) - Confortable */
+@media (min-width: 1600px) {
+  .nav-content-fix {
+    height: var(--nav-height-2xl);
+    gap: var(--nav-gap-xl);
+    padding: 0 2.25rem;
+    max-width: 1400px;
+    margin: 0 auto;
+  }
+  
+  .nav-logo-fix {
+    height: 60px;
+    max-width: 220px;
   }
   
   .nav-desktop-fix {
@@ -414,61 +453,22 @@
   }
   
   .nav-items-fix {
-    gap: var(--nav-gap-lg);
+    gap: var(--nav-gap-md);
   }
   
   .nav-item-fix {
-    padding: 1.125rem 2rem !important;
-    font-size: var(--nav-font-xl) !important;
+    padding: 0.875rem 1.5rem;
+    font-size: var(--nav-font-xl);
   }
   
   .nav-actions-fix {
-    gap: var(--nav-gap-lg);
+    gap: var(--nav-gap-md);
   }
   
   .nav-action-btn-fix {
-    padding: 1.25rem 2.25rem !important;
-    font-size: var(--nav-font-xl) !important;
-    min-height: 60px !important;
-  }
-}
-
-/* Écrans larges (1600px+) - Maximum confort */
-@media (min-width: 1600px) {
-  .nav-content-fix {
-    height: var(--nav-height-2xl);
-    gap: var(--nav-gap-xl);
-    padding: 0 2.5rem;
-    max-width: 1600px;
-    margin: 0 auto;
-  }
-  
-  .nav-logo-fix {
-    height: 80px;
-    max-width: 280px;
-  }
-  
-  .nav-desktop-fix {
-    margin: 0 2.5rem;
-  }
-  
-  .nav-items-fix {
-    gap: var(--nav-gap-xl);
-  }
-  
-  .nav-item-fix {
-    padding: 1.25rem 2.5rem;
-    font-size: 1.125rem;
-  }
-  
-  .nav-actions-fix {
-    gap: var(--nav-gap-lg);
-  }
-  
-  .nav-action-btn-fix {
-    padding: 1.5rem 3rem;
-    font-size: 1.125rem;
-    min-height: 64px;
+    padding: 1rem 2rem;
+    font-size: var(--nav-font-xl);
+    min-height: 48px;
   }
 }
 
