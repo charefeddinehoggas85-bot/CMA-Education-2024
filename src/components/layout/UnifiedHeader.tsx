@@ -172,12 +172,12 @@ const UnifiedHeader = () => {
   }
 
   const navigation = [
-    { name: 'Nos formateurs', href: '/formateurs', icon: '👨‍🏫' },
-    { name: 'Nos Partenaires', href: '/partenaires', icon: '🤝' },
-    { name: 'Blog', href: '/blog', icon: '📝' },
-    { name: 'Pédagogie', href: '/pedagogie', icon: '🎓' },
-    { name: 'Admission', href: '/admission', icon: '📋' },
-    { name: 'À propos', href: '/about', icon: 'ℹ️' }
+    { name: 'Nos formateurs', href: '/formateurs', shortName: 'Formateurs' },
+    { name: 'Nos Partenaires', href: '/partenaires', shortName: 'Partenaires' },
+    { name: 'Blog', href: '/blog', shortName: 'Blog' },
+    { name: 'Pédagogie', href: '/pedagogie', shortName: 'Pédagogie' },
+    { name: 'Admission', href: '/admission', shortName: 'Admission' },
+    { name: 'À propos', href: '/about', shortName: 'À propos' }
   ]
 
   const isActive = (href: string) => pathname === href || (href !== '/' && pathname.startsWith(href))
@@ -359,7 +359,7 @@ const UnifiedHeader = () => {
                     }`}
                   >
                     <span className="hidden xl:inline">{item.name}</span>
-                    <span className="xl:hidden">{item.icon}</span>
+                    <span className="xl:hidden">{item.shortName}</span>
                   </Link>
                 )
               })}
@@ -431,7 +431,7 @@ const UnifiedHeader = () => {
                   }`}
                   onClick={() => setIsMenuOpen(false)}
                 >
-                  <span className="text-lg">📚</span>
+                  <GraduationCap className="w-5 h-5" />
                   <span>Formations</span>
                 </Link>
                 
@@ -441,14 +441,13 @@ const UnifiedHeader = () => {
                     <Link
                       key={item.name}
                       href={item.href}
-                      className={`flex items-center space-x-3 px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
+                      className={`flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-colors ${
                         active 
                           ? 'text-primary-blue bg-primary-blue/10' 
                           : 'text-gray-700 hover:text-primary-blue hover:bg-gray-50'
                       }`}
                       onClick={() => setIsMenuOpen(false)}
                     >
-                      <span className="text-lg">{item.icon}</span>
                       <span>{item.name}</span>
                     </Link>
                   )
