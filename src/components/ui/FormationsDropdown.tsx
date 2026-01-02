@@ -40,25 +40,26 @@ interface FallbackCategory {
   }>
 }
 
-// FALLBACK DATA - Formations statiques pour garantir l'affichage
+// FALLBACK DATA - Formations statiques pour garantir l'affichage TOUJOURS
 const FALLBACK_FORMATIONS: FallbackCategory[] = [
   {
     category: 'Alternance',
     icon: GraduationCap,
     formations: [
-      { title: 'Conducteur de Travaux Bâtiment', slug: 'conducteur-travaux-batiment', level: 'Bac+2', duree: '2 ans' },
-      { title: 'Chargé d\'Affaires Bâtiment', slug: 'charge-affaires-batiment', level: 'Bac+2', duree: '2 ans' },
+      { title: 'Chargé d\'Affaires Bâtiment', slug: 'charge-affaires-batiment', level: 'Bac+2', duree: '1 an' },
+      { title: 'Conducteur de Travaux Bâtiment', slug: 'conducteur-travaux-batiment', level: 'Bac+2', duree: '1 an' },
       { title: 'Chef de Chantier VRD', slug: 'chef-chantier-vrd', level: 'Bac+2', duree: '1 an' },
-      { title: 'Conducteur de Travaux VRD', slug: 'conducteur-travaux-vrd', level: 'Bac+2', duree: '1 an' }
+      { title: 'Conducteur de Travaux TP', slug: 'conducteur-travaux-tp-alternance', level: 'Bac+2', duree: '1 an' },
+      { title: 'Chef de Projets BTP', slug: 'chef-projets-btp-1an', level: 'Bac+5', duree: '1 an' }
     ]
   },
   {
     category: 'Reconversion',
     icon: Users,
     formations: [
-      { title: 'Conducteur de Travaux - Reconversion', slug: 'reconversion-btp/conducteur-travaux', level: 'Pro', duree: '8 mois' },
-      { title: 'Chargé d\'Affaires - Reconversion', slug: 'reconversion-btp/charge-affaires', level: 'Pro', duree: '8 mois' },
-      { title: 'Conducteur TP - Reconversion', slug: 'reconversion-btp/conducteur-travaux-publics', level: 'Pro', duree: '6 mois' }
+      { title: 'Chargé d\'Affaires - Reconversion', slug: 'reconversion-btp/charge-affaires', level: 'Bac+2', duree: '7 mois' },
+      { title: 'Conducteur de Travaux - Reconversion', slug: 'reconversion-btp/conducteur-travaux', level: 'Bac+2', duree: '7 mois' },
+      { title: 'Conducteur TP - Reconversion', slug: 'reconversion-btp/conducteur-travaux-publics', level: 'Bac+2', duree: '7 mois' }
     ]
   },
   {
@@ -85,7 +86,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
   const [categories, setCategories] = useState<FormationCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
-  const [useFallback, setUseFallback] = useState(false)
+  const [useFallback, setUseFallback] = useState(true) // Commencer par le fallback
 
   const handleMouseEnter = () => {
     if (hoverTimeout) {
@@ -105,7 +106,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
   useEffect(() => {
     async function loadFormations() {
       try {
-        console.log('🔄 Chargement des formations depuis Strapi...')
+        console.log('🔄 Tentative de chargement depuis Strapi...')
         const [categoriesData, formationsData] = await Promise.all([
           getFormationCategories(),
           getFormations()
@@ -165,13 +166,14 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
     }
   }, [hoverTimeout])
 
-  // Données à afficher (Strapi ou fallback)
+  // Données à afficher (Strapi ou fallback) - TOUJOURS QUELQUE CHOSE
   const displayData: (FormationCategory | FallbackCategory)[] = useFallback ? FALLBACK_FORMATIONS : categories
 
   if (loading) {
     return (
       <div className="relative">
         <button className="nav-item-fix flex items-center space-x-1 font-medium transition-colors rounded-lg text-gray-900 hover:text-primary-blue">
+          <GraduationCap className="w-4 h-4" />
           <span>Formations</span>
           <ChevronDown className="w-4 h-4 animate-pulse" />
         </button>
