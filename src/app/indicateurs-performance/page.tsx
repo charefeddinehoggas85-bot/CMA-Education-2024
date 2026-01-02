@@ -44,7 +44,7 @@ export default function IndicateursPerformancePage() {
     const fetchIndicateurs = async () => {
       try {
         const data = await getIndicateursPerformance()
-        setIndicateursData(data)
+        setIndicateursData(data as IndicateursData)
       } catch (err) {
         console.error('Erreur lors du chargement des indicateurs:', err)
         setError('Impossible de charger les indicateurs de performance')
