@@ -3,9 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import AboutSection from '@/components/sections/AboutSection'
-import GallerySection from '@/components/sections/GallerySection'
-import { getStatistiquesSite, getSiteSettings } from '@/lib/strapi'
-import { GraduationCap } from 'lucide-react'
+import { getStatistiquesSite } from '@/lib/strapi'
 
 interface Statistique {
   id: number
@@ -14,13 +12,6 @@ interface Statistique {
   suffixe?: string
   description?: string
   ordre: number
-}
-
-interface SiteSettings {
-  id: number
-  siteName: string
-  aboutTitle?: string
-  aboutDescription?: string
 }
 
 const StatsGrid = () => {
@@ -94,12 +85,6 @@ export default function AboutPage() {
     <>
       <AboutSection />
       <StatsGrid />
-      <GallerySection 
-        page="about" 
-        title="Notre Campus en Images"
-        description="Découvrez nos installations modernes et notre environnement d'apprentissage"
-        maxGalleries={2}
-      />
     </>
   )
 }
