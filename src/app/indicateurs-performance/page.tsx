@@ -131,15 +131,19 @@ export default function IndicateursPerformancePage() {
       <div className="bg-gradient-to-r from-green-600 to-blue-600 text-white py-16">
         <div className="max-w-7xl mx-auto px-6">
           <div className="flex items-center mb-6">
-            <Award className="h-12 w-12 mr-4" />
-            <div>
-              <h1 className="text-4xl font-black">Nos indicateurs de performance et de résultats</h1>
-              <p className="text-xl text-green-100 mt-2">Conformément à l'article L.6111-8 du Code du travail</p>
+            <Award className="h-12 w-12 mr-4 flex-shrink-0" />
+            <div className="flex-1">
+              <h1 className="text-4xl font-black text-white leading-tight">
+                Nos indicateurs de performance et de résultats
+              </h1>
+              <p className="text-xl text-green-100 mt-2">
+                Conformément à l'article L.6111-8 du Code du travail
+              </p>
             </div>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6">
-            <p className="text-lg leading-relaxed">
+            <p className="text-lg leading-relaxed text-white">
               À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. 
               Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats 
               liés à nos formations professionnelles. Ces données permettent à chacun — candidats, entreprises, partenaires 
@@ -148,7 +152,7 @@ export default function IndicateursPerformancePage() {
           </div>
           
           <div className="flex items-center text-green-100">
-            <FileText className="h-5 w-5 mr-2" />
+            <FileText className="h-5 w-5 mr-2 flex-shrink-0" />
             <span>Conformément à l'article L.6111-8 du Code du travail</span>
           </div>
         </div>
@@ -158,7 +162,7 @@ export default function IndicateursPerformancePage() {
         {/* Section Engagement */}
         <section className="mb-12 bg-white rounded-2xl shadow-lg p-8">
           <div className="flex items-center mb-6">
-            <TrendingUp className="h-8 w-8 text-primary-blue mr-3" />
+            <TrendingUp className="h-8 w-8 text-blue-600 mr-3 flex-shrink-0" />
             <h2 className="text-2xl font-bold text-gray-900">Notre Engagement</h2>
           </div>
           
@@ -183,11 +187,11 @@ export default function IndicateursPerformancePage() {
 
         {/* Section Tableau des Indicateurs */}
         <section className="mb-12 bg-white rounded-2xl shadow-lg overflow-hidden">
-          <div className="bg-gradient-to-r from-primary-blue to-blue-700 text-white p-6">
+          <div className="bg-gradient-to-r from-blue-600 to-blue-700 text-white p-6">
             <div className="flex items-center">
-              <BarChart3 className="h-8 w-8 mr-3" />
-              <div>
-                <h2 className="text-2xl font-bold">Indicateurs de résultats – Année 2025-26</h2>
+              <BarChart3 className="h-8 w-8 mr-3 flex-shrink-0" />
+              <div className="flex-1">
+                <h2 className="text-2xl font-bold text-white">Indicateurs de résultats – Année 2025-26</h2>
                 <p className="text-blue-100 mt-1">Tableau détaillé de nos performances par formation</p>
               </div>
             </div>
@@ -250,7 +254,7 @@ export default function IndicateursPerformancePage() {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1" />
+                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-600">
                           {formation.tauxReussiteCertification}
                         </span>
@@ -258,7 +262,7 @@ export default function IndicateursPerformancePage() {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1" />
+                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-600">
                           {formation.tauxInsertionProfessionnelle}
                         </span>
@@ -266,7 +270,7 @@ export default function IndicateursPerformancePage() {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1" />
+                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-600">
                           {formation.tauxPoursuiteEtudes}
                         </span>
@@ -274,7 +278,7 @@ export default function IndicateursPerformancePage() {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1" />
+                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-600">
                           {formation.tauxSatisfactionBeneficiaires}
                         </span>
@@ -282,7 +286,7 @@ export default function IndicateursPerformancePage() {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1" />
+                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-600">
                           {formation.tauxRuptureAlternance}
                         </span>
@@ -290,7 +294,7 @@ export default function IndicateursPerformancePage() {
                     </td>
                     <td className="px-4 py-4 text-center">
                       <div className="flex items-center justify-center">
-                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1" />
+                        <AlertCircle className="h-4 w-4 text-gray-400 mr-1 flex-shrink-0" />
                         <span className="text-sm font-medium text-gray-600">
                           {formation.tauxReussiteNational}
                         </span>
@@ -311,7 +315,7 @@ export default function IndicateursPerformancePage() {
         {/* Section Note Méthodologique */}
         <section className="mb-12 bg-yellow-50 rounded-2xl shadow-lg p-8 border-l-4 border-yellow-400">
           <div className="flex items-center mb-4">
-            <AlertCircle className="h-6 w-6 text-yellow-600 mr-2" />
+            <AlertCircle className="h-6 w-6 text-yellow-600 mr-2 flex-shrink-0" />
             <h3 className="text-lg font-semibold text-gray-900">Note méthodologique</h3>
           </div>
           <div className="prose prose-gray max-w-none">
@@ -331,7 +335,7 @@ export default function IndicateursPerformancePage() {
         {/* Section Contact */}
         <section className="bg-white rounded-2xl shadow-lg p-8">
           <div className="flex items-center mb-4">
-            <FileText className="h-6 w-6 text-primary-blue mr-2" />
+            <FileText className="h-6 w-6 text-blue-600 mr-2 flex-shrink-0" />
             <h3 className="text-lg font-semibold text-gray-900">Contact et informations</h3>
           </div>
           <div className="prose prose-gray max-w-none">
