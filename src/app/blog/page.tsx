@@ -82,17 +82,17 @@ export default function BlogPage() {
         
         // Charger les données de la page depuis Strapi
         const strapiPageData = await getPageBlog()
-        if (strapiPageData) {
+        if (strapiPageData && typeof strapiPageData === 'object') {
           setPageData({
-            heroTitle: strapiPageData.heroTitle || defaultPageData.heroTitle,
-            heroSubtitle: strapiPageData.heroSubtitle || defaultPageData.heroSubtitle,
-            heroImage: getStrapiMediaURL(strapiPageData.heroImage) || defaultPageData.heroImage,
-            heroBadgeText: strapiPageData.heroBadgeText || defaultPageData.heroBadgeText,
-            sectionTitle: strapiPageData.sectionTitle || defaultPageData.sectionTitle,
-            sectionSubtitle: strapiPageData.sectionSubtitle || defaultPageData.sectionSubtitle,
-            featuredSectionTitle: strapiPageData.featuredSectionTitle || defaultPageData.featuredSectionTitle,
-            searchPlaceholder: strapiPageData.searchPlaceholder || defaultPageData.searchPlaceholder,
-            noArticlesText: strapiPageData.noArticlesText || defaultPageData.noArticlesText,
+            heroTitle: (strapiPageData as any).heroTitle || defaultPageData.heroTitle,
+            heroSubtitle: (strapiPageData as any).heroSubtitle || defaultPageData.heroSubtitle,
+            heroImage: getStrapiMediaURL((strapiPageData as any).heroImage) || defaultPageData.heroImage,
+            heroBadgeText: (strapiPageData as any).heroBadgeText || defaultPageData.heroBadgeText,
+            sectionTitle: (strapiPageData as any).sectionTitle || defaultPageData.sectionTitle,
+            sectionSubtitle: (strapiPageData as any).sectionSubtitle || defaultPageData.sectionSubtitle,
+            featuredSectionTitle: (strapiPageData as any).featuredSectionTitle || defaultPageData.featuredSectionTitle,
+            searchPlaceholder: (strapiPageData as any).searchPlaceholder || defaultPageData.searchPlaceholder,
+            noArticlesText: (strapiPageData as any).noArticlesText || defaultPageData.noArticlesText,
             allCategoriesText: strapiPageData.allCategoriesText || defaultPageData.allCategoriesText
           })
         }
