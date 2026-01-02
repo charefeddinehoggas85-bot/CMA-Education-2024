@@ -5,7 +5,7 @@ import { GraduationCap, Clock, Award, ArrowRight, RefreshCw, CheckCircle, Buildi
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { getFormations, getImageURL, getVAEFormules, getVAECertifications, getPageFormations } from '@/lib/strapi'
+import { getFormations, getImageURL, getVAEFormules, getVAECertifications, getPageFormations, getStrapiMediaURL } from '@/lib/strapi'
 
 // Données statiques pour VAE et entreprises (à migrer vers Strapi plus tard)
 const staticVaeFormules = [
@@ -477,6 +477,7 @@ export default function FormationsPage() {
   const [vaeCertifications, setVaeCertifications] = useState<{niveau5: any[], niveau6: any[]}>(staticVaeCertifications)
   const [loading, setLoading] = useState(true)
   const [pageData, setPageData] = useState<any>(null)
+  const [heroImage, setHeroImage] = useState<string>('/images/formations/formations-hero.jpg')
 
   // Helper pour normaliser les données VAE de Strapi
   const normalizeVAEFormule = (formule: any): VAEFormule => {
@@ -556,6 +557,15 @@ export default function FormationsPage() {
         if (pageFormationsData) {
           setPageData(pageFormationsData)
           console.log('✅ Page Formations Single Type chargé depuis Strapi')
+          
+          // Charger l'image hero depuis Strapi si disponible
+          if (pageFormationsData.heroImage) {
+            const strapiHeroImage = getStrapiMediaURL(pageFormationsData.heroImage)
+            if (strapiHeroImage) {
+              setHeroImage(strapiHeroImage)
+              console.log('✅ Hero image chargée depuis Strapi:', strapiHeroImage)
+            }
+          }
         }
       } catch (error) {
         console.error('❌ Erreur chargement Strapi:', error)
@@ -580,7 +590,7 @@ export default function FormationsPage() {
         {/* Image de fond */}
         <div className="absolute inset-0">
           <img 
-            src="/images/formations/formations-hero.jpg"
+            src={heroImage}
             alt="Formations BTP"
             className="w-full h-full object-cover object-center"
           />

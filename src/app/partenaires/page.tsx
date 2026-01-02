@@ -1,11 +1,16 @@
 'use client'
 
+import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { ExternalLink, Building2, Users, Briefcase, TrendingUp } from 'lucide-react'
+import { ExternalLink, Building2, Users, Briefcase } from 'lucide-react'
 import Link from 'next/link'
+import { getPagePartenaires, getPartners, getStrapiMediaURL, getImageURL } from '@/lib/strapi'
 
-// Liste des partenaires avec leurs logos et sites web
-const partners = [
+// Image par défaut (fallback)
+const DEFAULT_HERO_IMAGE = '/images/partenaires-hero.jpg'
+
+// Données statiques par défaut (fallback)
+const defaultPartners = [
   { name: 'Léon Grosse', logo: '/images/partners/LEON GROSSE.webp', website: 'https://www.leongrosse.fr/' },
   { name: 'Eiffage', logo: '/images/partners/eiffage.webp', website: 'https://www.eiffage.com/' },
   { name: 'Afpa', logo: '/images/partners/Afpa.webp', website: 'https://www.afpa.fr/' },
@@ -20,18 +25,119 @@ const partners = [
   { name: 'GS Construction', logo: '/images/partners/GS Construction.webp', website: 'https://www.gs-construction.fr/' },
 ]
 
-// Statistiques réelles
-const stats = [
+// Statistiques par défaut
+const defaultStats = [
   { icon: Building2, value: '12', label: 'Entreprises partenaires', suffix: '' },
   { icon: Users, value: '40', label: 'Alternants placés', suffix: '+' },
   { icon: Briefcase, value: '98', label: "Taux d'insertion", suffix: '%' },
 ]
 
+interface PageData {
+  heroTitle: string
+  heroSubtitle: string
+  heroImage: string | null
+  sectionTitle: string
+  sectionDescription: string
+  ctaTitle: string
+  ctaDescription: string
+  ctaButtonText: string
+  ctaButtonLink: string
+}
+
+interface Partner {
+  id?: number
+  name: string
+  logo: string
+  website?: string
+  logoData?: any
+}
+
 export default function PartenairesPage() {
+  const [pageData, setPageData] = useState<PageData>({
+    heroTitle: 'Nos Partenaires',
+    heroSubtitle: 'Des entreprises leaders du BTP qui nous font confiance pour former les professionnels de demain',
+    heroImage: null,
+    sectionTitle: 'Ils nous font confiance',
+    sectionDescription: 'Nos partenaires accueillent nos alternants et participent activement à leur formation',
+    ctaTitle: 'Devenez partenaire',
+    ctaDescription: 'Rejoignez notre réseau d\'entreprises partenaires et accueillez nos alternants formés aux métiers du BTP',
+    ctaButtonText: 'Nous contacter',
+    ctaButtonLink: '/contact'
+  })
+  const [partners, setPartners] = useState<Partner[]>(defaultPartners)
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    async function loadData() {
+      try {
+        // Charger les données de la page
+        const strapiPageData = await getPagePartenaires()
+        if (strapiPageData) {
+          // Récupérer l'URL de l'image hero depuis Strapi
+          let heroImageUrl: string | null = null
+          if ((strapiPageData as any).heroImage) {
+            const strapiImageUrl = getStrapiMediaURL((strapiPageData as any).heroImage)
+            if (strapiImageUrl) {
+              heroImageUrl = strapiImageUrl
+              console.log('✅ Image Partenaires chargée depuis Strapi:', heroImageUrl)
+            }
+          }
+          
+          setPageData({
+            heroTitle: (strapiPageData as any).heroTitle || 'Nos Partenaires',
+            heroSubtitle: (strapiPageData as any).heroSubtitle || (strapiPageData as any).heroDescription || pageData.heroSubtitle,
+            heroImage: heroImageUrl,
+            sectionTitle: (strapiPageData as any).sectionTitle || pageData.sectionTitle,
+            sectionDescription: (strapiPageData as any).sectionDescription || pageData.sectionDescription,
+            ctaTitle: (strapiPageData as any).ctaTitle || pageData.ctaTitle,
+            ctaDescription: (strapiPageData as any).ctaDescription || pageData.ctaDescription,
+            ctaButtonText: (strapiPageData as any).ctaButtonText || pageData.ctaButtonText,
+            ctaButtonLink: (strapiPageData as any).ctaButtonLink || pageData.ctaButtonLink
+          })
+        }
+
+        // Charger les partenaires depuis Strapi
+        const strapiPartners = await getPartners()
+        if (strapiPartners && strapiPartners.length > 0) {
+          const formattedPartners = strapiPartners.map((p: any) => ({
+            id: p.id,
+            name: p.nom || p.name,
+            logo: getImageURL(p.logoData || p.logo, '/images/placeholder-partner.png'),
+            website: p.siteWeb || p.website || '#'
+          }))
+          setPartners(formattedPartners)
+        }
+      } catch (error) {
+        console.error('Erreur chargement partenaires:', error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    loadData()
+  }, [])
+  if (loading) {
+    return (
+      <div className="py-20 text-center">
+        <div className="animate-pulse">
+          <div className="bg-gray-200 h-16 w-96 mx-auto rounded mb-4"></div>
+          <div className="bg-gray-200 h-6 w-2/3 mx-auto rounded"></div>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <>
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary-blue to-blue-800 text-white overflow-hidden">
+        {/* Image de fond dynamique depuis Strapi */}
+        {pageData.heroImage && (
+          <div 
+            className="absolute inset-0 bg-cover bg-center opacity-20"
+            style={{ backgroundImage: `url('${pageData.heroImage}')` }}
+          />
+        )}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-64 h-64 border border-white/30 rounded-full"></div>
           <div className="absolute bottom-20 right-20 w-96 h-96 border border-white/20 rounded-full"></div>
@@ -45,15 +151,15 @@ export default function PartenairesPage() {
             className="text-center"
           >
             <h1 className="text-5xl md:text-6xl font-montserrat font-black mb-6">
-              Nos Partenaires
+              {pageData.heroTitle}
             </h1>
             <p className="text-xl md:text-2xl opacity-90 max-w-3xl mx-auto mb-12">
-              Des entreprises leaders du BTP qui nous font confiance pour former les professionnels de demain
+              {pageData.heroSubtitle}
             </p>
             
             {/* Stats */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-6">
-              {stats.map((stat, index) => (
+              {defaultStats.map((stat, index) => (
                 <motion.div
                   key={index}
                   initial={{ opacity: 0, scale: 0.8 }}
@@ -84,10 +190,10 @@ export default function PartenairesPage() {
             className="text-center mb-16"
           >
             <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
-              Ils nous font confiance
+              {pageData.sectionTitle}
             </h2>
             <p className="text-xl text-gray-600 max-w-3xl mx-auto">
-              Nos partenaires accueillent nos alternants et participent activement à leur formation
+              {pageData.sectionDescription}
             </p>
           </motion.div>
 
@@ -219,16 +325,16 @@ export default function PartenairesPage() {
             transition={{ duration: 0.6 }}
           >
             <h2 className="text-3xl font-montserrat font-bold text-primary-blue mb-6">
-              Devenez partenaire
+              {pageData.ctaTitle}
             </h2>
             <p className="text-lg text-gray-600 mb-8">
-              Rejoignez notre réseau d'entreprises partenaires et accueillez nos alternants formés aux métiers du BTP
+              {pageData.ctaDescription}
             </p>
             <Link
-              href="/contact"
+              href={pageData.ctaButtonLink}
               className="inline-flex items-center space-x-2 bg-primary-blue text-white px-8 py-4 rounded-xl font-bold text-lg hover:bg-blue-700 transition-all transform hover:scale-105"
             >
-              <span>Nous contacter</span>
+              <span>{pageData.ctaButtonText}</span>
               <ExternalLink className="w-5 h-5" />
             </Link>
           </motion.div>
