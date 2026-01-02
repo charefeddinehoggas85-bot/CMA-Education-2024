@@ -62,7 +62,7 @@ const defaultLabels: PageLabels = {
   ctaPrimaryButtonText: "Candidater maintenant",
   ctaSecondaryButtonText: "Nous contacter",
   ctaSecondaryButtonLink: "/contact",
-  phoneNumber: "01 89 70 60 52",
+  phoneNumber: "01 85 09 71 06",
   dureeLabel: "Durée",
   heuresLabel: "Heures",
   modaliteLabel: "Modalité",
@@ -509,7 +509,7 @@ export default function FormationContent({ formation }: { formation: Formation }
                   </Link>
                   <div className="text-center pt-4 border-t">
                     <div className="flex items-center justify-center space-x-2 text-primary-blue">
-                      <Phone className="w-4 h-4" /><span className="font-semibold">01 89 70 60 52</span>
+                      <Phone className="w-4 h-4" /><span className="font-semibold">01 85 09 71 06</span>
                     </div>
                   </div>
                 </div>

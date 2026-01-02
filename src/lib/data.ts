@@ -521,7 +521,7 @@ export const values = [
 
 export const contact = {
   address: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
-  phone: '01 89 70 60 52',
+  phone: '01 85 09 71 06',
   email: 'contact.academy@cma-education.com',
   emailInscription: 'inscription.academy@cma-education.com'
 }

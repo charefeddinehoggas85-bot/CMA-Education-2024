@@ -396,7 +396,7 @@ function generatePage1(formation: Formation): string {
         <div class="footer-contact">
           <strong>CMA - Construction Management Academy</strong><br>
           67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne<br>
-          📞 01 89 70 60 52 | ✉️ contact.academy@cma-education.com
+          📞 01 85 09 71 06 | ✉️ contact.academy@cma-education.com
         </div>
         <div class="page-number">Page 1</div>
       </div>
@@ -456,7 +456,7 @@ function generatePage2(formation: Formation): string {
       <div class="footer">
         <div class="footer-contact">
           <strong>CMA - Construction Management Academy</strong><br>
-          📞 01 89 70 60 52 | ✉️ contact.academy@cma-education.com
+          📞 01 85 09 71 06 | ✉️ contact.academy@cma-education.com
         </div>
         <div class="page-number">Page 2</div>
       </div>
@@ -545,7 +545,7 @@ function generatePage3(formation: Formation): string {
           <strong>Construction Management Academy</strong><br>
           67-69 Avenue du Général de Gaulle<br>
           77420 Champs sur Marne<br><br>
-          <strong style="color: ${COLORS.bleu};">Téléphone :</strong> 01 89 70 60 52<br>
+          <strong style="color: ${COLORS.bleu};">Téléphone :</strong> 01 85 09 71 06<br>
           <strong style="color: ${COLORS.bleu};">Email :</strong> contact.academy@cma-education.com<br>
           <strong style="color: ${COLORS.bleu};">Inscription :</strong> inscription.academy@cma-education.com
         </div>

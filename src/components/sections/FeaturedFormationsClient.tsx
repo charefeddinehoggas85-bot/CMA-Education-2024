@@ -195,11 +195,11 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
   
   const getCategoryGradient = (cat: string) => {
     switch(cat) {
-      case 'alternance': return 'from-blue-500 via-indigo-500 to-purple-600'
-      case 'reconversion': return 'from-emerald-500 via-teal-500 to-cyan-600'
-      case 'vae': return 'from-purple-500 via-violet-500 to-fuchsia-600'
-      case 'entreprise': return 'from-orange-500 via-red-500 to-pink-600'
-      default: return 'from-blue-500 to-indigo-600'
+      case 'alternance': return 'from-blue-600 via-blue-700 to-indigo-800'
+      case 'reconversion': return 'from-emerald-600 via-teal-700 to-cyan-800'
+      case 'vae': return 'from-purple-600 via-violet-700 to-fuchsia-800'
+      case 'entreprise': return 'from-orange-600 via-red-700 to-pink-800'
+      default: return 'from-blue-600 to-indigo-800'
     }
   }
 
@@ -275,10 +275,10 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
       viewport={{ once: true }}
       onHoverStart={() => setIsHovered(true)}
       onHoverEnd={() => setIsHovered(false)}
-      className="group relative bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden flex-shrink-0 w-72 h-[420px] border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500"
+      className="group relative bg-white/90 backdrop-blur-sm rounded-3xl overflow-hidden flex-shrink-0 w-72 min-h-[480px] border border-white/20 shadow-lg hover:shadow-2xl transition-all duration-500 flex flex-col"
     >
       {/* IMAGE DE LA FORMATION */}
-      <div className="relative h-48 overflow-hidden">
+      <div className="relative h-44 overflow-hidden flex-shrink-0">
         <img 
           src={imageUrl}
           alt={formation.title}
@@ -307,15 +307,15 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
       </div>
 
       {/* CONTENU DE LA CARTE */}
-      <div className="p-4 flex-1 flex flex-col">
+      <div className="p-4 flex-1 flex flex-col min-h-0">
         {/* Titre */}
-        <h3 className="text-lg font-bold text-gray-900 mb-2 line-clamp-2 leading-tight">
+        <h3 className="text-base font-bold text-gray-900 mb-2 line-clamp-2 leading-tight flex-shrink-0">
           {formation.title}
         </h3>
 
         {/* RNCP Badge */}
         {formation.rncp && (
-          <div className="flex items-center gap-2 mb-3">
+          <div className="flex items-center gap-2 mb-2 flex-shrink-0">
             <div className="flex items-center gap-1 bg-blue-50 px-2 py-1 rounded-lg">
               <Award className="w-3 h-3 text-blue-600" />
               <span className="text-xs font-medium text-blue-700">{formation.rncp}</span>
@@ -335,12 +335,12 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
         )}
 
         {/* Description */}
-        <p className="text-sm text-gray-600 mb-3 line-clamp-2 leading-relaxed flex-1">
+        <p className="text-sm text-gray-600 mb-3 line-clamp-3 leading-relaxed flex-grow">
           {formation.shortDescription || formation.shortDesc || 'Formation professionnelle certifiante dans le BTP'}
         </p>
 
         {/* Informations pratiques */}
-        <div className="grid grid-cols-2 gap-2 mb-4 text-xs">
+        <div className="grid grid-cols-2 gap-2 mb-3 text-xs flex-shrink-0">
           {formation.duration && (
             <div className="flex items-center gap-1 bg-gray-50 px-2 py-1 rounded-lg">
               <Clock className="w-3 h-3 text-gray-500" />
@@ -354,22 +354,23 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
         </div>
 
         {/* BOUTON DÉCOUVRIR - Lien vers la page de formation */}
-        <motion.div
-          whileHover={{ scale: 1.02 }}
-          whileTap={{ scale: 0.98 }}
-          className="mt-auto"
-        >
-          <Link
-            href={`/formations/${formation.slug}`}
-            className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-4 py-3 rounded-xl font-semibold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl w-full`}
+        <div className="mt-auto flex-shrink-0">
+          <motion.div
+            whileHover={{ scale: 1.02 }}
+            whileTap={{ scale: 0.98 }}
           >
-            <span className="relative z-10">Découvrir</span>
-            <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform" />
-            
-            {/* Effet de brillance au hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-          </Link>
-        </motion.div>
+            <Link
+              href={`/formations/${formation.slug}`}
+              className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl w-full border-2 border-white/20 hover:border-white/40`}
+            >
+              <span className="relative z-10 font-bold text-white drop-shadow-sm">Découvrir</span>
+              <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform text-white drop-shadow-sm" />
+              
+              {/* Effet de brillance au hover */}
+              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+            </Link>
+          </motion.div>
+        </div>
       </div>
 
       {/* Effet de bordure animée au hover */}

@@ -14,7 +14,7 @@ const OptimizedFloatingActions = memo(() => {
     {
       icon: <Phone className="w-4 h-4" />,
       label: "Appeler",
-      onClick: () => window.open('tel:0189706052', '_self'),
+      onClick: () => window.open('tel:0185097106', '_self'),
       color: "bg-green-500 hover:bg-green-600"
     },
     {

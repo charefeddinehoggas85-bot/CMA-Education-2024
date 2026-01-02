@@ -37,66 +37,123 @@ export async function POST(request: NextRequest) {
     
     console.log(`📄 Brochure trouvée: ${brochureData.name} (ID: ${brochureId})`);
 
-    // SOLUTION: Utiliser l'API Strapi pour récupérer le contenu du fichier
-    // Puisque les URLs directes /uploads/ ne fonctionnent pas sur Railway,
-    // nous utilisons l'API /api/upload/files/{id} qui fonctionne
+    // SOLUTION: Utiliser les liens directs fournis pour chaque brochure
+    // Mapping direct des formations vers leurs brochures (URLs fournies par l'utilisateur)
+    const DIRECT_BROCHURE_URLS: Record<string, string> = {
+      // Chef de chantier VRD
+      'chef-chantier-vrd': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_chantieer_VRD_1879443ced.pdf',
+      'chef-de-chantier-vrd': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_chantieer_VRD_1879443ced.pdf',
+      
+      // Conducteur de Travaux VRD (toutes les variantes)
+      'conducteur-travaux-vrd': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      'conducteur-travaux-vrd-1an': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      'conducteur-travaux-vrd-2ans': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      'conducteur-de-travaux-vrd': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      'conducteur-de-travaux-vrd-1an': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      'conducteur-de-travaux-vrd-2ans': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      'conducteur-travaux-VRD-reconversion': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_VRD_d47e5ae88b.pdf',
+      
+      // Double Parcours BIM
+      'responsable-travaux-bim': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Double_Parcours_f36af320c9.pdf',
+      'double-parcours-bim': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Double_Parcours_f36af320c9.pdf',
+      'responsable-de-travaux-bim': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Double_Parcours_f36af320c9.pdf',
+      
+      // Conducteur de Travaux Bâtiment (toutes les variantes)
+      'conducteur-travaux-batiment': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_Batiment_and_GC_8f5966db1c.pdf',
+      'conducteur-de-travaux-batiment': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_Batiment_and_GC_8f5966db1c.pdf',
+      'conducteur-travaux-reconversion': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_Batiment_and_GC_8f5966db1c.pdf',
+      'conducteur-de-travaux-reconversion': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_Batiment_and_GC_8f5966db1c.pdf',
+      'conducteur-travaux-publics-reconversion': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Conducteur_de_Travaux_Batiment_and_GC_8f5966db1c.pdf',
+      
+      // Chargé d'Affaires (toutes les variantes)
+      'charge-affaires-batiment': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Charge_d_affaires_dyu_Batiment_dea7cde775.pdf',
+      'charge-d-affaires-batiment': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Charge_d_affaires_dyu_Batiment_dea7cde775.pdf',
+      'charge-affaires-reconversion': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Charge_d_affaires_dyu_Batiment_dea7cde775.pdf',
+      'charge-d-affaires-reconversion': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Charge_d_affaires_dyu_Batiment_dea7cde775.pdf',
+      'charge-affaires': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Charge_d_affaires_dyu_Batiment_dea7cde775.pdf',
+      
+      // Chef de Projets (toutes les variantes)
+      'chef-projets-btp': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_Projets_caee386a65.pdf',
+      'chef-de-projets-btp': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_Projets_caee386a65.pdf',
+      'chef-projets-btp-1an': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_Projets_caee386a65.pdf',
+      'chef-de-projets-btp-1an': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_Projets_caee386a65.pdf',
+      'chef-projets': 'https://cma-education-strapi-production.up.railway.app/uploads/Brochure_Chef_de_Projets_caee386a65.pdf'
+    };
     
     let pdfBuffer = null;
     let successMethod = null;
 
     try {
-      console.log('🔄 Récupération via API Strapi upload/files...');
+      console.log('🔄 Récupération via liens directs...');
       
-      // Étape 1: Récupérer les métadonnées du fichier
-      const fileMetaResponse = await fetch(`${strapiUrl}/api/upload/files/${brochureId}`, {
-        headers: {
-          'Accept': 'application/json',
-        },
-      });
+      // Obtenir le slug de la formation pour le mapping direct
+      const formationSlug = formation.attributes.slug;
+      console.log(`🔍 Formation slug: "${formationSlug}"`);
       
-      if (!fileMetaResponse.ok) {
-        throw new Error(`API upload/files failed: ${fileMetaResponse.status}`);
-      }
-
-      const fileMeta = await fileMetaResponse.json();
-      console.log(`📋 Métadonnées récupérées: ${fileMeta.name}`);
-
-      // Étape 2: Essayer de récupérer le contenu via différentes méthodes
+      const directBrochureUrl = DIRECT_BROCHURE_URLS[formationSlug];
       
-      // Méthode A: Essayer l'URL directe avec différents headers
-      const directUrl = `${strapiUrl}${fileMeta.url}`;
-      console.log(`📥 Tentative URL directe: ${directUrl}`);
-      
-      const directResponse = await fetch(directUrl, {
-        headers: {
-          'Accept': 'application/pdf, application/octet-stream, */*',
-          'User-Agent': 'CMA-Education-Bot/1.0',
-          'Cache-Control': 'no-cache',
-        },
-      });
-
-      if (directResponse.ok) {
-        const buffer = await directResponse.arrayBuffer();
+      if (directBrochureUrl) {
+        console.log(`📥 URL directe trouvée pour ${formationSlug}: ${directBrochureUrl}`);
         
-        // Vérifier que c'est bien un PDF
-        const pdfHeader = new Uint8Array(buffer.slice(0, 4));
-        const isPdf = pdfHeader[0] === 0x25 && pdfHeader[1] === 0x50 && pdfHeader[2] === 0x44 && pdfHeader[3] === 0x46; // %PDF
-        
-        if (isPdf && buffer.byteLength > 100) {
-          pdfBuffer = buffer;
-          successMethod = 'direct-url';
-          console.log(`✅ URL directe réussie - ${buffer.byteLength} bytes`);
-        } else {
-          console.log(`⚠️ URL directe - Contenu invalide (${buffer.byteLength} bytes, isPdf: ${isPdf})`);
+        const directResponse = await fetch(directBrochureUrl, {
+          headers: {
+            'Accept': 'application/pdf, application/octet-stream, */*',
+            'User-Agent': 'CMA-Education-Bot/1.0',
+            'Cache-Control': 'no-cache',
+          },
+        });
+
+        console.log(`📡 Réponse directe: ${directResponse.status} ${directResponse.statusText}`);
+        console.log(`📄 Content-Type: ${directResponse.headers.get('content-type')}`);
+
+        if (directResponse.ok) {
+          const buffer = await directResponse.arrayBuffer();
           
-          // Si ce n'est pas un PDF, c'est probablement une réponse d'erreur JSON
-          if (buffer.byteLength < 1000) {
-            const textContent = new TextDecoder().decode(buffer);
-            console.log(`📄 Contenu reçu: ${textContent.substring(0, 200)}`);
+          // Vérifier que c'est bien un PDF
+          const pdfHeader = new Uint8Array(buffer.slice(0, 4));
+          const isPdf = pdfHeader[0] === 0x25 && pdfHeader[1] === 0x50 && pdfHeader[2] === 0x44 && pdfHeader[3] === 0x46; // %PDF
+          
+          console.log(`🔍 Vérification PDF: isPdf=${isPdf}, size=${buffer.byteLength} bytes`);
+          
+          if (isPdf && buffer.byteLength > 1000) {
+            pdfBuffer = buffer;
+            successMethod = 'direct-link';
+            console.log(`✅ Lien direct réussi - ${buffer.byteLength} bytes`);
+          } else {
+            console.log(`⚠️ Lien direct - Contenu invalide (${buffer.byteLength} bytes, isPdf: ${isPdf})`);
           }
+        } else {
+          console.log(`❌ Lien direct failed: ${directResponse.status} ${directResponse.statusText}`);
         }
       } else {
-        console.log(`❌ URL directe failed: ${directResponse.status}`);
+        console.log(`⚠️ Aucun lien direct trouvé pour la formation: "${formationSlug}"`);
+        console.log(`📋 Slugs disponibles: ${Object.keys(DIRECT_BROCHURE_URLS).join(', ')}`);
+      }
+
+      // Fallback: Si le lien direct échoue, essayer l'API Strapi
+      if (!pdfBuffer) {
+        console.log('🔄 Fallback: Tentative API Strapi...');
+        
+        const fileApiResponse = await fetch(`${strapiUrl}/api/upload/files/${brochureId}`, {
+          headers: {
+            'Accept': 'application/pdf, application/octet-stream, */*',
+          },
+        });
+        
+        if (fileApiResponse.ok) {
+          const contentType = fileApiResponse.headers.get('content-type');
+          if (contentType && contentType.includes('application/pdf')) {
+            const buffer = await fileApiResponse.arrayBuffer();
+            const pdfHeader = new Uint8Array(buffer.slice(0, 4));
+            const isPdf = pdfHeader[0] === 0x25 && pdfHeader[1] === 0x50 && pdfHeader[2] === 0x44 && pdfHeader[3] === 0x46;
+            
+            if (isPdf && buffer.byteLength > 1000) {
+              pdfBuffer = buffer;
+              successMethod = 'strapi-api-fallback';
+              console.log(`✅ API Strapi fallback réussie - ${buffer.byteLength} bytes`);
+            }
+          }
+        }
       }
 
     } catch (error) {
@@ -264,7 +321,7 @@ ${rncp ? `0 -20 Td\n(Certification: ${rncp}) Tj` : ''}
 /F2 10 Tf
 (Construction Management Academy) Tj
 0 -15 Td
-(Tel: 01 89 70 60 52) Tj
+(Tel: 01 85 09 71 06) Tj
 0 -15 Td
 (Email: contact.academy@cma-education.com) Tj
 0 -15 Td

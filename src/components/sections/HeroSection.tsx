@@ -36,7 +36,7 @@ const HeroSection = () => {
     heroTitle: 'Devenez l\'acteur du BTP d\'aujourd\'hui et de demain',
     heroSubtitle: 'Formations BTP spécialisées',
     heroDescription: 'Alternance, reconversion et VAE. Niveaux 5 à 7 (Bac+2 à Bac+5).',
-    contactPhone: '01 89 70 60 52',
+    contactPhone: '01 85 09 71 06',
     contactEmail: 'contact.academy@cma-education.com'
   })
   const [pageData, setPageData] = useState<PageHomeData | null>(null)

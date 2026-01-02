@@ -503,7 +503,7 @@ export async function getContactInfo() {
   // qui génère une erreur 404 si le content-type n'existe pas
   return {
     id: 1,
-    phone: '01 89 70 60 52',
+    phone: '01 85 09 71 06',
     email: 'contact.academy@cma-education.com',
     address: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
     emailInscription: 'inscription.academy@construction-management-academy.fr',
@@ -747,7 +747,7 @@ export async function getPageFormationDetail() {
       ctaPrimaryButtonText: attrs.ctaPrimaryButtonText || "Candidater maintenant",
       ctaSecondaryButtonText: attrs.ctaSecondaryButtonText || "Nous contacter",
       ctaSecondaryButtonLink: attrs.ctaSecondaryButtonLink || "/contact",
-      phoneNumber: attrs.phoneNumber || "01 89 70 60 52",
+      phoneNumber: attrs.phoneNumber || "01 85 09 71 06",
       dureeLabel: attrs.dureeLabel || "Durée",
       heuresLabel: attrs.heuresLabel || "Heures",
       modaliteLabel: attrs.modaliteLabel || "Modalité",
@@ -826,7 +826,7 @@ export async function getFloatingActions() {
     return {
       id: data.data.id,
       // Contact Information
-      phoneNumber: attrs.phoneNumber || "0189706052",
+      phoneNumber: attrs.phoneNumber || "0185097106",
       phoneLabel: attrs.phoneLabel || "Appeler",
       phoneFullLabel: attrs.phoneFullLabel || "Nous appeler",
       email: attrs.email || "contact.academy@cma-education.com",
@@ -941,7 +941,7 @@ export async function getPageContact() {
       addressLabel: attrs.addressLabel || "Adresse",
       addressValue: attrs.addressValue || "67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne",
       phoneLabel: attrs.phoneLabel || "Téléphone",
-      phoneValue: attrs.phoneValue || "01 89 70 60 52",
+      phoneValue: attrs.phoneValue || "01 85 09 71 06",
       emailLabel: attrs.emailLabel || "Email",
       emailValue: attrs.emailValue || "contact.academy@cma-education.com",
       inscriptionLabel: attrs.inscriptionLabel || "Inscription",

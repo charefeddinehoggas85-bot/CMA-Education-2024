@@ -9,7 +9,7 @@ const FloatingActions = () => {
     {
       icon: <AnimatedIcon variant="shake" size="sm"><Phone className="w-5 h-5" /></AnimatedIcon>,
       label: "Nous appeler",
-      onClick: () => window.open('tel:0189706052', '_self')
+      onClick: () => window.open('tel:0185097106', '_self')
     },
     {
       icon: <AnimatedIcon variant="bounce" size="sm"><Mail className="w-5 h-5" /></AnimatedIcon>,

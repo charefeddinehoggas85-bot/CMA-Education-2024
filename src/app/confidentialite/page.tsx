@@ -33,7 +33,7 @@ export default function ConfidentialitePage() {
           id: 1,
           siteName: 'CMA Education',
           contactEmail: 'contact.academy@cma-education.com',
-          contactPhone: '01 89 70 60 52',
+          contactPhone: '01 85 09 71 06',
           legalAddress: '123 Avenue de la Construction, 75001 Paris',
           siret: '12345678901234',
           rcs: 'Paris B 123 456 789'

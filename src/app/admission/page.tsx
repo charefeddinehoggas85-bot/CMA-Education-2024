@@ -115,7 +115,7 @@ const defaultPageData: PageAdmission = {
   titre: "Parcours d'admission CMA",
   sousTitre: "Comment intégrer CMA ?",
   introduction: "À la Construction Management Academy, nous vous offrons un processus d'admission simplifié, sans concours d'entrée. L'admission CMA se fait uniquement sur la base d'un entretien de motivation. Si vous détenez les diplômes requis pour nos formations, vous êtes éligible. Lors de l'entretien, nous évaluerons votre motivation, qui est au cœur de notre processus de sélection. Il est important de noter qu'aucun frais de scolarité ou d'inscription ne sera demandé à l'alternant.",
-  contactPhone: "01 89 70 60 52",
+  contactPhone: "01 85 09 71 06",
   contactEmail: "inscription.academy@cma-education.com",
   ctaTexte: "Déposer ma candidature",
   ctaUrl: "https://cma-education.ymag.cloud/index.php/preinscription/",

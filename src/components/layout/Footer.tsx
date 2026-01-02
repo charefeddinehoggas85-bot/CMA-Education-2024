@@ -56,7 +56,7 @@ const Footer = () => {
     setSiteSettings({
       id: 1,
       siteName: 'Construction Management Academy',
-      contactPhone: '01 89 70 60 52',
+      contactPhone: '01 85 09 71 06',
       contactEmail: 'contact.academy@cma-education.com',
       contactAddress: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
       socialMedia: FORCED_SOCIAL_MEDIA

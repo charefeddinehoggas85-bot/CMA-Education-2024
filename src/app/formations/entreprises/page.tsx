@@ -104,7 +104,7 @@ const defaultPageData: PageEntrepriseData = {
   ctaDescription: "Contactez-nous pour discuter de vos besoins et obtenir un devis personnalisé",
   ctaBoutonPrincipal: "Nous contacter",
   ctaBoutonSecondaire: "Télécharger la brochure",
-  telephone: "01 89 70 60 52",
+  telephone: "01 85 09 71 06",
   email: "contact.academy@cma-education.com"
 }
 

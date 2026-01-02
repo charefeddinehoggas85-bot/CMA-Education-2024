@@ -25,9 +25,9 @@ const AccessibilityBanner = () => {
   const [siteSettings, setSiteSettings] = useState<SiteSettings>({
     id: 1,
     siteName: 'Construction Management Academy',
-    contactPhone: '01 89 70 60 52',
+    contactPhone: '01 85 09 71 06',
     accessibilityMessage: 'Nos formations sont ouvertes à tous, y compris aux personnes en situation de handicap. Nous mettons en place les aménagements nécessaires pour garantir les meilleures conditions d\'apprentissage.',
-    accessibilityPhone: '01 89 70 60 52',
+    accessibilityPhone: '01 85 09 71 06',
     referentHandicap: 'notre référent handicap'
   })
   const [pageData, setPageData] = useState<PageHomeData>({

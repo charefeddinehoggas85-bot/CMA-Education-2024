@@ -72,7 +72,7 @@ export async function POST(request: NextRequest) {
     
     <div class="contact-info">
         <h3>Contactez-nous</h3>
-        <p><strong>Téléphone :</strong> 01 89 70 60 52</p>
+        <p><strong>Téléphone :</strong> 01 85 09 71 06</p>
         <p><strong>Email :</strong> contact.academy@cma-education.com</p>
         <p><strong>Adresse :</strong> 67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne</p>
     </div>
