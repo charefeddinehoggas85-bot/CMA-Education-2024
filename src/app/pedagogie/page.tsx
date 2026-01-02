@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import GallerySection from '@/components/sections/GallerySection'
-import { getPagePedagogie } from '@/lib/strapi'
+import { getPagePedagogie, getStrapiMediaURL } from '@/lib/strapi'
 import { 
   BookOpen, Users, Target, Award, CheckCircle, ArrowRight, 
   Lightbulb, Cog, Heart, Star, Clock, TrendingUp 
@@ -53,7 +53,7 @@ interface EnvironnementItem {
 interface PagePedagogieData {
   heroTitle: string
   heroDescription: string
-  heroImage?: any
+  heroImage: string | null
   chiffresCles: ChiffreCle[]
   valeursPedagogiques: ValeurPedagogique[]
   methodesPedagogiques: MethodePedagogique[]
@@ -68,10 +68,14 @@ interface PagePedagogieData {
   ctaSecondaryButtonLink: string
 }
 
+// Image par défaut (fallback)
+const DEFAULT_HERO_IMAGE = '/images/pedagogie-hero.jpg'
+
 // Données par défaut (fallback)
 const defaultData: PagePedagogieData = {
   heroTitle: "Notre Pédagogie d'Excellence",
   heroDescription: "Une approche innovante qui allie théorie et pratique pour former les professionnels BTP de demain",
+  heroImage: DEFAULT_HERO_IMAGE,
   chiffresCles: [
     { valeur: "95%", label: "Taux de réussite", icon: "Award", ordre: 1 },
     { valeur: "20", label: "Étudiants max par classe", icon: "Users", ordre: 2 },
@@ -123,11 +127,21 @@ export default function PedagogiePage() {
         const strapiData = await getPagePedagogie()
         
         if (strapiData) {
+          // Récupérer l'URL de l'image hero depuis Strapi
+          let heroImageUrl = DEFAULT_HERO_IMAGE
+          if (strapiData.heroImage) {
+            const strapiImageUrl = getStrapiMediaURL(strapiData.heroImage)
+            if (strapiImageUrl) {
+              heroImageUrl = strapiImageUrl
+              console.log('✅ Image Pédagogie chargée depuis Strapi:', heroImageUrl)
+            }
+          }
+          
           // Fusionner les données Strapi avec les valeurs par défaut
           setPageData({
             heroTitle: strapiData.heroTitle || defaultData.heroTitle,
             heroDescription: strapiData.heroDescription || defaultData.heroDescription,
-            heroImage: strapiData.heroImage,
+            heroImage: heroImageUrl,
             chiffresCles: strapiData.chiffresCles?.length > 0 ? strapiData.chiffresCles : defaultData.chiffresCles,
             valeursPedagogiques: strapiData.valeursPedagogiques?.length > 0 ? strapiData.valeursPedagogiques : defaultData.valeursPedagogiques,
             methodesPedagogiques: strapiData.methodesPedagogiques?.length > 0 ? strapiData.methodesPedagogiques : defaultData.methodesPedagogiques,
@@ -196,7 +210,10 @@ export default function PedagogiePage() {
     <>
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-br from-primary-blue via-indigo-700 to-purple-800 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/images/pedagogie-hero.jpg')] bg-cover bg-center opacity-20"></div>
+        <div 
+          className="absolute inset-0 bg-cover bg-center opacity-20"
+          style={{ backgroundImage: `url('${pageData.heroImage || DEFAULT_HERO_IMAGE}')` }}
+        ></div>
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <motion.div
             initial={{ opacity: 0, y: 30 }}
