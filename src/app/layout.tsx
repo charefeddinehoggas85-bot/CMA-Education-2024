@@ -1,11 +1,9 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import '@/styles/header-responsive-fix.css'
-import '@/styles/navigation-responsive-complete.css'
-import '@/styles/global-responsive-fix.css'
-import '@/styles/formations-dropdown-expert.css'
+import '@/styles/unified-header.css'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import ClientOnlyComponents from '@/components/ClientOnlyComponents'
+import PageLayout from '@/components/layout/PageLayout'
 
 import { organizationSchema, localBusinessSchema } from '@/lib/structured-data'
 
@@ -88,7 +86,9 @@ export default function RootLayout({
       </head>
       <body className="font-sans antialiased" suppressHydrationWarning>
         <div id="__next">
-          {children}
+          <PageLayout>
+            {children}
+          </PageLayout>
           <ClientOnlyComponents />
           <ServiceWorkerRegistration />
         </div>
