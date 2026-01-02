@@ -88,7 +88,7 @@ export default function RootLayout({
         <div id="__next">
           {children}
           <WhatsAppWidget />
-          <ChatBot />
+          <ChatBot onClose={() => {}} />
           <OpenDayPopupProvider />
           <ServiceWorkerRegistration />
         </div>

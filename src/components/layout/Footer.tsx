@@ -3,17 +3,8 @@
 import Link from 'next/link'
 import { Facebook, Linkedin, Phone, Mail, MapPin, Sparkles, Youtube } from 'lucide-react'
 import { useEffect, useState } from 'react'
-import { getStatistiquesSite, getSiteSettings, getPageFooter, getImageURL } from '@/lib/strapi'
+import { getSiteSettings, getPageFooter, getImageURL } from '@/lib/strapi'
 import OptimizedGoogleMap from '@/components/ui/OptimizedGoogleMap'
-
-interface Statistique {
-  id: number
-  cle: string
-  nombre: number
-  label: string
-  suffixe: string
-  ordre: number
-}
 
 interface SiteSettings {
   id: number
@@ -56,17 +47,9 @@ interface PageFooterData {
 }
 
 const Footer = () => {
-  const [stats, setStats] = useState<Statistique[]>([])
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null)
   const [pageData, setPageData] = useState<PageFooterData | null>(null)
   const [loading, setLoading] = useState(true)
-
-  // Fallback data
-  const defaultStats: Statistique[] = [
-    { id: 1, cle: 'experience', nombre: 15, label: 'Années', suffixe: '+', ordre: 1 },
-    { id: 2, cle: 'formations', nombre: 7, label: 'Formations', suffixe: '', ordre: 2 },
-    { id: 3, cle: 'partners', nombre: 12, label: 'Partenaires', suffixe: '+', ordre: 3 }
-  ]
 
   const defaultSiteSettings: SiteSettings = {
     id: 1,
@@ -86,17 +69,10 @@ const Footer = () => {
   useEffect(() => {
     async function loadData() {
       try {
-        const [statsData, settingsData, footerData] = await Promise.all([
-          getStatistiquesSite(),
+        const [settingsData, footerData] = await Promise.all([
           getSiteSettings(),
           getPageFooter()
         ])
-        
-        if (statsData && (statsData as Statistique[]).length > 0) {
-          setStats(statsData as Statistique[])
-        } else {
-          setStats(defaultStats)
-        }
         
         if (settingsData) {
           setSiteSettings(settingsData as SiteSettings)
@@ -109,7 +85,6 @@ const Footer = () => {
         }
       } catch (error) {
         console.warn('⚠️ Erreur Strapi, utilisation des données de fallback:', error)
-        setStats(defaultStats)
         setSiteSettings(defaultSiteSettings)
       } finally {
         setLoading(false)
@@ -117,7 +92,6 @@ const Footer = () => {
     }
     
     // Set fallback immediately for fast initial render
-    setStats(defaultStats)
     setSiteSettings(defaultSiteSettings)
     setLoading(false)
     
