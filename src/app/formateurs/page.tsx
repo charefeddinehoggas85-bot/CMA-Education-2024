@@ -2,8 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import Navigation from '@/components/layout/Navigation'
-import Footer from '@/components/layout/Footer'
 import { Building2, Zap, Users, MapPin, Award } from 'lucide-react'
 import FormatorCard from '@/components/ui/FormatorCard'
 import { getFormateurs } from '@/lib/strapi'
@@ -429,13 +427,8 @@ const FormatorsSection = () => {
 
 export default function FormateursPage() {
   return (
-    <main className="overflow-x-hidden">
-      <Navigation />
-      {/* Espacement pour compenser le header fixe avec classe utilitaire */}
-      <div className="pt-header-offset md:pt-header-offset-mobile">
-        <FormatorsSection />
-      </div>
-      <Footer />
-    </main>
+    <div className="pt-16 sm:pt-18 lg:pt-20">
+      <FormatorsSection />
+    </div>
   )
 }

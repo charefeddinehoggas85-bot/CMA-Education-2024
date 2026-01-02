@@ -1,4 +1,3 @@
-import Navigation from '@/components/layout/Navigation'
 import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
 import FeaturedFormationsSection from '@/components/sections/FeaturedFormationsSection'
@@ -9,15 +8,13 @@ import AccessibilityBanner from '@/components/sections/AccessibilityBanner'
 
 export default function Home() {
   return (
-    <main className="overflow-x-hidden">
-      <Navigation />
+    <>
       <HeroSection />
       <FeaturedFormationsSection />
       <FeaturedFormatorsSection />
       <FeaturedPartnersSection />
       <ContactSection />
       <AccessibilityBanner />
-      <Footer />
-    </main>
+    </>
   )
 }
