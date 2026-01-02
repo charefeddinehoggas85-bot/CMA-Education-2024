@@ -2,10 +2,8 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import { getSiteSettings, getContactInfo, getProcessusAdmission, getPartners, getFormations, getPageContact } from '@/lib/strapi'
-import { Phone, Mail, MapPin, Clock, CheckCircle, UserPlus } from 'lucide-react'
-import emailjs from '@emailjs/browser'
-import { useRef } from 'react'
+import { getSiteSettings, getContactInfo, getProcessusAdmission, getPartners, getPageContact } from '@/lib/strapi'
+import { Phone, Mail, MapPin, Clock, CheckCircle, UserPlus, ArrowRight, Sparkles, GraduationCap, Building2, Users, Star, Rocket, Target, Award } from 'lucide-react'
 
 interface SiteSettings {
   id: number
@@ -52,16 +50,56 @@ interface Partner {
   logo?: string
 }
 
-interface Formation {
-  id: number
-  titre: string
-  slug: string
-  niveau?: string
-  category?: {
-    nom: string
-    slug: string
-  }
-}
+// Animated floating particles component
+const FloatingParticles = () => (
+  <div className="absolute inset-0 overflow-hidden pointer-events-none">
+    {[...Array(20)].map((_, i) => (
+      <motion.div
+        key={i}
+        className="absolute w-2 h-2 bg-primary-yellow/30 rounded-full"
+        initial={{ 
+          x: Math.random() * 100 + '%', 
+          y: '100%',
+          opacity: 0 
+        }}
+        animate={{ 
+          y: '-100%',
+          opacity: [0, 1, 1, 0],
+        }}
+        transition={{
+          duration: Math.random() * 10 + 10,
+          repeat: Infinity,
+          delay: Math.random() * 5,
+          ease: 'linear'
+        }}
+      />
+    ))}
+  </div>
+)
+
+// Animated gradient orbs
+const GradientOrbs = () => (
+  <>
+    <motion.div
+      className="absolute top-20 left-10 w-72 h-72 bg-gradient-to-r from-primary-blue/20 to-primary-yellow/20 rounded-full blur-3xl"
+      animate={{
+        scale: [1, 1.2, 1],
+        x: [0, 30, 0],
+        y: [0, -20, 0],
+      }}
+      transition={{ duration: 8, repeat: Infinity, ease: 'easeInOut' }}
+    />
+    <motion.div
+      className="absolute bottom-20 right-10 w-96 h-96 bg-gradient-to-r from-primary-yellow/20 to-green-500/20 rounded-full blur-3xl"
+      animate={{
+        scale: [1.2, 1, 1.2],
+        x: [0, -40, 0],
+        y: [0, 30, 0],
+      }}
+      transition={{ duration: 10, repeat: Infinity, ease: 'easeInOut' }}
+    />
+  </>
+)
 
 const AdmissionStep = ({ step, index }: { step: ProcessusAdmission, index: number }) => (
   <motion.div
@@ -85,25 +123,21 @@ const AdmissionStep = ({ step, index }: { step: ProcessusAdmission, index: numbe
 )
 
 export default function ContactPage() {
-  const form = useRef<HTMLFormElement>(null)
-  const [isLoading, setIsLoading] = useState(false)
   const [siteSettings, setSiteSettings] = useState<SiteSettings | null>(null)
   const [contactInfo, setContactInfo] = useState<ContactInfo | null>(null)
   const [admissionSteps, setAdmissionSteps] = useState<ProcessusAdmission[]>([])
   const [partners, setPartners] = useState<Partner[]>([])
-  const [formations, setFormations] = useState<Formation[]>([])
   const [loading, setLoading] = useState(true)
   const [pageData, setPageData] = useState<any>(null)
 
   useEffect(() => {
     async function loadContactData() {
       try {
-        const [settingsData, contactData, stepsData, partnersData, formationsData, pageContactData] = await Promise.all([
+        const [settingsData, contactData, stepsData, partnersData, pageContactData] = await Promise.all([
           getSiteSettings(),
           getContactInfo(),
           getProcessusAdmission(),
           getPartners(),
-          getFormations(),
           getPageContact()
         ])
         
@@ -111,14 +145,11 @@ export default function ContactPage() {
         setContactInfo(contactData as ContactInfo)
         setAdmissionSteps(stepsData as ProcessusAdmission[])
         setPartners(partnersData as Partner[])
-        setFormations(formationsData as Formation[])
         if (pageContactData) {
           setPageData(pageContactData)
-          console.log('✅ Page Contact Single Type chargé depuis Strapi')
         }
       } catch (error) {
         console.error('Erreur chargement contact:', error)
-        // Fallback avec données statiques
         setSiteSettings({
           id: 1,
           siteName: 'Construction Management Academy',
@@ -127,419 +158,394 @@ export default function ContactPage() {
           inscriptionEmail: 'inscription.academy@construction-management-academy.fr'
         })
         setAdmissionSteps([
-          {
-            id: 1,
-            titre: "Candidature en ligne",
-            description: "Remplissez le formulaire de candidature",
-            detail: "Processus simplifié en 5 minutes",
-            etape: 1,
-            ordre: 1
-          },
-          {
-            id: 2,
-            titre: "Entretien de motivation",
-            description: "Échange avec notre équipe pédagogique",
-            detail: "Entretien personnalisé de 30 minutes",
-            etape: 2,
-            ordre: 2
-          }
+          { id: 1, titre: "Candidature en ligne", description: "Remplissez le formulaire de candidature", detail: "Processus simplifié en 5 minutes", etape: 1, ordre: 1 },
+          { id: 2, titre: "Entretien de motivation", description: "Échange avec notre équipe pédagogique", detail: "Entretien personnalisé de 30 minutes", etape: 2, ordre: 2 }
         ])
       } finally {
         setLoading(false)
       }
     }
-
     loadContactData()
   }, [])
 
-  const sendEmail = async (e: React.FormEvent) => {
-    e.preventDefault()
-    if (!form.current) return
-
-    setIsLoading(true)
-    
-    try {
-      await emailjs.sendForm(
-        'service_cma2026',
-        'template_n27932h',
-        form.current,
-        'tdRwM2nw_IxILeGS-'
-      )
-      
-      alert('✅ Candidature envoyée avec succès ! Nous vous recontacterons sous 24h.')
-      form.current.reset()
-    } catch (error) {
-      console.error('Erreur EmailJS:', error)
-      alert('❌ Erreur lors de l\'envoi. Veuillez réessayer.')
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  // Organiser les formations par catégorie pour le select
-  const formationsByCategory = formations.reduce((acc: any, formation) => {
-    const categoryName = formation.category?.nom || 'Autres formations'
-    if (!acc[categoryName]) {
-      acc[categoryName] = []
-    }
-    acc[categoryName].push(formation)
-    return acc
-  }, {})
-
   if (loading) {
     return (
-      <>
-        <div className="py-20 text-center">
-          <div className="animate-pulse">
-            <div className="bg-gray-200 h-16 w-96 mx-auto rounded mb-4"></div>
-            <div className="bg-gray-200 h-6 w-2/3 mx-auto rounded"></div>
-          </div>
+      <div className="py-20 text-center">
+        <div className="animate-pulse">
+          <div className="bg-gray-200 h-16 w-96 mx-auto rounded mb-4"></div>
+          <div className="bg-gray-200 h-6 w-2/3 mx-auto rounded"></div>
         </div>
-      </>
+      </div>
     )
   }
 
   return (
     <>
-      {/* Hero */}
+      {/* Hero Section */}
       <section className="py-96 text-white relative">
         <div className="absolute inset-0 opacity-100">
-          <img 
-            src="/images/rejoignez-hero.jpg" 
-            alt="" 
-            className="w-full h-full object-cover"
-          />
+          <img src="/images/rejoignez-hero.jpg" alt="" className="w-full h-full object-cover" />
         </div>
         <div className="relative z-10">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <motion.h1 
-            className="text-5xl md:text-6xl font-montserrat font-bold mb-6"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-          >
-            {pageData?.heroTitle || `Rejoignez ${siteSettings?.siteName || 'Construction Management Academy'} !`}
-          </motion.h1>
-          <motion.p 
-            className="text-xl opacity-90 max-w-3xl mx-auto"
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.2 }}
-          >
-            {pageData?.heroSubtitle || "Processus d'admission simplifié, sans concours d'entrée. L'admission se fait uniquement sur entretien de motivation."}
-          </motion.p>
-        </div>
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <motion.h1 
+              className="text-5xl md:text-6xl font-montserrat font-bold mb-6"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+            >
+              {pageData?.heroTitle || `Rejoignez ${siteSettings?.siteName || 'Construction Management Academy'} !`}
+            </motion.h1>
+            <motion.p 
+              className="text-xl opacity-90 max-w-3xl mx-auto"
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2 }}
+            >
+              {pageData?.heroSubtitle || "Processus d'admission simplifié, sans concours d'entrée. L'admission se fait uniquement sur entretien de motivation."}
+            </motion.p>
+          </div>
         </div>
       </section>
 
-        {/* Parcours d'admission */}
-        <section className="py-20 bg-white">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
-                {pageData?.admissionSectionTitle || `Parcours d'admission ${siteSettings?.siteName || 'Construction Management Academy'}`}
-              </h2>
-              <p className="text-xl text-gray-600 max-w-4xl mx-auto">
-                {(pageData?.admissionSectionSubtitle || "Un processus simplifié en {count} étapes pour intégrer nos formations").replace('{count}', String(admissionSteps.length))}
-              </p>
-            </div>
+      {/* ✨ ANIMATED CTA SECTION - Expert UI/UX Design */}
+      <section className="py-24 bg-gradient-to-br from-slate-900 via-primary-blue to-slate-900 relative overflow-hidden">
+        <FloatingParticles />
+        <GradientOrbs />
+        
+        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+          {/* Main CTA Card */}
+          <motion.div
+            initial={{ opacity: 0, y: 40 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+            className="relative"
+          >
+            {/* Glowing border effect */}
+            <div className="absolute -inset-1 bg-gradient-to-r from-primary-yellow via-green-400 to-primary-yellow rounded-3xl blur-lg opacity-30 animate-pulse" />
             
-            <div className="grid md:grid-cols-2 gap-12">
-              {admissionSteps.map((step, index) => (
-                <AdmissionStep key={step.id} step={step} index={index} />
-              ))}
-            </div>
-          </div>
-        </section>
+            <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/20">
+              {/* Badge */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 }}
+                className="flex justify-center mb-8"
+              >
+                <span className="inline-flex items-center gap-2 px-6 py-2 bg-primary-yellow/20 border border-primary-yellow/40 rounded-full text-primary-yellow font-semibold">
+                  <Sparkles className="w-5 h-5" />
+                  Inscription Ouverte 2025-2026
+                </span>
+              </motion.div>
 
-        {/* Nos partenaires de confiance */}
-        <section className="py-20 bg-gray-50">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="text-center mb-16">
-              <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
-                {pageData?.partnersSectionTitle || "Nos partenaires de confiance"}
+              {/* Title */}
+              <motion.h2
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.3 }}
+                className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white text-center mb-6"
+              >
+                Lancez Votre Carrière
+                <span className="block mt-2 bg-gradient-to-r from-primary-yellow to-green-400 bg-clip-text text-transparent">
+                  Dans le BTP
+                </span>
+              </motion.h2>
+
+              {/* Subtitle */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.4 }}
+                className="text-xl text-white/80 text-center max-w-3xl mx-auto mb-10"
+              >
+                Rejoignez une formation d'excellence et accédez à des métiers passionnants 
+                avec un taux d'insertion professionnelle de <span className="text-primary-yellow font-bold">95%</span>
+              </motion.p>
+
+              {/* Stats Row */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.5 }}
+                className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
+              >
+                {[
+                  { icon: GraduationCap, value: '100%', label: 'Alternance' },
+                  { icon: Building2, value: '150+', label: 'Entreprises partenaires' },
+                  { icon: Users, value: '95%', label: 'Taux d\'insertion' },
+                  { icon: Award, value: 'RNCP', label: 'Titres certifiés' },
+                ].map((stat, index) => (
+                  <motion.div
+                    key={index}
+                    whileHover={{ scale: 1.05, y: -5 }}
+                    className="text-center p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary-yellow/50 transition-all duration-300"
+                  >
+                    <stat.icon className="w-8 h-8 text-primary-yellow mx-auto mb-2" />
+                    <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
+                    <div className="text-sm text-white/60">{stat.label}</div>
+                  </motion.div>
+                ))}
+              </motion.div>
+
+              {/* CTA Button */}
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.6 }}
+                className="flex flex-col sm:flex-row items-center justify-center gap-4"
+              >
+                <motion.a
+                  href="https://cma-education.ymag.cloud/index.php/preinscription/"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.98 }}
+                  className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-primary-yellow to-yellow-400 text-primary-blue font-bold text-xl rounded-2xl shadow-2xl shadow-primary-yellow/30 hover:shadow-primary-yellow/50 transition-all duration-300 overflow-hidden"
+                >
+                  {/* Shine effect */}
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                  
+                  <Rocket className="w-6 h-6 group-hover:rotate-12 transition-transform" />
+                  <span>Candidater Maintenant</span>
+                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
+                </motion.a>
+
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  whileInView={{ opacity: 1 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.8 }}
+                  className="flex items-center gap-2 text-white/60"
+                >
+                  <CheckCircle className="w-5 h-5 text-green-400" />
+                  <span>Sans frais de scolarité</span>
+                </motion.div>
+              </motion.div>
+
+              {/* Trust indicators */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.9 }}
+                className="mt-10 pt-8 border-t border-white/10"
+              >
+                <p className="text-center text-white/50 text-sm mb-4">Ils nous font confiance</p>
+                <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
+                  {partners.slice(0, 6).map((partner, index) => (
+                    <motion.div
+                      key={partner.id}
+                      initial={{ opacity: 0, y: 10 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      transition={{ delay: 1 + index * 0.1 }}
+                      className="h-8 grayscale hover:grayscale-0 transition-all duration-300"
+                    >
+                      <img 
+                        src={partner.logo ? `/images/partners/${partner.logo}` : `/images/partners/default.webp`}
+                        alt={partner.nom}
+                        className="h-full w-auto object-contain filter brightness-0 invert"
+                        onError={(e) => { e.currentTarget.style.display = 'none' }}
+                      />
+                    </motion.div>
+                  ))}
+                </div>
+              </motion.div>
+            </div>
+          </motion.div>
+
+          {/* Secondary CTA Cards */}
+          <div className="grid md:grid-cols-3 gap-6 mt-12">
+            {[
+              { icon: Target, title: 'Admission simplifiée', desc: 'Sans concours, sur entretien de motivation', color: 'from-blue-500 to-cyan-500' },
+              { icon: Star, title: 'Accompagnement personnalisé', desc: 'Un conseiller dédié pour votre projet', color: 'from-purple-500 to-pink-500' },
+              { icon: GraduationCap, title: 'Diplômes reconnus', desc: 'Titres RNCP de niveau Bac+2 à Bac+5', color: 'from-green-500 to-emerald-500' },
+            ].map((card, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: 0.2 + index * 0.1 }}
+                whileHover={{ y: -8, scale: 1.02 }}
+                className="relative group"
+              >
+                <div className={`absolute inset-0 bg-gradient-to-r ${card.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300`} />
+                <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/30 transition-all duration-300">
+                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${card.color} flex items-center justify-center mb-4`}>
+                    <card.icon className="w-6 h-6 text-white" />
+                  </div>
+                  <h3 className="text-lg font-bold text-white mb-2">{card.title}</h3>
+                  <p className="text-white/60 text-sm">{card.desc}</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Parcours d'admission */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
+              {pageData?.admissionSectionTitle || `Parcours d'admission`}
+            </h2>
+            <p className="text-xl text-gray-600 max-w-4xl mx-auto">
+              {(pageData?.admissionSectionSubtitle || "Un processus simplifié en {count} étapes pour intégrer nos formations").replace('{count}', String(admissionSteps.length))}
+            </p>
+          </div>
+          
+          <div className="grid md:grid-cols-2 gap-12">
+            {admissionSteps.map((step, index) => (
+              <AdmissionStep key={step.id} step={step} index={index} />
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Nos partenaires de confiance */}
+      <section className="py-20 bg-gray-50">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-6">
+              {pageData?.partnersSectionTitle || "Nos partenaires de confiance"}
+            </h2>
+            <p className="text-xl text-gray-600">
+              {pageData?.partnersSectionSubtitle || "Des entreprises leaders qui recrutent nos diplômés"}
+            </p>
+          </div>
+          
+          <div className="partners-grid">
+            {partners.slice(0, 12).map((partner, index) => (
+              <motion.div
+                key={partner.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: index * 0.05 }}
+                className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center h-24 group"
+              >
+                <img 
+                  src={partner.logo ? `/images/partners/${partner.logo}` : `/images/partners/default.webp`}
+                  alt={partner.nom} 
+                  className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none'
+                    e.currentTarget.parentElement!.innerHTML = `<div class="text-xs font-bold text-gray-600 text-center">${partner.nom}</div>`
+                  }}
+                />
+              </motion.div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Contact Info Section */}
+      <section className="py-20 bg-white relative">
+        <div className="absolute inset-0 opacity-10">
+          <img src="/images/contact-hero.jpg" alt="" className="w-full h-full object-cover" />
+        </div>
+        <div className="relative z-10">
+          <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-12"
+            >
+              <h2 className="text-4xl font-montserrat font-bold text-primary-blue mb-4">
+                {pageData?.contactSectionTitle || "Contactez-nous"}
               </h2>
               <p className="text-xl text-gray-600">
-                {pageData?.partnersSectionSubtitle || "Des entreprises leaders qui recrutent nos diplômés"}
+                Notre équipe est à votre disposition pour répondre à toutes vos questions
               </p>
-            </div>
-            
-            <div className="partners-grid">
-              {partners.slice(0, 12).map((partner, index) => (
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-8">
+              {/* Contact Cards */}
+              {[
+                { icon: MapPin, title: pageData?.addressLabel || "Adresse", value: pageData?.addressValue || (contactInfo?.adressePrincipale ? `${contactInfo.adressePrincipale.rue}, ${contactInfo.adressePrincipale.codePostal} ${contactInfo.adressePrincipale.ville}` : '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne'), color: 'bg-primary-blue' },
+                { icon: Phone, title: pageData?.phoneLabel || "Téléphone", value: pageData?.phoneValue || contactInfo?.telephones?.find(t => t.principal)?.numero || siteSettings?.contactPhone || '01 85 09 71 06', color: 'bg-primary-blue' },
+                { icon: Mail, title: pageData?.emailLabel || "Email", value: pageData?.emailValue || contactInfo?.emails?.find(e => e.type === 'contact')?.email || siteSettings?.contactEmail || 'contact.academy@cma-education.com', color: 'bg-primary-blue' },
+                { icon: UserPlus, title: pageData?.inscriptionLabel || "Inscription", value: pageData?.inscriptionEmail || contactInfo?.emails?.find(e => e.type === 'inscription')?.email || siteSettings?.inscriptionEmail || 'inscription.academy@construction-management-academy.fr', color: 'bg-green-600' },
+              ].map((item, index) => (
                 <motion.div
-                  key={partner.id}
+                  key={index}
                   initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: 0.4, delay: index * 0.05 }}
-                  className="bg-white rounded-lg p-4 shadow-md hover:shadow-lg transition-all duration-300 flex items-center justify-center h-24 group"
+                  transition={{ delay: index * 0.1 }}
+                  className="bg-white rounded-2xl p-6 shadow-lg hover:shadow-xl transition-all duration-300 border border-gray-100"
                 >
-                  <img 
-                    src={partner.logo ? `/images/partners/${partner.logo}` : `/images/partners/default.webp`}
-                    alt={partner.nom} 
-                    className="max-w-full max-h-full object-contain filter grayscale group-hover:grayscale-0 transition-all duration-300"
-                    onError={(e) => {
-                      console.error(`Failed to load partner logo: ${partner.logo}`)
-                      e.currentTarget.style.display = 'none'
-                      e.currentTarget.parentElement!.innerHTML = `<div class="text-xs font-bold text-gray-600 text-center">${partner.nom}</div>`
-                    }}
-                  />
+                  <div className="flex items-start space-x-4">
+                    <div className={`w-12 h-12 ${item.color} rounded-xl flex items-center justify-center flex-shrink-0`}>
+                      <item.icon className="w-6 h-6 text-white" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-primary-blue mb-1">{item.title}</h3>
+                      <p className="text-gray-600 text-sm">{item.value}</p>
+                    </div>
+                  </div>
                 </motion.div>
               ))}
             </div>
-          </div>
-        </section>
 
-        {/* Contact & Formulaire */}
-        <section className="py-20 bg-white relative">
-          <div className="absolute inset-0 opacity-30">
-            <img 
-              src="/images/contact-hero.jpg" 
-              alt="" 
-              className="w-full h-full object-cover"
-            />
-          </div>
-          <div className="relative z-10">
-          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="grid lg:grid-cols-2 gap-12">
-              {/* Informations de contact */}
-              <motion.div
-                initial={{ opacity: 0, x: -30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
+            {/* Info Banner */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="mt-12 bg-gradient-to-r from-primary-blue to-blue-700 text-white p-8 rounded-2xl"
+            >
+              <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center space-x-4">
+                  <div className="w-14 h-14 bg-white/20 rounded-full flex items-center justify-center">
+                    <Clock className="w-7 h-7 text-primary-yellow" />
+                  </div>
+                  <div>
+                    <h3 className="font-bold text-lg">{pageData?.reactiviteLabel || "Réactivité garantie"}</h3>
+                    <p className="opacity-90">{pageData?.reactiviteValue || "Réponse sous 24h"}</p>
+                    <p className="text-sm opacity-70">{pageData?.reactiviteDetail || "Décision sous 48h après entretien"}</p>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-3 bg-white/10 px-6 py-3 rounded-xl">
+                  <CheckCircle className="w-6 h-6 text-primary-yellow" />
+                  <span className="font-semibold">{pageData?.noFeesTitle || "Aucun frais de scolarité"}</span>
+                </div>
+              </div>
+            </motion.div>
+
+            {/* Final CTA */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.5 }}
+              className="mt-12 text-center"
+            >
+              <motion.a
+                href="https://cma-education.ymag.cloud/index.php/preinscription/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="inline-flex items-center gap-3 px-8 py-4 bg-gradient-to-r from-primary-yellow to-yellow-400 text-primary-blue font-bold text-lg rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
               >
-                <div className="relative mb-8">
-                  <img 
-                    src="/images/contact-hero.jpg" 
-                    alt="Construction Management Academy - Contactez-nous" 
-                    className="w-full h-48 object-cover rounded-2xl shadow-lg"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-r from-primary-blue/80 to-transparent rounded-2xl flex items-center">
-                    <h2 className="text-3xl font-montserrat font-bold text-white ml-8">
-                      {pageData?.contactSectionTitle || "Contactez-nous"}
-                    </h2>
-                  </div>
-                </div>
-                
-                <div className="space-y-6 mb-8">
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center">
-                      <MapPin className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.addressLabel || "Adresse"}</h3>
-                      <p className="text-gray-600">
-                        {pageData?.addressValue || 
-                          (contactInfo?.adressePrincipale ? 
-                            `${contactInfo.adressePrincipale.rue}, ${contactInfo.adressePrincipale.codePostal} ${contactInfo.adressePrincipale.ville}` :
-                            '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne'
-                          )
-                        }
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center">
-                      <Phone className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.phoneLabel || "Téléphone"}</h3>
-                      <p className="text-gray-600">
-                        {pageData?.phoneValue || 
-                         contactInfo?.telephones?.find(t => t.principal)?.numero || 
-                         siteSettings?.contactPhone || 
-                         '01 85 09 71 06'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center">
-                      <Mail className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.emailLabel || "Email"}</h3>
-                      <p className="text-gray-600">
-                        {pageData?.emailValue || 
-                         contactInfo?.emails?.find(e => e.type === 'contact')?.email || 
-                         siteSettings?.contactEmail || 
-                         'contact.academy@cma-education.com'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-green-600 rounded-lg flex items-center justify-center">
-                      <UserPlus className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.inscriptionLabel || "Inscription"}</h3>
-                      <p className="text-gray-600">
-                        {pageData?.inscriptionEmail || 
-                         contactInfo?.emails?.find(e => e.type === 'inscription')?.email || 
-                         siteSettings?.inscriptionEmail || 
-                         'inscription.academy@construction-management-academy.fr'}
-                      </p>
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-4">
-                    <div className="w-12 h-12 bg-primary-blue rounded-lg flex items-center justify-center">
-                      <Clock className="w-6 h-6 text-white" />
-                    </div>
-                    <div>
-                      <h3 className="font-semibold text-primary-blue mb-1">{pageData?.reactiviteLabel || "Réactivité"}</h3>
-                      <p className="text-gray-600">{pageData?.reactiviteValue || "Réponse sous 24h"}</p>
-                      <p className="text-sm text-gray-500">{pageData?.reactiviteDetail || "Décision sous 48h après entretien"}</p>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="bg-primary-blue text-white p-6 rounded-xl">
-                  <div className="flex items-center space-x-3 mb-2">
-                    <CheckCircle className="w-6 h-6 text-primary-yellow" />
-                    <h3 className="font-semibold">{pageData?.noFeesTitle || "Aucun frais de scolarité"}</h3>
-                  </div>
-                  <p className="opacity-90">
-                    {pageData?.noFeesDescription || "Aucun frais de scolarité ou d'inscription ne sera demandé à l'alternant."}
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Formulaire */}
-              <motion.div
-                initial={{ opacity: 0, x: 30 }}
-                whileInView={{ opacity: 1, x: 0 }}
-                viewport={{ once: true }}
-                className="bg-white rounded-2xl p-8 shadow-lg"
-              >
-                <h3 className="text-2xl font-montserrat font-bold text-primary-blue mb-6">
-                  {pageData?.formTitle || "Formulaire d'inscription"}
-                </h3>
-                
-                <form 
-                  ref={form}
-                  className="space-y-6" 
-                  onSubmit={sendEmail}
-                >
-                  {/* Champs cachés pour EmailJS */}
-                  <input type="hidden" name="to_email" value={pageData?.inscriptionEmail || siteSettings?.inscriptionEmail || "inscription.academy@construction-management-academy.fr"} />
-                  <input type="hidden" name="from_name" value={`Site Web ${siteSettings?.siteName || 'Construction Management Academy'}`} />
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <input
-                      type="text"
-                      name="prenom"
-                      placeholder={pageData?.formPrenomPlaceholder || "Prénom *"}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
-                      required
-                    />
-                    <input
-                      type="text"
-                      name="nom"
-                      placeholder={pageData?.formNomPlaceholder || "Nom *"}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
-                      required
-                    />
-                  </div>
-                  
-                  <input
-                    type="date"
-                    name="dateNaissance"
-                    placeholder={pageData?.formDateNaissancePlaceholder || "Date de naissance *"}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
-                    required
-                  />
-                  
-                  <div className="grid md:grid-cols-2 gap-4">
-                    <input
-                      type="tel"
-                      name="telephone"
-                      placeholder={pageData?.formTelephonePlaceholder || "Téléphone *"}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
-                      required
-                    />
-                    <input
-                      type="email"
-                      name="email"
-                      placeholder={pageData?.formEmailPlaceholder || "Email *"}
-                      className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
-                      required
-                    />
-                  </div>
-                  
-                  <input
-                    type="text"
-                    name="codePostal"
-                    placeholder={pageData?.formCodePostalPlaceholder || "Code postal *"}
-                    className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue"
-                    required
-                  />
-                  
-                  <select name="formation" className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-primary-blue" required>
-                    <option value="">{pageData?.formFormationPlaceholder || "Sélectionner la Formation *"}</option>
-                    
-                    {Object.entries(formationsByCategory).map(([categoryName, categoryFormations]) => (
-                      <optgroup key={categoryName} label={categoryName}>
-                        {(categoryFormations as Formation[]).map((formation) => (
-                          <option key={formation.id} value={formation.slug}>
-                            {formation.titre} {formation.niveau && `- ${formation.niveau}`}
-                          </option>
-                        ))}
-                      </optgroup>
-                    ))}
-                    
-                    {/* Fallback si pas de formations Strapi */}
-                    {Object.keys(formationsByCategory).length === 0 && (
-                      <>
-                        <optgroup label="🎓 FORMATIONS EN ALTERNANCE">
-                          <option value="conducteur-travaux-batiment-alternance">Conducteur de Travaux Bâtiment - Bac+3 (Alternance)</option>
-                          <option value="charge-affaires-batiment-alternance">Chargé d'Affaires Bâtiment - Bac+3 (Alternance)</option>
-                        </optgroup>
-                        <optgroup label="🔄 FORMATIONS RECONVERSION">
-                          <option value="conducteur-travaux-reconversion">Conducteur de Travaux - Reconversion (7 mois)</option>
-                          <option value="charge-affaires-reconversion">Chargé d'Affaires - Reconversion (6 mois)</option>
-                        </optgroup>
-                      </>
-                    )}
-                  </select>
-                  
-                  <div className="space-y-4">
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {pageData?.formCvLabel || "Téléverser votre CV"}
-                      </label>
-                      <input type="file" name="cv" accept=".pdf,.doc,.docx" className="w-full" />
-                    </div>
-                    
-                    <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-2">
-                        {pageData?.formDiplomeLabel || "Téléverser votre dernier diplôme"}
-                      </label>
-                      <input type="file" name="diplome" accept=".pdf,.jpg,.png" className="w-full" />
-                    </div>
-                  </div>
-                  
-                  <div className="flex items-start space-x-3">
-                    <input type="checkbox" id="consent" className="mt-1" required />
-                    <label htmlFor="consent" className="text-sm text-gray-600">
-                      {pageData?.formConsentText || `J'accepte être recontacté et que mes données soient collectées par ${siteSettings?.siteName || 'Construction Management Academy'}`}
-                    </label>
-                  </div>
-                  
-                  <a
-                    href={pageData?.formSubmitButtonUrl || "https://cma-education.ymag.cloud/index.php/preinscription/"}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="block w-full bg-gradient-primary text-white py-3 rounded-lg font-semibold hover:shadow-xl transition-all duration-300 text-center"
-                  >
-                    {pageData?.formSubmitButtonText || "Accéder à la préinscription"}
-                  </a>
-                </form>
-              </motion.div>
-            </div>
+                <Rocket className="w-5 h-5" />
+                Démarrer ma candidature
+                <ArrowRight className="w-5 h-5" />
+              </motion.a>
+            </motion.div>
           </div>
-          </div>
-        </section>
+        </div>
+      </section>
     </>
   )
 }
