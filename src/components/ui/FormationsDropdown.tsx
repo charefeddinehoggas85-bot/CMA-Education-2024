@@ -28,8 +28,20 @@ interface FormationCategory {
   formations?: Formation[]
 }
 
+// Interface pour les données fallback
+interface FallbackCategory {
+  category: string
+  icon: React.ComponentType<any>
+  formations: Array<{
+    title: string
+    slug: string
+    level: string
+    duree: string
+  }>
+}
+
 // FALLBACK DATA - Formations statiques pour garantir l'affichage
-const FALLBACK_FORMATIONS = [
+const FALLBACK_FORMATIONS: FallbackCategory[] = [
   {
     category: 'Alternance',
     icon: GraduationCap,
@@ -154,7 +166,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
   }, [hoverTimeout])
 
   // Données à afficher (Strapi ou fallback)
-  const displayData = useFallback ? FALLBACK_FORMATIONS : categories
+  const displayData: (FormationCategory | FallbackCategory)[] = useFallback ? FALLBACK_FORMATIONS : categories
 
   if (loading) {
     return (
@@ -209,7 +221,10 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
           {/* Onglets */}
           <div className="flex border-b border-gray-100 bg-gray-50 overflow-x-auto">
             {displayData.map((category, index) => {
-              const IconComponent = useFallback ? category.icon : GraduationCap
+              const IconComponent = useFallback ? (category as FallbackCategory).icon : GraduationCap
+              const categoryName = useFallback ? (category as FallbackCategory).category : (category as FormationCategory).name
+              const formationsCount = useFallback ? (category as FallbackCategory).formations.length : ((category as FormationCategory).formations?.length || 0)
+              
               return (
                 <button
                   key={index}
@@ -224,9 +239,9 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
                   }`}
                 >
                   <IconComponent className="w-4 h-4" />
-                  <span>{useFallback ? category.category : category.name}</span>
+                  <span>{categoryName}</span>
                   <span className="ml-1 text-xs text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded-full">
-                    {useFallback ? category.formations.length : (category.formations?.length || 0)}
+                    {formationsCount}
                   </span>
                 </button>
               )
@@ -238,7 +253,9 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
             <div className="grid grid-cols-1 gap-3">
               {(() => {
                 const activeCategory = displayData[activeTab]
-                const formations = useFallback ? activeCategory.formations : activeCategory.formations
+                const formations = useFallback 
+                  ? (activeCategory as FallbackCategory).formations 
+                  : (activeCategory as FormationCategory).formations
                 
                 if (!formations || formations.length === 0) {
                   return (
