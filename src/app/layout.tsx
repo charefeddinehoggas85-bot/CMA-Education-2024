@@ -1,9 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
-import WhatsAppWidget from '@/components/ui/WhatsAppWidget'
-import ChatBot from '@/components/ui/ChatBot'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
-import OpenDayPopupProvider from '@/components/layout/OpenDayPopupProvider'
+import ClientOnlyComponents from '@/components/ClientOnlyComponents'
 
 import { organizationSchema, localBusinessSchema } from '@/lib/structured-data'
 
@@ -87,9 +85,7 @@ export default function RootLayout({
       <body className="font-sans antialiased" suppressHydrationWarning>
         <div id="__next">
           {children}
-          <WhatsAppWidget />
-          <ChatBot onClose={() => {}} />
-          <OpenDayPopupProvider />
+          <ClientOnlyComponents />
           <ServiceWorkerRegistration />
         </div>
       </body>

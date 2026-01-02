@@ -13,7 +13,7 @@ interface Message {
 }
 
 interface ChatBotProps {
-  onClose: () => void
+  onClose?: () => void
 }
 
 const ChatBot = ({ onClose }: ChatBotProps) => {
@@ -175,7 +175,7 @@ const ChatBot = ({ onClose }: ChatBotProps) => {
           </div>
         </div>
         <button
-          onClick={onClose}
+          onClick={onClose || (() => {})}
           className="text-white hover:text-blue-200 transition-colors"
         >
           <X className="w-5 h-5" />

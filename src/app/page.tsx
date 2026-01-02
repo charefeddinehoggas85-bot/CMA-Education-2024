@@ -6,7 +6,6 @@ import FeaturedFormatorsSection from '@/components/sections/FeaturedFormatorsSec
 import FeaturedPartnersSection from '@/components/sections/FeaturedPartnersSection'
 import ContactSection from '@/components/sections/ContactSection'
 import AccessibilityBanner from '@/components/sections/AccessibilityBanner'
-import OptimizedFloatingActions from '@/components/ui/OptimizedFloatingActions'
 
 export default function Home() {
   return (
@@ -19,7 +18,6 @@ export default function Home() {
       <ContactSection />
       <AccessibilityBanner />
       <Footer />
-      <OptimizedFloatingActions />
     </main>
   )
 }

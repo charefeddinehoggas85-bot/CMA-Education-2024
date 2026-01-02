@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, memo } from 'react'
+import { useState, memo, useEffect } from 'react'
 import { Phone, Mail, MessageCircle, Calendar, Download, Plus, X } from 'lucide-react'
 import { useRouter } from 'next/navigation'
 import BrochureModal from './BrochureModal'
@@ -8,7 +8,16 @@ import BrochureModal from './BrochureModal'
 const OptimizedFloatingActions = memo(() => {
   const [isOpen, setIsOpen] = useState(false)
   const [isBrochureModalOpen, setIsBrochureModalOpen] = useState(false)
+  const [mounted, setMounted] = useState(false)
   const router = useRouter()
+
+  useEffect(() => {
+    setMounted(true)
+  }, [])
+
+  if (!mounted) {
+    return null
+  }
 
   const actions = [
     {
