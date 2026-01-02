@@ -65,7 +65,7 @@ const Footer = () => {
   const defaultStats: Statistique[] = [
     { id: 1, cle: 'experience', nombre: 15, label: 'Années', suffixe: '+', ordre: 1 },
     { id: 2, cle: 'formations', nombre: 7, label: 'Formations', suffixe: '', ordre: 2 },
-    { id: 3, cle: 'partners', nombre: 12+, label: 'Partenaires', suffixe: '+', ordre: 3 }
+    { id: 3, cle: 'partners', nombre: 12, label: 'Partenaires', suffixe: '+', ordre: 3 }
   ]
 
   const defaultSiteSettings: SiteSettings = {
