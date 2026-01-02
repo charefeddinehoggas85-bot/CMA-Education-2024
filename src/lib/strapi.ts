@@ -90,12 +90,8 @@ export async function fetchAPI(path: string, options: RequestInit = {}) {
         Authorization: `Bearer ${STRAPI_API_TOKEN}`,
       }),
     },
-  }
-
-  // Only add Next.js specific options on the server-side
-  if (typeof window === 'undefined') {
     // Désactiver le cache pour toujours récupérer les données fraîches de Strapi
-    (defaultOptions as any).cache = 'no-store'
+    cache: 'no-store',
   }
 
   const mergedOptions = {

@@ -72,14 +72,33 @@ export default function PartenairesPage() {
       try {
         // Charger les données de la page
         const strapiPageData = await getPagePartenaires()
+        console.log('📦 Données Strapi Partenaires:', strapiPageData)
+        
         if (strapiPageData) {
           // Récupérer l'URL de l'image hero depuis Strapi
           let heroImageUrl: string | null = null
-          if ((strapiPageData as any).heroImage) {
-            const strapiImageUrl = getStrapiMediaURL((strapiPageData as any).heroImage)
+          const heroImageData = (strapiPageData as any).heroImage
+          
+          console.log('🖼️ heroImage data:', heroImageData)
+          
+          if (heroImageData) {
+            // Essayer getStrapiMediaURL d'abord
+            const strapiImageUrl = getStrapiMediaURL(heroImageData)
+            console.log('🔗 getStrapiMediaURL result:', strapiImageUrl)
+            
             if (strapiImageUrl) {
               heroImageUrl = strapiImageUrl
-              console.log('✅ Image Partenaires chargée depuis Strapi:', heroImageUrl)
+            } else if (heroImageData.data?.attributes?.url) {
+              // Fallback: construire l'URL manuellement
+              const url = heroImageData.data.attributes.url
+              heroImageUrl = url.startsWith('http') 
+                ? url 
+                : `https://cma-education-strapi-production.up.railway.app${url}`
+              console.log('🔗 URL construite manuellement:', heroImageUrl)
+            }
+            
+            if (heroImageUrl) {
+              console.log('✅ Image Partenaires finale:', heroImageUrl)
             }
           }
           
@@ -134,9 +153,15 @@ export default function PartenairesPage() {
         {/* Image de fond dynamique depuis Strapi */}
         {pageData.heroImage && (
           <div 
-            className="absolute inset-0 bg-cover bg-center opacity-20"
+            className="absolute inset-0 bg-cover bg-center opacity-30"
             style={{ backgroundImage: `url('${pageData.heroImage}')` }}
           />
+        )}
+        {/* Debug: afficher l'URL de l'image en dev */}
+        {process.env.NODE_ENV === 'development' && pageData.heroImage && (
+          <div className="absolute top-2 left-2 bg-black/50 text-white text-xs p-2 rounded z-50 max-w-xs truncate">
+            IMG: {pageData.heroImage}
+          </div>
         )}
         <div className="absolute inset-0 opacity-10">
           <div className="absolute top-20 left-20 w-64 h-64 border border-white/30 rounded-full"></div>
