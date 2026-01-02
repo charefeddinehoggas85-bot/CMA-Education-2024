@@ -4,7 +4,6 @@ import { getFormation, getSiteSettings } from '@/lib/strapi'
 import ProcessSection from '@/components/sections/ProcessSection'
 import SocialProofSection from '@/components/sections/SocialProofSection'
 import ContactSection from '@/components/sections/ContactSection'
-import PageLayout from '@/components/layout/PageLayout'
 import { GraduationCap, Clock, Award, MapPin, Euro, CheckCircle, Users, Building } from 'lucide-react'
 
 const SLUG = 'reconversion-btp'
@@ -54,7 +53,7 @@ export default async function FormationPage() {
     const opportunities = formation.opportunities || formation.debouches || []
 
     return (
-      <PageLayout>
+      <>
         <section className="relative py-20 bg-gradient-to-br from-primary-blue via-blue-700 to-indigo-800 text-white">
           <div className="absolute inset-0 bg-black/90" />
           <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -139,18 +138,18 @@ export default async function FormationPage() {
         <ProcessSection />
         <SocialProofSection />
         <ContactSection />
-      </PageLayout>
+      </>
     )
   } catch (error) {
     return (
-      <PageLayout>
+      <>
         <div className="min-h-screen flex items-center justify-center">
           <div className="text-center">
             <h1 className="text-4xl font-bold text-gray-900 mb-4">Erreur</h1>
             <a href="/formations" className="bg-blue-600 text-white px-6 py-3 rounded-lg">Voir les formations</a>
           </div>
         </div>
-      </PageLayout>
+      </>
     )
   }
 }

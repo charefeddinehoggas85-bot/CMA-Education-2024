@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { Calendar, ArrowRight, Search, Filter, TrendingUp, BookOpen } from 'lucide-react'
 import Link from 'next/link'
 import { getArticlesBlog, getArticlesBlogFeatured, getCategoriesBlog, getImageURL, getPageBlog, getStrapiMediaURL } from '@/lib/strapi'
@@ -178,7 +177,7 @@ export default function BlogPage() {
   }
 
   return (
-    <PageLayout>
+    <>
       <section className="relative py-24 min-h-[550px] text-white overflow-hidden bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
         <div className="absolute inset-0" style={{ backgroundImage: `url('${pageData.heroImage}')`, backgroundSize: 'cover', backgroundPosition: 'center' }}>
           <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/60 to-black/50"></div>
@@ -276,6 +275,6 @@ export default function BlogPage() {
           )}
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

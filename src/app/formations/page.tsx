@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { GraduationCap, Clock, Award, ArrowRight, RefreshCw, CheckCircle, Building2, Target, BookOpen, MapPin, Euro, Users, TrendingUp, Heart, ExternalLink } from 'lucide-react'
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
@@ -575,7 +574,7 @@ export default function FormationsPage() {
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Hero avec image */}
       <section className="pt-24 pb-8 relative min-h-[450px]">
         {/* Image de fond */}
@@ -935,6 +934,6 @@ export default function FormationsPage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

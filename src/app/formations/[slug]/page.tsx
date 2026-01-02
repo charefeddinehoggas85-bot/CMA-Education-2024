@@ -1,5 +1,4 @@
 import { notFound } from 'next/navigation'
-import PageLayout from '@/components/layout/PageLayout'
 import FormationContent from './FormationContent'
 
 // Force le rendu dynamique (SSR) pour toujours récupérer les données fraîches de Strapi
@@ -190,7 +189,7 @@ export default async function FormationDetailPage({ params }: { params: { slug: 
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Indicateur de debug AMÉLIORÉ - visible en production */}
       <div className="fixed bottom-4 left-4 bg-black text-white p-4 rounded-lg text-xs z-[9999] max-w-sm shadow-2xl border-2 border-yellow-400">
         <div className="font-bold text-lg mb-2" style={{ color: source === 'STRAPI' ? '#22c55e' : '#ef4444' }}>
@@ -218,6 +217,6 @@ export default async function FormationDetailPage({ params }: { params: { slug: 
       </div>
       
       <FormationContent formation={formation} />
-    </PageLayout>
+    </>
   )
 }

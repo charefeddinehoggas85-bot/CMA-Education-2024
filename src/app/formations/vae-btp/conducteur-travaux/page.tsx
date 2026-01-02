@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { CheckCircle, Clock, Award, ArrowRight, Users, Euro, BookOpen, Star, FileCheck } from 'lucide-react'
 import Link from 'next/link'
 
@@ -66,7 +65,7 @@ export default function VAEConducteurTravauxPage() {
   ]
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-purple-600 via-indigo-700 to-blue-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/90" />
@@ -274,6 +273,6 @@ export default function VAEConducteurTravauxPage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

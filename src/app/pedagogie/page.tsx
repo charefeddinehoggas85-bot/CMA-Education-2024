@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import GallerySection from '@/components/sections/GallerySection'
 import { getPagePedagogie } from '@/lib/strapi'
 import { 
@@ -182,19 +181,19 @@ export default function PedagogiePage() {
 
   if (loading) {
     return (
-      <PageLayout>
+      <>
         <div className="py-20 text-center">
           <div className="animate-pulse">
             <div className="bg-gray-200 h-16 w-96 mx-auto rounded mb-4"></div>
             <div className="bg-gray-200 h-6 w-2/3 mx-auto rounded"></div>
           </div>
         </div>
-      </PageLayout>
+      </>
     )
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-br from-primary-blue via-indigo-700 to-purple-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-[url('/images/pedagogie-hero.jpg')] bg-cover bg-center opacity-20"></div>
@@ -426,6 +425,6 @@ export default function PedagogiePage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

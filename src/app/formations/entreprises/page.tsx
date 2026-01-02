@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
-import PageLayout from '@/components/layout/PageLayout'
 import { 
   Building2, Users, TrendingUp, Award, CheckCircle, Phone, Mail, 
   ArrowRight, ChevronDown, Briefcase, Target, Heart, Star,
@@ -182,7 +181,7 @@ export default function FormationsEntreprises() {
   }, [])
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section - Design moderne avec couleurs CMA */}
       <section ref={heroRef} className="relative min-h-[90vh] flex items-center overflow-hidden">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
@@ -602,6 +601,6 @@ export default function FormationsEntreprises() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

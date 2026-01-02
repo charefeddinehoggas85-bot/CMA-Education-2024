@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { getEtapesAdmission, getPageAdmission, getImageURL } from '@/lib/strapi'
 import { 
   FileText, 
@@ -247,7 +246,7 @@ export default function AdmissionPage() {
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section avec image de fond */}
       <section className="relative min-h-[500px] flex items-center">
         <div className="absolute inset-0">
@@ -463,6 +462,6 @@ export default function AdmissionPage() {
           </div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

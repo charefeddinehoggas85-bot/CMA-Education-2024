@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { CheckCircle, Clock, Award, ArrowRight, Users, Euro, BookOpen, Star, FileCheck, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 
@@ -66,7 +65,7 @@ export default function VAEChargeAffairesPage() {
   ]
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-green-600 via-emerald-700 to-teal-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/90" />
@@ -274,6 +273,6 @@ export default function VAEChargeAffairesPage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { Download, FileText, User, Building, Mail, Phone, CheckCircle, Leaf } from 'lucide-react'
 import { getFormations, getPageBrochure } from '@/lib/strapi'
 import emailjs from '@emailjs/browser'
@@ -211,7 +210,7 @@ export default function BrochurePage() {
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Hero */}
       <section className="py-20 bg-gradient-to-br from-primary-blue via-blue-700 to-indigo-800 text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -418,6 +417,6 @@ export default function BrochurePage() {
           )}
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

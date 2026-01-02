@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { getSiteSettings, getContactInfo, getProcessusAdmission, getPartners, getFormations, getPageContact } from '@/lib/strapi'
 import { Phone, Mail, MapPin, Clock, CheckCircle, UserPlus } from 'lucide-react'
 import emailjs from '@emailjs/browser'
@@ -189,19 +188,19 @@ export default function ContactPage() {
 
   if (loading) {
     return (
-      <PageLayout>
+      <>
         <div className="py-20 text-center">
           <div className="animate-pulse">
             <div className="bg-gray-200 h-16 w-96 mx-auto rounded mb-4"></div>
             <div className="bg-gray-200 h-6 w-2/3 mx-auto rounded"></div>
           </div>
         </div>
-      </PageLayout>
+      </>
     )
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Hero */}
       <section className="py-96 text-white relative">
         <div className="absolute inset-0 opacity-100">
@@ -541,6 +540,6 @@ export default function ContactPage() {
           </div>
           </div>
         </section>
-    </PageLayout>
+    </>
   )
 }

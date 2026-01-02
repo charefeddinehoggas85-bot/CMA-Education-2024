@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { RefreshCw, Clock, Award, ArrowRight, CheckCircle, Users, Euro, MapPin, Calendar, Target, BookOpen, Star } from 'lucide-react'
 import Link from 'next/link'
 
@@ -72,7 +71,7 @@ export default function ReconversionChargeAffairesPage() {
   ]
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section */}
       <section className="py-20 bg-gradient-to-br from-green-600 via-emerald-700 to-teal-800 text-white relative overflow-hidden">
         <div className="absolute inset-0 bg-black/90" />
@@ -306,6 +305,6 @@ export default function ReconversionChargeAffairesPage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

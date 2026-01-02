@@ -2,7 +2,6 @@
 
 import { motion, useScroll, useTransform } from 'framer-motion'
 import { useEffect, useState, useRef } from 'react'
-import PageLayout from '@/components/layout/PageLayout'
 import { 
   CheckCircle, Clock, Award, ArrowRight, Euro, FileCheck, 
   GraduationCap, ChevronDown, Building2, HardHat, Wrench
@@ -276,7 +275,7 @@ export default function VAEBTPPage() {
   ]
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section - 100% modifiable via Strapi */}
       <section ref={heroRef} className="relative min-h-[90vh] flex items-center overflow-hidden">
         <motion.div style={{ y: heroY }} className="absolute inset-0">
@@ -742,6 +741,6 @@ export default function VAEBTPPage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

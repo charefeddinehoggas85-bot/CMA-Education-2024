@@ -1,7 +1,6 @@
 'use client'
 
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { ExternalLink, Building2, Users, Briefcase, TrendingUp } from 'lucide-react'
 import Link from 'next/link'
 
@@ -30,7 +29,7 @@ const stats = [
 
 export default function PartenairesPage() {
   return (
-    <PageLayout>
+    <>
       {/* Hero Section */}
       <section className="relative py-20 bg-gradient-to-br from-primary-blue to-blue-800 text-white overflow-hidden">
         <div className="absolute inset-0 opacity-10">
@@ -268,6 +267,6 @@ export default function PartenairesPage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

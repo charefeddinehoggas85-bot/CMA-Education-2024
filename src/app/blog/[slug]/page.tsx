@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { Calendar, User, ArrowLeft, Share2, Clock, BookOpen, ChevronRight } from 'lucide-react'
 import Link from 'next/link'
 import { getArticleBlog, getArticlesBlog, getImageURL } from '@/lib/strapi'
@@ -89,17 +88,17 @@ export default function ArticlePage({ params }: PageProps) {
 
   if (isLoading) {
     return (
-      <PageLayout>
+      <>
         <div className="min-h-screen flex items-center justify-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-slate-900"></div>
         </div>
-      </PageLayout>
+      </>
     )
   }
 
   if (!article) {
     return (
-      <PageLayout>
+      <>
         <div className="min-h-screen flex flex-col items-center justify-center">
           <BookOpen className="w-16 h-16 text-gray-300 mb-4" />
           <h1 className="text-3xl font-bold text-slate-900 mb-4">Article non trouvé</h1>
@@ -108,12 +107,12 @@ export default function ArticlePage({ params }: PageProps) {
             <span>Retour au blog</span>
           </Link>
         </div>
-      </PageLayout>
+      </>
     )
   }
 
   return (
-    <PageLayout>
+    <>
       <div className="bg-gradient-to-r from-gray-50 to-white border-b border-gray-200">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center space-x-2 text-sm text-gray-600">
@@ -207,6 +206,6 @@ export default function ArticlePage({ params }: PageProps) {
           </Link>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

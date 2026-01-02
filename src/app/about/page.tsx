@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import AboutSection from '@/components/sections/AboutSection'
 import GallerySection from '@/components/sections/GallerySection'
 import { getStatistiquesSite, getSiteSettings } from '@/lib/strapi'
@@ -92,7 +91,7 @@ const StatsGrid = () => {
 
 export default function AboutPage() {
   return (
-    <PageLayout>
+    <>
       <AboutSection />
       <StatsGrid />
       <GallerySection 
@@ -101,6 +100,6 @@ export default function AboutPage() {
         description="Découvrez nos installations modernes et notre environnement d'apprentissage"
         maxGalleries={2}
       />
-    </PageLayout>
+    </>
   )
 }

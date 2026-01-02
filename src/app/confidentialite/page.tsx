@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
-import PageLayout from '@/components/layout/PageLayout'
 import { getSiteSettings } from '@/lib/strapi'
 import { Shield, Eye, Lock, FileText, Mail, Phone } from 'lucide-react'
 import Link from 'next/link'
@@ -48,19 +47,19 @@ export default function ConfidentialitePage() {
 
   if (loading) {
     return (
-      <PageLayout>
+      <>
         <div className="py-20 text-center">
           <div className="animate-pulse">
             <div className="bg-gray-200 h-16 w-96 mx-auto rounded mb-4"></div>
             <div className="bg-gray-200 h-6 w-2/3 mx-auto rounded"></div>
           </div>
         </div>
-      </PageLayout>
+      </>
     )
   }
 
   return (
-    <PageLayout>
+    <>
       {/* Hero Section */}
       <section className="pt-32 pb-16 bg-gradient-to-br from-gray-800 via-gray-900 to-black text-white">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
@@ -347,6 +346,6 @@ export default function ConfidentialitePage() {
           </motion.div>
         </div>
       </section>
-    </PageLayout>
+    </>
   )
 }

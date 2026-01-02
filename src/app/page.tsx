@@ -1,4 +1,3 @@
-import Footer from '@/components/layout/Footer'
 import HeroSection from '@/components/sections/HeroSection'
 import FeaturedFormationsSection from '@/components/sections/FeaturedFormationsSection'
 import FeaturedFormatorsSection from '@/components/sections/FeaturedFormatorsSection'
