@@ -554,16 +554,32 @@ export default function FormationsPage() {
 
         // Charger les données de la page depuis Strapi (Single Type)
         const pageFormationsData = await getPageFormations()
+        console.log('📦 Données Page Formations:', pageFormationsData)
+        
         if (pageFormationsData) {
           setPageData(pageFormationsData)
           console.log('✅ Page Formations Single Type chargé depuis Strapi')
           
           // Charger l'image hero depuis Strapi si disponible
-          if (pageFormationsData.heroImage) {
-            const strapiHeroImage = getStrapiMediaURL(pageFormationsData.heroImage)
+          const heroImageData = pageFormationsData.heroImage
+          console.log('🖼️ heroImage data:', heroImageData)
+          
+          if (heroImageData) {
+            // Essayer getStrapiMediaURL d'abord
+            const strapiHeroImage = getStrapiMediaURL(heroImageData)
+            console.log('🔗 getStrapiMediaURL result:', strapiHeroImage)
+            
             if (strapiHeroImage) {
               setHeroImage(strapiHeroImage)
-              console.log('✅ Hero image chargée depuis Strapi:', strapiHeroImage)
+              console.log('✅ Hero image finale:', strapiHeroImage)
+            } else if (heroImageData.data?.attributes?.url) {
+              // Fallback: construire l'URL manuellement
+              const url = heroImageData.data.attributes.url
+              const finalUrl = url.startsWith('http') 
+                ? url 
+                : `https://cma-education-strapi-production.up.railway.app${url}`
+              setHeroImage(finalUrl)
+              console.log('🔗 URL construite manuellement:', finalUrl)
             }
           }
         }
