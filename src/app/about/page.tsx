@@ -53,7 +53,7 @@ const StatsGrid = () => {
     return (
       <section className="py-16 bg-primary-blue text-white">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+          <div className="formateurs-grid text-center">
             {[1,2,3].map(i => (
               <div key={i} className="animate-pulse">
                 <div className="bg-white/20 h-12 w-24 mx-auto rounded mb-2"></div>
@@ -69,7 +69,7 @@ const StatsGrid = () => {
   return (
     <section className="py-16 bg-primary-blue text-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
+        <div className="formateurs-grid text-center">
           {stats.slice(0, 3).map((stat, index) => (
             <motion.div
               key={stat.id}

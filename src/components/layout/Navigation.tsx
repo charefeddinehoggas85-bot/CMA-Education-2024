@@ -60,7 +60,7 @@ const Navigation = () => {
           </div>
 
           {/* SECTION CENTRE - Navigation principale (Desktop à partir de md) */}
-          <nav className="nav-desktop-fix hidden md:flex items-center justify-center flex-1 max-w-5xl mx-2 md:mx-4 xl:mx-8">
+          <nav className="nav-desktop-fix items-center justify-center flex-1 max-w-5xl mx-2 md:mx-4 xl:mx-8">
             <div className="nav-items-fix">
               {/* Dropdown Formations */}
               <div className="relative">
@@ -103,7 +103,7 @@ const Navigation = () => {
             {/* Téléphone - Adaptatif */}
             <a 
               href="tel:0185097106" 
-              className="nav-action-btn-fix hidden md:flex items-center space-x-1 lg:space-x-2 text-gray-700 hover:text-primary-blue hover:bg-gray-50 transition-all duration-200"
+              className="nav-action-btn-fix items-center space-x-1 lg:space-x-2 text-gray-700 hover:text-primary-blue hover:bg-gray-50 transition-all duration-200"
             >
               <Phone className="w-3 lg:w-4 h-3 lg:h-4" />
               <span className="hidden lg:inline xl:hidden">📞</span>
@@ -139,7 +139,7 @@ const Navigation = () => {
             </OptimizedButton>
 
             {/* BOUTON MENU MOBILE Ultra Responsive */}
-            <div className="md:hidden flex items-center">
+            <div className="nav-mobile-toggle-fix items-center">
               <button
                 className="p-1.5 sm:p-2 text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-colors duration-200"
                 onClick={() => setIsOpen(!isOpen)}
@@ -154,7 +154,7 @@ const Navigation = () => {
 
       {/* MENU MOBILE Ultra Responsive */}
       {isOpen && (
-        <div className="nav-mobile-menu-fix md:hidden">
+        <div className="nav-mobile-menu-fix">
           <div className="nav-mobile-content-fix max-w-7xl mx-auto">
             <nav className="space-y-1 sm:space-y-2">
               {/* Formations en premier avec icône */}

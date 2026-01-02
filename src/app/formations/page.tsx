@@ -449,7 +449,7 @@ const CategorySection = ({ title, subtitle, icon, formations, category, color }:
                   </div>
                   
                   {/* Grille des formations de ce niveau */}
-                  <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                  <div className="formations-grid">
                     {formationsNiveau.map((formation: any, index: number) => (
                       <FormationCard key={formation.id || index} formation={formation} index={index} category={category} />
                     ))}
@@ -459,7 +459,7 @@ const CategorySection = ({ title, subtitle, icon, formations, category, color }:
             })}
           </div>
         ) : (
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="formations-grid">
             {formations.map((formation: any, index: number) => (
               <FormationCard key={formation.id || index} formation={formation} index={index} category={category} />
             ))}

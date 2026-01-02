@@ -57,8 +57,8 @@
 .nav-logo-fix {
   flex-shrink: 0;
   width: auto;
-  height: clamp(32px, 5vh, 64px);
-  max-width: clamp(80px, 15vw, 200px);
+  height: clamp(48px, 8vh, 80px);
+  max-width: clamp(120px, 20vw, 280px);
   object-fit: contain;
   transition: all 0.2s ease;
 }
@@ -126,7 +126,19 @@
   text-overflow: ellipsis;
 }
 
-/* MENU MOBILE - Protection overflow */
+/* BOUTON MENU MOBILE - Masqué sur desktop */
+.nav-mobile-toggle-fix {
+  display: flex;
+  align-items: center;
+}
+
+@media (min-width: 768px) {
+  .nav-mobile-toggle-fix {
+    display: none !important;
+  }
+}
+
+/* MENU MOBILE - Masqué sur desktop */
 .nav-mobile-menu-fix {
   position: absolute;
   top: 100%;
@@ -140,6 +152,12 @@
   border-top: 1px solid rgba(229, 231, 235, 0.5);
   box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
   z-index: 9999;
+}
+
+@media (min-width: 768px) {
+  .nav-mobile-menu-fix {
+    display: none !important;
+  }
 }
 
 .nav-mobile-content-fix {
@@ -503,8 +521,8 @@
   }
 }
 
-/* CORRECTION SPÉCIALE POUR LES ÉCRANS 1024px-1440px - FORCE LA VISIBILITÉ */
-@media (min-width: 1024px) and (max-width: 1440px) {
+/* CORRECTION SPÉCIALE POUR TOUS LES ÉCRANS DESKTOP - FORCE LA VISIBILITÉ */
+@media (min-width: 768px) {
   .nav-desktop-fix {
     display: flex !important;
     visibility: visible !important;
@@ -533,6 +551,62 @@
     display: flex !important;
     visibility: visible !important;
     opacity: 1 !important;
+  }
+}
+
+/* CORRECTION SPÉCIFIQUE POUR ÉCRANS PROBLÉMATIQUES 1024px-1440px */
+@media (min-width: 1024px) and (max-width: 1440px) {
+  /* Force l'affichage de tous les éléments de navigation */
+  .nav-desktop-fix {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex: 1 !important;
+    min-width: 0 !important;
+  }
+  
+  .nav-items-fix {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    justify-content: center !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+  }
+  
+  .nav-item-fix {
+    display: inline-block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    white-space: nowrap !important;
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.75rem !important;
+  }
+  
+  /* Force l'affichage du logo avec une taille appropriée */
+  .nav-logo-fix {
+    height: 48px !important;
+    max-width: 160px !important;
+    width: auto !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  .nav-actions-fix {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    gap: 0.5rem !important;
+    flex-shrink: 0 !important;
+  }
+  
+  .nav-action-btn-fix {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    font-size: 0.75rem !important;
+    padding: 0.5rem 0.875rem !important;
   }
 }
 

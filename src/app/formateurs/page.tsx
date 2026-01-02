@@ -316,7 +316,7 @@ const FormatorsSection = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.2 }}
-            className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto mb-16"
+            className="formateurs-grid max-w-3xl mx-auto mb-16"
           >
             <div className="text-center">
               <div className="text-3xl font-bold text-primary-blue mb-2">{formateurs.length}+</div>
@@ -383,7 +383,7 @@ const FormatorsSection = () => {
                 </div>
 
                 {/* Grille des formateurs */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div className="formateurs-grid">
                   {sectorFormateurs.filter(f => !f.isDirector).map((formateur, index) => (
                     <FormatorCard 
                       key={formateur.id}

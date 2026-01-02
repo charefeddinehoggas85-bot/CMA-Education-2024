@@ -94,7 +94,7 @@ export default function PartenairesPage() {
 
           {/* Grille de logos avec animations élégantes */}
           <motion.div 
-            className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8"
+            className="partners-grid"
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true, margin: "-50px" }}

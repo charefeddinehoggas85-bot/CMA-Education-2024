@@ -264,7 +264,7 @@ export default function ContactPage() {
               </p>
             </div>
             
-            <div className="grid grid-cols-3 md:grid-cols-5 lg:grid-cols-6 gap-6">
+            <div className="partners-grid">
               {partners.slice(0, 12).map((partner, index) => (
                 <motion.div
                   key={partner.id}

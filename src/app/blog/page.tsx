@@ -222,7 +222,7 @@ export default function BlogPage() {
               <TrendingUp className="w-6 h-6 text-primary-yellow" />
               <h2 className="text-3xl font-montserrat font-bold text-slate-900">{pageData.featuredSectionTitle}</h2>
             </div>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            <div className="blog-grid">
               {featuredArticles.map((article) => (
                 <Link key={article.id} href={`/blog/${article.slug}`}>
                   <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-2xl transition-all h-full">
@@ -254,7 +254,7 @@ export default function BlogPage() {
           ) : regularArticles.length === 0 ? (
             <div className="text-center py-20"><BookOpen className="w-16 h-16 text-gray-300 mx-auto mb-4" /><p className="text-gray-600">{pageData.noArticlesText}</p></div>
           ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div className="blog-grid">
               {regularArticles.map((article) => (
                 <Link key={article.id} href={`/blog/${article.slug}`}>
                   <div className="bg-white border border-gray-200 rounded-2xl overflow-hidden hover:shadow-xl transition-all h-full">
