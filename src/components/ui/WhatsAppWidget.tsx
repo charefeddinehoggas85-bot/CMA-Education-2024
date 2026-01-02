@@ -1,17 +1,66 @@
 'use client'
 
-import { useState } from 'react'
-import { MessageCircle, X, Phone } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { MessageCircle, X } from 'lucide-react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { getFloatingActions } from '@/lib/strapi'
+
+interface WhatsAppData {
+  whatsappNumber: string
+  whatsappTitle: string
+  whatsappStatus: string
+  whatsappMessage: string
+  whatsappButtonText: string
+  whatsappDefaultMessage: string
+  isWhatsappEnabled: boolean
+  whatsappButtonColor: string
+}
 
 const WhatsAppWidget = () => {
   const [isOpen, setIsOpen] = useState(false)
-  const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "+33123456789"
+  const [whatsappData, setWhatsappData] = useState<WhatsAppData>({
+    whatsappNumber: "+33 1 85 09 71 06",
+    whatsappTitle: "Support Construction Management Academy",
+    whatsappStatus: "En ligne",
+    whatsappMessage: "Besoin d'aide ? Contactez-nous sur WhatsApp pour toutes vos questions sur nos formations BTP !",
+    whatsappButtonText: "Démarrer la conversation",
+    whatsappDefaultMessage: "Bonjour, je souhaite obtenir des informations sur les formations Construction Management Academy BTP.",
+    isWhatsappEnabled: true,
+    whatsappButtonColor: "bg-green-500 hover:bg-green-600"
+  })
+
+  useEffect(() => {
+    async function loadWhatsAppData() {
+      try {
+        const data = await getFloatingActions()
+        if (data) {
+          setWhatsappData({
+            whatsappNumber: data.whatsappNumber,
+            whatsappTitle: data.whatsappTitle,
+            whatsappStatus: data.whatsappStatus,
+            whatsappMessage: data.whatsappMessage,
+            whatsappButtonText: data.whatsappButtonText,
+            whatsappDefaultMessage: data.whatsappDefaultMessage,
+            isWhatsappEnabled: data.isWhatsappEnabled,
+            whatsappButtonColor: data.whatsappButtonColor
+          })
+        }
+      } catch (error) {
+        console.error('Erreur chargement WhatsApp data:', error)
+      }
+    }
+    loadWhatsAppData()
+  }, [])
   
   const handleWhatsAppClick = () => {
-    const message = "Bonjour, je souhaite obtenir des informations sur les formations Construction Management Academy BTP."
-    const url = `https://wa.me/${phoneNumber.replace('+', '')}?text=${encodeURIComponent(message)}`
+    const cleanNumber = whatsappData.whatsappNumber.replace(/[\s+]/g, '')
+    const url = `https://wa.me/${cleanNumber}?text=${encodeURIComponent(whatsappData.whatsappDefaultMessage)}`
     window.open(url, '_blank')
+  }
+
+  // Don't render if WhatsApp is disabled
+  if (!whatsappData.isWhatsappEnabled) {
+    return null
   }
 
   return (
@@ -37,8 +86,8 @@ const WhatsAppWidget = () => {
                     <MessageCircle className="w-5 h-5 text-white" />
                   </div>
                   <div>
-                    <h3 className="font-semibold text-gray-800">Support Construction Management Academy</h3>
-                    <p className="text-sm text-green-500">En ligne</p>
+                    <h3 className="font-semibold text-gray-800">{whatsappData.whatsappTitle}</h3>
+                    <p className="text-sm text-green-500">{whatsappData.whatsappStatus}</p>
                   </div>
                 </div>
                 <button
@@ -50,7 +99,7 @@ const WhatsAppWidget = () => {
               </div>
               
               <p className="text-gray-600 text-sm mb-4">
-                Besoin d'aide ? Contactez-nous sur WhatsApp pour toutes vos questions sur nos formations BTP !
+                {whatsappData.whatsappMessage}
               </p>
               
               <button
@@ -58,7 +107,7 @@ const WhatsAppWidget = () => {
                 className="w-full bg-green-500 hover:bg-green-600 text-white py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition-colors"
               >
                 <MessageCircle className="w-5 h-5" />
-                Démarrer la conversation
+                {whatsappData.whatsappButtonText}
               </button>
             </motion.div>
           )}
