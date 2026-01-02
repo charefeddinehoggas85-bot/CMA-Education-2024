@@ -826,7 +826,7 @@ export async function getFloatingActions() {
     return {
       id: data.data.id,
       // Contact Information
-      phoneNumber: attrs.phoneNumber || "0185097106",
+      phoneNumber: attrs.phoneNumber || "0189706052",
       phoneLabel: attrs.phoneLabel || "Appeler",
       phoneFullLabel: attrs.phoneFullLabel || "Nous appeler",
       email: attrs.email || "contact.academy@cma-education.com",
@@ -1119,4 +1119,22 @@ export async function getPageHome() {
     console.error('❌ Erreur getPageHome:', error)
     return null
   }
+}
+// Fonction pour récupérer les données des mentions légales
+export async function getPageMentionsLegales() {
+  const data = await fetchAPI('/api/page-mentions-legales?populate=*')
+  return transformStrapiData(data.data)
+}
+
+// Fonction pour récupérer les indicateurs de performance
+export async function getIndicateursPerformance() {
+  const data = await fetchAPI('/api/indicateurs-performance?populate=formations&sort=formations.ordre:asc')
+  const transformed = transformStrapiData(data.data)
+  
+  // Transformer les formations associées
+  if (transformed && data.data?.attributes?.formations?.data) {
+    (transformed as any).formations = transformStrapiArray(data.data.attributes.formations.data)
+  }
+  
+  return transformed
 }

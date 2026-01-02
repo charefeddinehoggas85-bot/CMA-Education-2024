@@ -362,6 +362,10 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
             <Link
               href={`/formations/${formation.slug}`}
               className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl w-full border-2 border-white/20 hover:border-white/40`}
+              onClick={(e) => {
+                console.log('🔍 Discover button clicked for formation:', formation.slug);
+                console.log('🔗 Navigating to:', `/formations/${formation.slug}`);
+              }}
             >
               <span className="relative z-10 font-bold text-white drop-shadow-sm">Découvrir</span>
               <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform text-white drop-shadow-sm" />
