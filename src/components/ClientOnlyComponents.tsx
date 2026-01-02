@@ -12,7 +12,7 @@ const WhatsAppWidget = dynamic(() => import('@/components/ui/WhatsAppWidget'), {
   ssr: false
 })
 
-const ChatBot = dynamic(() => import('@/components/ui/ChatBot'), {
+const ChatBotProvider = dynamic(() => import('@/components/ui/ChatBotProvider'), {
   ssr: false
 })
 
@@ -35,7 +35,7 @@ export default function ClientOnlyComponents() {
     <>
       <OptimizedFloatingActions />
       <WhatsAppWidget />
-      <ChatBot />
+      <ChatBotProvider />
       <OpenDayPopupProvider />
     </>
   )
