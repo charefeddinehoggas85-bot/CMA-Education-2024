@@ -582,6 +582,13 @@
   }
   
   .nav-item-fix {
+    display: flex !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+  }
+  
+  /* Force la visibilité du dropdown Formations */
+  .nav-items-fix > div:first-child {
     display: block !important;
     visibility: visible !important;
     opacity: 1 !important;

@@ -110,7 +110,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
   if (loading) {
     return (
       <div className="relative">
-        <button className="flex items-center space-x-1 font-medium transition-colors px-3 py-2 rounded-lg text-gray-900 hover:text-primary-yellow">
+        <button className="nav-item-fix flex items-center space-x-1 font-medium transition-colors rounded-lg text-gray-900 hover:text-primary-blue">
           <span>Formations</span>
           <ChevronDown className="w-4 h-4" />
         </button>
@@ -125,7 +125,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
       onMouseLeave={handleMouseLeave}
     >
       <button
-        className="flex items-center space-x-1 font-medium transition-colors px-3 py-2 rounded-lg text-gray-900 hover:text-primary-yellow"
+        className="nav-item-fix flex items-center space-x-1 font-medium transition-colors rounded-lg text-gray-900 hover:text-primary-blue"
       >
         <span>Formations</span>
         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
