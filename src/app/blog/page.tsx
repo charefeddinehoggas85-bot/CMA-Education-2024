@@ -93,7 +93,7 @@ export default function BlogPage() {
             featuredSectionTitle: (strapiPageData as any).featuredSectionTitle || defaultPageData.featuredSectionTitle,
             searchPlaceholder: (strapiPageData as any).searchPlaceholder || defaultPageData.searchPlaceholder,
             noArticlesText: (strapiPageData as any).noArticlesText || defaultPageData.noArticlesText,
-            allCategoriesText: strapiPageData.allCategoriesText || defaultPageData.allCategoriesText
+            allCategoriesText: (strapiPageData as any).allCategoriesText || defaultPageData.allCategoriesText
           })
         }
         
