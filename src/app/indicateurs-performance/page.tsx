@@ -1,7 +1,8 @@
 import { Award, TrendingUp, BarChart3, FileText, AlertCircle } from 'lucide-react'
+import { getPageIndicateursPerformance } from '@/lib/strapi'
 
-// Données statiques des formations
-const formationsData = [
+// Données statiques des formations (fallback)
+const formationsDataFallback = [
   {
     titre: "Conducteur de Travaux Bâtiment et Génie Civil",
     certification: "RNCP 35027",
@@ -124,7 +125,20 @@ const formationsData = [
   }
 ]
 
-export default function IndicateursPerformancePage() {
+export default async function IndicateursPerformancePage() {
+  // Récupérer les données depuis Strapi
+  const pageData = await getPageIndicateursPerformance()
+  
+  // Utiliser les données Strapi ou les fallbacks
+  const titre = pageData?.titre || "Nos indicateurs de performance et de résultats"
+  const sousTitre = pageData?.sousTitre || "Conformément à l'article L.6111-8 du Code du travail"
+  const description = pageData?.description || "À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats liés à nos formations professionnelles. Ces données permettent à chacun — candidats, entreprises, partenaires et financeurs — d'évaluer l'efficacité de notre accompagnement."
+  const engagement = pageData?.engagement || "À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. Nous nous engageons à fournir une formation de qualité supérieure qui répond aux besoins du marché du BTP."
+  const transparence = pageData?.transparence || "Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats liés à nos formations professionnelles pour permettre à chacun d'évaluer l'efficacité de notre accompagnement."
+  const anneeReference = pageData?.anneeReference || "2025-26"
+  const formationsData = pageData?.formations && pageData.formations.length > 0 ? pageData.formations : formationsDataFallback
+  const noteMethodologique = pageData?.noteMethodologique || "<p>Les indicateurs présentés dans ce tableau sont en cours de collecte et d'analyse. La Construction Management Academy étant un établissement récent, nous mettons en place progressivement nos outils de suivi et d'évaluation pour fournir des données précises et fiables sur nos performances pédagogiques.</p><p>Ces indicateurs seront mis à jour régulièrement au fur et à mesure de la disponibilité des données et de l'évolution de nos cohortes d'apprenants.</p>"
+  const contactInfo = pageData?.contactInfo || "<p>Pour toute question concernant nos indicateurs de performance ou pour obtenir des informations complémentaires sur nos formations, n'hésitez pas à nous contacter :</p><div><p><strong>Construction Management Academy</strong></p><p>Email : contact@construction-management-academy.fr</p><p>Téléphone : +33 1 XX XX XX XX</p></div>"
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">
       {/* Hero Section */}
@@ -134,26 +148,23 @@ export default function IndicateursPerformancePage() {
             <Award className="h-12 w-12 mr-4 flex-shrink-0" />
             <div className="flex-1">
               <h1 className="text-4xl font-black text-white leading-tight">
-                Nos indicateurs de performance et de résultats
+                {titre}
               </h1>
               <p className="text-xl text-green-100 mt-2">
-                Conformément à l'article L.6111-8 du Code du travail
+                {sousTitre}
               </p>
             </div>
           </div>
           
           <div className="bg-white/10 backdrop-blur-sm rounded-lg p-6 mb-6">
             <p className="text-lg leading-relaxed text-white">
-              À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. 
-              Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats 
-              liés à nos formations professionnelles. Ces données permettent à chacun — candidats, entreprises, partenaires 
-              et financeurs — d'évaluer l'efficacité de notre accompagnement.
+              {description}
             </p>
           </div>
           
           <div className="flex items-center text-green-100">
             <FileText className="h-5 w-5 mr-2 flex-shrink-0" />
-            <span>Conformément à l'article L.6111-8 du Code du travail</span>
+            <span>{pageData?.conformiteArticle || "Conformément à l'article L.6111-8 du Code du travail"}</span>
           </div>
         </div>
       </div>
@@ -170,16 +181,14 @@ export default function IndicateursPerformancePage() {
             <div className="bg-blue-50 rounded-lg p-6">
               <h3 className="font-semibold text-gray-900 mb-3">Engagement Qualité</h3>
               <p className="text-gray-700">
-                À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. 
-                Nous nous engageons à fournir une formation de qualité supérieure qui répond aux besoins du marché du BTP.
+                {engagement}
               </p>
             </div>
             
             <div className="bg-green-50 rounded-lg p-6">
               <h3 className="font-semibold text-gray-900 mb-3">Transparence</h3>
               <p className="text-gray-700">
-                Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats 
-                liés à nos formations professionnelles pour permettre à chacun d'évaluer l'efficacité de notre accompagnement.
+                {transparence}
               </p>
             </div>
           </div>
@@ -191,7 +200,7 @@ export default function IndicateursPerformancePage() {
             <div className="flex items-center">
               <BarChart3 className="h-8 w-8 mr-3 flex-shrink-0" />
               <div className="flex-1">
-                <h2 className="text-2xl font-bold text-white">Indicateurs de résultats – Année 2025-26</h2>
+                <h2 className="text-2xl font-bold text-white">Indicateurs de résultats – Année {anneeReference}</h2>
                 <p className="text-blue-100 mt-1">Tableau détaillé de nos performances par formation</p>
               </div>
             </div>
@@ -319,16 +328,10 @@ export default function IndicateursPerformancePage() {
             <h3 className="text-lg font-semibold text-gray-900">Note méthodologique</h3>
           </div>
           <div className="prose prose-gray max-w-none">
-            <p className="text-gray-700 leading-relaxed">
-              Les indicateurs présentés dans ce tableau sont en cours de collecte et d'analyse. 
-              La Construction Management Academy étant un établissement récent, nous mettons en place 
-              progressivement nos outils de suivi et d'évaluation pour fournir des données précises 
-              et fiables sur nos performances pédagogiques.
-            </p>
-            <p className="text-gray-700 leading-relaxed mt-4">
-              Ces indicateurs seront mis à jour régulièrement au fur et à mesure de la disponibilité 
-              des données et de l'évolution de nos cohortes d'apprenants.
-            </p>
+            <div 
+              className="text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: noteMethodologique }}
+            />
           </div>
         </section>
 
@@ -339,21 +342,10 @@ export default function IndicateursPerformancePage() {
             <h3 className="text-lg font-semibold text-gray-900">Contact et informations</h3>
           </div>
           <div className="prose prose-gray max-w-none">
-            <p className="text-gray-700 leading-relaxed">
-              Pour toute question concernant nos indicateurs de performance ou pour obtenir 
-              des informations complémentaires sur nos formations, n'hésitez pas à nous contacter :
-            </p>
-            <div className="mt-4 bg-gray-50 rounded-lg p-4">
-              <p className="text-gray-700 mb-2">
-                <strong>Construction Management Academy</strong>
-              </p>
-              <p className="text-gray-700 mb-2">
-                Email : contact@construction-management-academy.fr
-              </p>
-              <p className="text-gray-700">
-                Téléphone : +33 1 XX XX XX XX
-              </p>
-            </div>
+            <div 
+              className="text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: contactInfo }}
+            />
           </div>
           
           <div className="mt-6 pt-6 border-t border-gray-200">

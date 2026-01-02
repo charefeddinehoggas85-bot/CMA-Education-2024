@@ -1138,3 +1138,35 @@ export async function getIndicateursPerformance() {
   
   return transformed
 }
+
+// Page Indicateurs Performance (singleton)
+export async function getPageIndicateursPerformance() {
+  try {
+    const data = await fetchAPI('/api/page-indicateurs-performance?populate=*')
+    if (!data?.data) {
+      console.log('⚠️ Page Indicateurs Performance non trouvée dans Strapi, utilisation des fallbacks')
+      return null
+    }
+    
+    const attrs = data.data.attributes || {}
+    
+    return {
+      id: data.data.id,
+      titre: attrs.titre || "Nos indicateurs de performance et de résultats",
+      sousTitre: attrs.sousTitre || "Conformément à l'article L.6111-8 du Code du travail",
+      description: attrs.description || "À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats liés à nos formations professionnelles. Ces données permettent à chacun — candidats, entreprises, partenaires et financeurs — d'évaluer l'efficacité de notre accompagnement.",
+      conformiteArticle: attrs.conformiteArticle || "Conformément à l'article L.6111-8 du Code du travail",
+      engagement: attrs.engagement || "À la Construction Management Academy, nous plaçons la réussite de nos apprenants au cœur de notre engagement. Nous nous engageons à fournir une formation de qualité supérieure qui répond aux besoins du marché du BTP.",
+      transparence: attrs.transparence || "Dans une logique de transparence et de qualité, nous mettons à disposition les indicateurs clés de résultats liés à nos formations professionnelles pour permettre à chacun d'évaluer l'efficacité de notre accompagnement.",
+      anneeReference: attrs.anneeReference || "2025-26",
+      formations: attrs.formations || [],
+      noteMethodologique: attrs.noteMethodologique || "<p>Les indicateurs présentés dans ce tableau sont en cours de collecte et d'analyse. La Construction Management Academy étant un établissement récent, nous mettons en place progressivement nos outils de suivi et d'évaluation pour fournir des données précises et fiables sur nos performances pédagogiques.</p><p>Ces indicateurs seront mis à jour régulièrement au fur et à mesure de la disponibilité des données et de l'évolution de nos cohortes d'apprenants.</p>",
+      contactInfo: attrs.contactInfo || "<p>Pour toute question concernant nos indicateurs de performance ou pour obtenir des informations complémentaires sur nos formations, n'hésitez pas à nous contacter :</p><div><p><strong>Construction Management Academy</strong></p><p>Email : contact@construction-management-academy.fr</p><p>Téléphone : +33 1 XX XX XX XX</p></div>",
+      metaTitle: attrs.seo?.metaTitle || "Indicateurs de Performance - Construction Management Academy",
+      metaDescription: attrs.seo?.metaDescription || "Découvrez nos indicateurs de performance et de résultats conformément à l'article L.6111-8 du Code du travail. Transparence et qualité de nos formations BTP."
+    }
+  } catch (error) {
+    console.error('❌ Erreur getPageIndicateursPerformance:', error)
+    return null
+  }
+}
