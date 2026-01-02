@@ -106,7 +106,8 @@ const Footer = () => {
     { name: 'Formations', href: '/formations' },
     { name: 'À propos', href: '/about' },
     { name: 'Pédagogie', href: '/pedagogie' },
-    { name: 'Partenaires', href: '/partenaires' }
+    { name: 'Partenaires', href: '/partenaires' },
+    { name: 'Indicateurs de performance', href: '/indicateurs-performance' }
   ]
   const contactTitle = pageData?.contactTitle || "Contact"
   const phoneHoursLabel = pageData?.phoneHoursLabel || "Lun-Ven 9h-18h"
