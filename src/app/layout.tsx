@@ -1,6 +1,7 @@
 import type { Metadata } from 'next'
 import './globals.css'
 import '@/styles/header-responsive-fix.css'
+import '@/styles/navigation-responsive-complete.css'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import ClientOnlyComponents from '@/components/ClientOnlyComponents'
 

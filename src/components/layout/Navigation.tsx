@@ -41,10 +41,10 @@ const Navigation = () => {
   ]
 
   return (
-    <header className={`fixed top-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-lg' : 'bg-white/90 backdrop-blur-sm'}`}>
+    <header className={`nav-header-fix transition-all duration-300 ${isScrolled ? 'bg-white/95 backdrop-blur-xl shadow-lg' : 'bg-white/90 backdrop-blur-sm'}`}>
       {/* Container principal avec padding ultra adaptatif */}
-      <div className="max-w-7xl mx-auto px-2 sm:px-4 md:px-6 lg:px-8">
-        <div className="flex items-center justify-between h-12 sm:h-14 md:h-16 lg:h-18 xl:h-20 2xl:h-22">
+      <div className="nav-container-fix max-w-7xl mx-auto">
+        <div className="nav-content-fix">
           
           {/* SECTION GAUCHE - Logo Ultra Responsive */}
           <div className="flex-shrink-0 flex items-center">
@@ -53,15 +53,15 @@ const Navigation = () => {
                 <img 
                   src="/images/logoo.svg" 
                   alt="Construction Management Academy" 
-                  className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 2xl:h-20 w-auto"
+                  className="nav-logo-fix"
                 />
               </div>
             </Link>
           </div>
 
           {/* SECTION CENTRE - Navigation principale (Desktop à partir de md) */}
-          <nav className="hidden md:flex items-center justify-center flex-1 max-w-5xl mx-2 md:mx-4 xl:mx-8">
-            <div className="flex items-center space-x-0.5 md:space-x-1 xl:space-x-2">
+          <nav className="nav-desktop-fix hidden md:flex items-center justify-center flex-1 max-w-5xl mx-2 md:mx-4 xl:mx-8">
+            <div className="nav-items-fix">
               {/* Dropdown Formations */}
               <div className="relative">
                 <FormationsDropdown isScrolled={isScrolled} />
@@ -74,7 +74,7 @@ const Navigation = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`relative px-1 md:px-2 lg:px-3 xl:px-4 py-2 text-xs md:text-sm lg:text-base font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
+                    className={`nav-item-fix relative rounded-lg transition-all duration-200 whitespace-nowrap ${
                       isActive 
                         ? 'text-primary-blue bg-primary-blue/10 shadow-sm' 
                         : 'text-gray-700 hover:text-primary-blue hover:bg-gray-50'
@@ -99,11 +99,11 @@ const Navigation = () => {
           </nav>
 
           {/* SECTION DROITE - Actions Ultra Responsive */}
-          <div className="flex items-center space-x-1 sm:space-x-2 md:space-x-3 xl:space-x-4 flex-shrink-0">
+          <div className="nav-actions-fix">
             {/* Téléphone - Adaptatif */}
             <a 
               href="tel:0185097106" 
-              className="hidden md:flex items-center space-x-1 lg:space-x-2 px-2 lg:px-3 py-2 text-xs lg:text-sm font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-all duration-200"
+              className="nav-action-btn-fix hidden md:flex items-center space-x-1 lg:space-x-2 text-gray-700 hover:text-primary-blue hover:bg-gray-50 transition-all duration-200"
             >
               <Phone className="w-3 lg:w-4 h-3 lg:h-4" />
               <span className="hidden lg:inline xl:hidden">📞</span>
@@ -118,7 +118,7 @@ const Navigation = () => {
                 rel="noopener noreferrer"
                 className="group flex-shrink-0"
               >
-                <button className="flex items-center space-x-1 px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 text-xs sm:text-sm font-semibold text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
+                <button className="nav-action-btn-fix flex items-center space-x-1 text-white bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105">
                   <Calendar className="w-3 sm:w-4 h-3 sm:h-4" />
                   <span className="hidden sm:inline lg:hidden">JPO</span>
                   <span className="hidden lg:inline">Inscription JPO</span>
@@ -130,7 +130,7 @@ const Navigation = () => {
             <OptimizedButton 
               variant="gradient" 
               size="sm" 
-              className="px-2 sm:px-3 lg:px-4 py-1.5 sm:py-2 lg:py-2.5 text-xs sm:text-sm font-semibold shadow-md hover:shadow-lg flex-shrink-0"
+              className="nav-action-btn-fix shadow-md hover:shadow-lg flex-shrink-0"
               onClick={handleCandidater}
             >
               <span className="hidden sm:inline lg:hidden">✨</span>
@@ -154,8 +154,8 @@ const Navigation = () => {
 
       {/* MENU MOBILE Ultra Responsive */}
       {isOpen && (
-        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/50 shadow-xl">
-          <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
+        <div className="nav-mobile-menu-fix md:hidden">
+          <div className="nav-mobile-content-fix max-w-7xl mx-auto">
             <nav className="space-y-1 sm:space-y-2">
               {/* Formations en premier avec icône */}
               <Link
