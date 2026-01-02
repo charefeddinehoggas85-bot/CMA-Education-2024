@@ -6,7 +6,7 @@ import { Building2, Users, Award, Lightbulb, GraduationCap, Target, Cog, Heart, 
 
 import AnimatedIcon from '@/components/ui/AnimatedIcon'
 import ModernBackground from '@/components/ui/ModernBackground'
-import { getPageAbout } from '@/lib/strapi'
+import { getPageAbout, getImageURL, getStrapiMediaURL } from '@/lib/strapi'
 
 // Types pour le Single Type Page About
 interface FeatureItem {
@@ -21,6 +21,7 @@ interface PageAboutData {
   heroTitle: string
   heroSubtitle: string
   heroDescription: string
+  heroImage: string | null
   histoireTitle: string
   histoireContent: string
   missionTitle: string
@@ -31,11 +32,15 @@ interface PageAboutData {
   features: FeatureItem[]
 }
 
+// Image par défaut (fallback)
+const DEFAULT_HERO_IMAGE = '/images/formations/digital-construction.jpg'
+
 // Données par défaut (fallback)
 const defaultData: PageAboutData = {
   heroTitle: "Qui sommes nous",
   heroSubtitle: "Centre de formation BTP",
   heroDescription: "Un centre de formation BTP reconnu pour son savoir-faire dans la préparation aux métiers de la conduite et du management de travaux. Nos programmes sont conçus pour répondre aux nouveaux défis du BTP : transition énergétique, digitalisation, exigences réglementaires et innovation technologique.",
+  heroImage: DEFAULT_HERO_IMAGE,
   histoireTitle: "Notre Histoire",
   histoireContent: "",
   missionTitle: "Notre Mission",
@@ -61,10 +66,21 @@ const AboutSection = () => {
         const strapiData = await getPageAbout()
         
         if (strapiData) {
+          // Récupérer l'URL de l'image hero depuis Strapi
+          let heroImageUrl = DEFAULT_HERO_IMAGE
+          if (strapiData.heroImage) {
+            const strapiImageUrl = getStrapiMediaURL(strapiData.heroImage)
+            if (strapiImageUrl) {
+              heroImageUrl = strapiImageUrl
+              console.log('✅ Image About chargée depuis Strapi:', heroImageUrl)
+            }
+          }
+          
           setPageData({
             heroTitle: strapiData.heroTitle || defaultData.heroTitle,
             heroSubtitle: strapiData.heroSubtitle || defaultData.heroSubtitle,
             heroDescription: strapiData.heroDescription || defaultData.heroDescription,
+            heroImage: heroImageUrl,
             histoireTitle: strapiData.histoireTitle || defaultData.histoireTitle,
             histoireContent: strapiData.histoireContent || defaultData.histoireContent,
             missionTitle: strapiData.missionTitle || defaultData.missionTitle,
@@ -204,7 +220,7 @@ const AboutSection = () => {
           >
             <div className="relative overflow-hidden rounded-3xl shadow-2xl group h-[450px]">
               <img 
-                src="/images/formations/digital-construction.jpg" 
+                src={pageData.heroImage || DEFAULT_HERO_IMAGE} 
                 alt="Innovation & Excellence Construction Management Academy"
                 className="absolute inset-0 w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
               />
