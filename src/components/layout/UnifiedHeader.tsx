@@ -234,10 +234,14 @@ const UnifiedHeader = () => {
                 {/* MEGA DROPDOWN - RESPONSIVE DESIGN */}
                 {showFormationsMenu && (
                   <div 
-                    className="absolute top-full left-0 lg:left-1/2 lg:transform lg:-translate-x-1/2 mt-1 
-                               w-[calc(100vw-1.5rem)] sm:w-[400px] lg:w-[480px] xl:w-[520px]
-                               max-w-[95vw] sm:max-w-[90vw] lg:max-w-[85vw]
+                    className="absolute top-full mt-1 
+                               left-0 lg:left-auto lg:right-auto
+                               w-[320px] sm:w-[380px] lg:w-[420px] xl:w-[480px]
                                bg-white rounded-lg lg:rounded-xl shadow-lg lg:shadow-xl border border-gray-100 z-[9999] overflow-hidden"
+                    style={{ 
+                      // Empêcher le dropdown de sortir de l'écran à gauche
+                      maxWidth: 'calc(100vw - 24px)',
+                    }}
                     onMouseEnter={handleFormationsMouseEnter}
                     onMouseLeave={handleFormationsMouseLeave}
                   >
