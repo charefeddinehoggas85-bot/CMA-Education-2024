@@ -59,9 +59,9 @@ const Navigation = () => {
             </Link>
           </div>
 
-          {/* SECTION CENTRE - Navigation principale (Desktop uniquement) */}
-          <nav className="hidden lg:flex items-center justify-center flex-1 max-w-5xl mx-4 xl:mx-8">
-            <div className="flex items-center space-x-0.5 xl:space-x-1 2xl:space-x-2">
+          {/* SECTION CENTRE - Navigation principale (Desktop à partir de md) */}
+          <nav className="hidden md:flex items-center justify-center flex-1 max-w-5xl mx-2 md:mx-4 xl:mx-8">
+            <div className="flex items-center space-x-0.5 md:space-x-1 xl:space-x-2">
               {/* Dropdown Formations */}
               <div className="relative">
                 <FormationsDropdown isScrolled={isScrolled} />
@@ -74,14 +74,14 @@ const Navigation = () => {
                   <Link
                     key={item.name}
                     href={item.href}
-                    className={`relative px-2 lg:px-3 xl:px-4 py-2 text-xs lg:text-sm xl:text-base font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
+                    className={`relative px-1 md:px-2 lg:px-3 xl:px-4 py-2 text-xs md:text-sm lg:text-base font-medium rounded-lg transition-all duration-200 whitespace-nowrap ${
                       isActive 
                         ? 'text-primary-blue bg-primary-blue/10 shadow-sm' 
                         : 'text-gray-700 hover:text-primary-blue hover:bg-gray-50'
                     }`}
                   >
-                    <span className="hidden xl:inline">{item.name}</span>
-                    <span className="xl:hidden">
+                    <span className="hidden lg:inline">{item.name}</span>
+                    <span className="lg:hidden">
                       {item.name === 'Nos formateurs' && '👨‍🏫'}
                       {item.name === 'Nos Partenaires' && '🤝'}
                       {item.name === 'Blog' && '📝'}
@@ -139,7 +139,7 @@ const Navigation = () => {
             </OptimizedButton>
 
             {/* BOUTON MENU MOBILE Ultra Responsive */}
-            <div className="lg:hidden flex items-center">
+            <div className="md:hidden flex items-center">
               <button
                 className="p-1.5 sm:p-2 text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-colors duration-200"
                 onClick={() => setIsOpen(!isOpen)}
@@ -154,7 +154,7 @@ const Navigation = () => {
 
       {/* MENU MOBILE Ultra Responsive */}
       {isOpen && (
-        <div className="lg:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/50 shadow-xl">
+        <div className="md:hidden absolute top-full left-0 right-0 bg-white/95 backdrop-blur-xl border-t border-gray-200/50 shadow-xl">
           <div className="max-w-7xl mx-auto px-3 sm:px-4 py-4 sm:py-6">
             <nav className="space-y-1 sm:space-y-2">
               {/* Formations en premier avec icône */}
