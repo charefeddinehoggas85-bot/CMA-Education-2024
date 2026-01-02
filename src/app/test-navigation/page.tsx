@@ -3,8 +3,17 @@
 import Link from 'next/link'
 import { useState, useEffect } from 'react'
 
+interface Formation {
+  id: number
+  attributes: {
+    title: string
+    slug: string
+    [key: string]: any
+  }
+}
+
 export default function TestNavigationPage() {
-  const [formations, setFormations] = useState([])
+  const [formations, setFormations] = useState<Formation[]>([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {

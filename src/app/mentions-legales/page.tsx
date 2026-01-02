@@ -67,7 +67,7 @@ export default function MentionsLegalesPage() {
     const fetchMentionsLegales = async () => {
       try {
         const data = await getPageMentionsLegales()
-        setMentionsData(data)
+        setMentionsData(data as MentionsLegalesData)
       } catch (err) {
         console.error('Erreur lors du chargement des mentions légales:', err)
         setError('Impossible de charger les mentions légales')

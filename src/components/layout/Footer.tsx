@@ -168,29 +168,32 @@ const Footer = () => {
               </p>
 
               {/* Stats épurées - Responsive */}
-              {loading ? (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-                  {[1, 2, 3].map((i) => (
-                    <div key={i} className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4 animate-pulse">
-                      <div className="h-5 md:h-6 bg-gray-300 rounded mb-2"></div>
-                      <div className="h-2 md:h-3 bg-gray-300 rounded"></div>
-                    </div>
-                  ))}
+              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
+                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
+                  <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
+                    15+
+                  </div>
+                  <div className="text-xs text-gray-300 font-medium">
+                    Formations
+                  </div>
                 </div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-                  {stats.slice(0, 3).map((stat) => (
-                    <div key={stat.id} className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
-                      <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
-                        {stat.nombre}{stat.suffixe}
-                      </div>
-                      <div className="text-xs text-gray-300 font-medium">
-                        {stat.label}
-                      </div>
-                    </div>
-                  ))}
+                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
+                  <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
+                    95%
+                  </div>
+                  <div className="text-xs text-gray-300 font-medium">
+                    Réussite
+                  </div>
                 </div>
-              )}
+                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
+                  <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
+                    500+
+                  </div>
+                  <div className="text-xs text-gray-300 font-medium">
+                    Diplômés
+                  </div>
+                </div>
+              </div>
 
               {/* Réseaux sociaux - Responsive */}
               <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
