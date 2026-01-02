@@ -4,10 +4,6 @@ import { useEffect, useState } from 'react'
 import dynamic from 'next/dynamic'
 
 // Dynamically import client components to avoid SSR issues
-const OptimizedFloatingActions = dynamic(() => import('@/components/ui/OptimizedFloatingActions'), {
-  ssr: false
-})
-
 const WhatsAppWidget = dynamic(() => import('@/components/ui/WhatsAppWidget'), {
   ssr: false
 })
@@ -33,7 +29,6 @@ export default function ClientOnlyComponents() {
 
   return (
     <>
-      <OptimizedFloatingActions />
       <WhatsAppWidget />
       <ChatBotProvider />
       <OpenDayPopupProvider />
