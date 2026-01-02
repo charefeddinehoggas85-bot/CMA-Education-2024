@@ -182,41 +182,11 @@ async function getFormationData(slug: string): Promise<{ formation: Formation | 
 
 // Page principale avec SSR
 export default async function FormationDetailPage({ params }: { params: { slug: string } }) {
-  const { formation, source, error, debug } = await getFormationData(params.slug)
+  const { formation } = await getFormationData(params.slug)
   
   if (!formation) {
     notFound()
   }
 
-  return (
-    <>
-      {/* Indicateur de debug AMÉLIORÉ - visible en production */}
-      <div className="fixed bottom-4 left-4 bg-black text-white p-4 rounded-lg text-xs z-[9999] max-w-sm shadow-2xl border-2 border-yellow-400">
-        <div className="font-bold text-lg mb-2" style={{ color: source === 'STRAPI' ? '#22c55e' : '#ef4444' }}>
-          📊 {source}
-        </div>
-        <div className="space-y-1">
-          <div><span className="text-gray-400">ID:</span> {formation.id}</div>
-          <div><span className="text-gray-400">Slug:</span> {params.slug}</div>
-          <div><span className="text-gray-400">Durée:</span> {formation.duree || 'N/A'}</div>
-          <div><span className="text-gray-400">Objectifs:</span> {Array.isArray(formation.objectifs) ? formation.objectifs.length : 'N/A'}</div>
-          <div><span className="text-gray-400">Débouchés:</span> {Array.isArray(formation.debouches) ? formation.debouches.length : 'N/A'}</div>
-          <div><span className="text-gray-400">Programme:</span> {Array.isArray(formation.programme) ? formation.programme.length : 'N/A'}</div>
-        </div>
-        {error && (
-          <div className="mt-2 p-2 bg-red-900/50 rounded text-red-300 text-[10px] break-all">
-            <div className="font-bold">Erreur Strapi:</div>
-            {error}
-          </div>
-        )}
-        <div className="mt-2 text-[10px] text-gray-500">
-          Fetch: {debug.fetchAttempted ? '✓' : '✗'} | 
-          Status: {debug.responseStatus || 'N/A'} | 
-          Data: {debug.dataReceived ? '✓' : '✗'}
-        </div>
-      </div>
-      
-      <FormationContent formation={formation} />
-    </>
-  )
+  return <FormationContent formation={formation} />
 }

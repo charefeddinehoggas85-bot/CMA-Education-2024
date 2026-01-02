@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Phone, Calendar, ChevronDown, GraduationCap, Building, Users, Award, Clock, RefreshCw } from 'lucide-react'
+import { Menu, X, Phone, Calendar, ChevronDown, GraduationCap, Award, Clock, RefreshCw } from 'lucide-react'
 import OptimizedButton from '@/components/ui/OptimizedButton'
 import { getFormations } from '@/lib/strapi'
 
@@ -231,24 +231,15 @@ const UnifiedHeader = () => {
                   <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${showFormationsMenu ? 'rotate-180' : ''}`} />
                 </button>
 
-                {/* MEGA DROPDOWN - DESIGN EXPERT */}
+                {/* MEGA DROPDOWN - DESIGN COMPACT */}
                 {showFormationsMenu && (
                   <div 
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[650px] max-w-[90vw] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[9999] overflow-hidden backdrop-blur-sm"
+                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-1 w-[520px] max-w-[85vw] bg-white rounded-xl shadow-xl border border-gray-100 z-[9999] overflow-hidden"
                     onMouseEnter={handleFormationsMouseEnter}
                     onMouseLeave={handleFormationsMouseLeave}
-                    style={{ 
-                      boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)' 
-                    }}
                   >
-                    {/* Header */}
-                    <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
-                      <h3 className="text-lg font-semibold text-gray-900">Nos Formations</h3>
-                      <p className="text-sm text-gray-500">Alternance & Reconversion professionnelle</p>
-                    </div>
-
-                    {/* Onglets - Seulement Alternance et Reconversion */}
-                    <div className="flex border-b border-gray-100 bg-gray-50 overflow-x-auto">
+                    {/* Onglets compacts */}
+                    <div className="flex border-b border-gray-100 bg-gray-50">
                       {formationsData.map((category, index) => {
                         const IconComponent = category.icon
                         return (
@@ -258,18 +249,16 @@ const UnifiedHeader = () => {
                               handleFormationsMouseEnter()
                               setActiveTab(index)
                             }}
-                            className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                            className={`flex-1 flex items-center justify-center gap-1.5 px-3 py-2 text-xs font-medium transition-all duration-200 ${
                               activeTab === index 
-                                ? `text-white bg-gradient-to-r ${category.color} shadow-sm` 
+                                ? `text-white bg-gradient-to-r ${category.color}` 
                                 : 'text-gray-600 hover:text-primary-blue hover:bg-gray-100'
                             }`}
                           >
-                            <IconComponent className="w-4 h-4" />
+                            <IconComponent className="w-3.5 h-3.5" />
                             <span>{category.category}</span>
-                            <span className={`ml-1 text-xs px-1.5 py-0.5 rounded-full ${
-                              activeTab === index 
-                                ? 'bg-white/20 text-white' 
-                                : 'bg-gray-200 text-gray-500'
+                            <span className={`text-[10px] px-1.5 py-0.5 rounded-full ${
+                              activeTab === index ? 'bg-white/20' : 'bg-gray-200 text-gray-500'
                             }`}>
                               {category.formations.length}
                             </span>
@@ -278,105 +267,70 @@ const UnifiedHeader = () => {
                       })}
                     </div>
 
-                    {/* Contenu - Formations avec détails */}
-                    <div className="p-4 max-h-[55vh] overflow-y-auto">
-                      <div className="grid grid-cols-1 gap-2">
-                        {formationsData[activeTab]?.formations.map((formation, idx) => (
-                          <Link
-                            key={idx}
-                            href={`/formations/${formation.slug}`}
-                            className="block p-4 rounded-xl hover:bg-blue-50 transition-all duration-200 group border border-transparent hover:border-blue-200 hover:shadow-md"
-                            onClick={() => setShowFormationsMenu(false)}
-                          >
-                            <div className="flex justify-between items-start">
-                              <div className="flex-1">
-                                {/* Titre de la formation */}
-                                <div className="font-semibold text-gray-900 group-hover:text-primary-blue text-base mb-2">
-                                  {formation.title}
-                                </div>
-                                
-                                {/* Détails: Niveau, Durée, Catégorie */}
-                                <div className="flex flex-wrap items-center gap-2 text-sm">
-                                  {/* Niveau */}
-                                  <span className="inline-flex items-center px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
-                                    <Award className="w-3 h-3 mr-1" />
-                                    {formation.level}
-                                  </span>
-                                  
-                                  {/* Durée */}
-                                  <span className="inline-flex items-center px-2.5 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
-                                    <Clock className="w-3 h-3 mr-1" />
-                                    {formation.duree}
-                                  </span>
-                                  
-                                  {/* Catégorie */}
-                                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
-                                    formation.category === 'Alternance' 
-                                      ? 'bg-primary-blue/10 text-primary-blue' 
-                                      : 'bg-emerald-100 text-emerald-800'
-                                  }`}>
-                                    {formation.category === 'Alternance' ? (
-                                      <GraduationCap className="w-3 h-3 mr-1" />
-                                    ) : (
-                                      <RefreshCw className="w-3 h-3 mr-1" />
-                                    )}
-                                    {formation.category}
-                                  </span>
-                                </div>
-                              </div>
-                              
-                              {/* Flèche */}
-                              <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
-                                <div className="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center">
-                                  <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                                  </svg>
-                                </div>
-                              </div>
-                            </div>
-                          </Link>
-                        ))}
-                      </div>
-                    </div>
-                    
-                    {/* Footer avec boutons VAE, Entreprises, Contact */}
-                    <div className="px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50">
-                      <div className="flex justify-between items-center">
+                    {/* Liste formations compacte */}
+                    <div className="p-2 max-h-[45vh] overflow-y-auto">
+                      {formationsData[activeTab]?.formations.map((formation, idx) => (
                         <Link
-                          href="/formations"
-                          className="inline-flex items-center space-x-2 text-sm text-primary-blue hover:text-primary-yellow font-semibold transition-colors group"
+                          key={idx}
+                          href={`/formations/${formation.slug}`}
+                          className="block px-3 py-2 rounded-lg hover:bg-blue-50 transition-all duration-150 group"
                           onClick={() => setShowFormationsMenu(false)}
                         >
-                          <span>Voir toutes les formations</span>
-                          <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
-                          </svg>
+                          <div className="flex items-center justify-between">
+                            <div className="flex-1 min-w-0">
+                              <div className="font-medium text-gray-800 group-hover:text-primary-blue text-sm truncate">
+                                {formation.title}
+                              </div>
+                              <div className="flex items-center gap-1.5 mt-1">
+                                <span className="inline-flex items-center px-1.5 py-0.5 bg-blue-50 text-blue-700 rounded text-[10px] font-medium">
+                                  <Award className="w-2.5 h-2.5 mr-0.5" />
+                                  {formation.level}
+                                </span>
+                                <span className="inline-flex items-center px-1.5 py-0.5 bg-green-50 text-green-700 rounded text-[10px] font-medium">
+                                  <Clock className="w-2.5 h-2.5 mr-0.5" />
+                                  {formation.duree}
+                                </span>
+                              </div>
+                            </div>
+                            <svg className="w-4 h-4 text-gray-300 group-hover:text-primary-blue transition-colors ml-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                            </svg>
+                          </div>
                         </Link>
-                        <div className="flex gap-2">
-                          <Link
-                            href="/formations/vae-btp"
-                            className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-200 transition-colors flex items-center gap-1"
-                            onClick={() => setShowFormationsMenu(false)}
-                          >
-                            <Award className="w-3 h-3" />
-                            VAE
-                          </Link>
-                          <Link
-                            href="/formations/entreprises"
-                            className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium hover:bg-orange-200 transition-colors flex items-center gap-1"
-                            onClick={() => setShowFormationsMenu(false)}
-                          >
-                            <Building className="w-3 h-3" />
-                            Entreprises
-                          </Link>
-                          <Link
-                            href="/contact"
-                            className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs font-medium hover:bg-green-200 transition-colors"
-                            onClick={() => setShowFormationsMenu(false)}
-                          >
-                            Contact
-                          </Link>
-                        </div>
+                      ))}
+                    </div>
+                    
+                    {/* Footer compact */}
+                    <div className="px-3 py-2 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
+                      <Link
+                        href="/formations"
+                        className="text-xs text-primary-blue hover:underline font-medium"
+                        onClick={() => setShowFormationsMenu(false)}
+                      >
+                        Toutes les formations →
+                      </Link>
+                      <div className="flex gap-1.5">
+                        <Link
+                          href="/formations/vae-btp"
+                          className="px-2 py-1 bg-purple-100 text-purple-700 rounded text-[10px] font-medium hover:bg-purple-200 transition-colors"
+                          onClick={() => setShowFormationsMenu(false)}
+                        >
+                          VAE
+                        </Link>
+                        <Link
+                          href="/formations/entreprises"
+                          className="px-2 py-1 bg-orange-100 text-orange-700 rounded text-[10px] font-medium hover:bg-orange-200 transition-colors"
+                          onClick={() => setShowFormationsMenu(false)}
+                        >
+                          Entreprises
+                        </Link>
+                        <Link
+                          href="/contact"
+                          className="px-2 py-1 bg-green-100 text-green-700 rounded text-[10px] font-medium hover:bg-green-200 transition-colors"
+                          onClick={() => setShowFormationsMenu(false)}
+                        >
+                          Contact
+                        </Link>
                       </div>
                     </div>
                   </div>
