@@ -1,0 +1,308 @@
+/* Corrections spécifiques pour les problèmes de responsivité du header */
+
+/* Variables CSS pour les corrections */
+:root {
+  --header-safe-area: env(safe-area-inset-top, 0px);
+  --header-min-height: 56px;
+  --header-max-width: 100vw;
+}
+
+/* Protection contre le débordement horizontal */
+.header-overflow-fix {
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  box-sizing: border-box;
+}
+
+/* Container principal avec protection overflow */
+.header-container-fix {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-width: 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  padding-left: clamp(0.5rem, 2vw, 2rem);
+  padding-right: clamp(0.5rem, 2vw, 2rem);
+  height: clamp(56px, 8vh, 96px);
+  min-height: var(--header-min-height);
+}
+
+/* Logo avec protection overflow */
+.header-logo-fix {
+  flex-shrink: 0;
+  min-width: 0;
+  overflow: hidden;
+  max-width: clamp(80px, 15vw, 200px);
+  height: clamp(32px, 6vh, 72px);
+}
+
+.header-logo-fix img {
+  width: auto;
+  height: 100%;
+  max-width: 100%;
+  object-fit: contain;
+}
+
+/* Navigation avec gestion de l'espace disponible */
+.header-nav-fix {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  margin: 0 clamp(0.5rem, 2vw, 2rem);
+}
+
+.header-nav-items-fix {
+  display: flex;
+  align-items: center;
+  gap: clamp(0.25rem, 1vw, 1rem);
+  overflow-x: auto;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+  padding: 0.25rem 0;
+}
+
+.header-nav-items-fix::-webkit-scrollbar {
+  display: none;
+}
+
+.header-nav-item-fix {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: 0.5rem clamp(0.375rem, 1vw, 1rem);
+  font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+/* Actions avec gestion de l'espace */
+.header-actions-fix {
+  flex-shrink: 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: clamp(0.25rem, 1vw, 0.75rem);
+  overflow: hidden;
+}
+
+.header-action-btn-fix {
+  flex-shrink: 0;
+  white-space: nowrap;
+  padding: clamp(0.25rem, 1vh, 0.625rem) clamp(0.5rem, 2vw, 1.25rem);
+  font-size: clamp(0.625rem, 1.5vw, 0.875rem);
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Corrections spécifiques pour les écrans problématiques */
+
+/* Écrans 1024px - 1200px (laptops moyens) */
+@media (min-width: 1024px) and (max-width: 1200px) {
+  .header-nav-item-fix {
+    padding: 0.5rem 0.5rem;
+    font-size: 0.75rem;
+  }
+  
+  .header-action-btn-fix {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
+  }
+  
+  .header-nav-fix {
+    margin: 0 1rem;
+  }
+}
+
+/* Écrans 1200px - 1366px (laptops standards) */
+@media (min-width: 1200px) and (max-width: 1366px) {
+  .header-nav-item-fix {
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+  
+  .header-action-btn-fix {
+    padding: 0.5rem 1rem;
+    font-size: 0.8125rem;
+  }
+}
+
+/* Écrans 1366px - 1440px (laptops larges) */
+@media (min-width: 1366px) and (max-width: 1440px) {
+  .header-nav-item-fix {
+    padding: 0.5rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  .header-action-btn-fix {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Écrans 1440px - 1600px (moniteurs moyens) */
+@media (min-width: 1440px) and (max-width: 1600px) {
+  .header-nav-item-fix {
+    padding: 0.5rem 1.25rem;
+    font-size: 0.875rem;
+  }
+  
+  .header-action-btn-fix {
+    padding: 0.625rem 1.5rem;
+    font-size: 0.875rem;
+  }
+}
+
+/* Écrans très larges (1600px+) */
+@media (min-width: 1600px) {
+  .header-nav-item-fix {
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+  }
+  
+  .header-action-btn-fix {
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+  }
+}
+
+/* Menu mobile avec protection overflow */
+.mobile-menu-fix {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  width: 100%;
+  max-width: 100vw;
+  overflow-x: hidden;
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  border-radius: 0 0 1rem 1rem;
+  box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+  z-index: 9999;
+}
+
+.mobile-menu-content-fix {
+  max-width: 100%;
+  padding: 1rem;
+  overflow-x: hidden;
+}
+
+/* Mega menu formations avec protection overflow */
+.formations-mega-menu-fix {
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin-top: 0.5rem;
+  width: min(90vw, 800px);
+  max-width: calc(100vw - 2rem);
+  background: white;
+  border-radius: 1rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+  border: 1px solid rgba(229, 231, 235, 0.5);
+  z-index: 9999;
+  overflow: hidden;
+}
+
+.formations-mega-menu-content-fix {
+  padding: 1rem;
+  max-width: 100%;
+  overflow-x: hidden;
+}
+
+/* Corrections pour les hauteurs d'écran réduites */
+@media (max-height: 600px) {
+  .header-container-fix {
+    height: 48px;
+    min-height: 48px;
+  }
+  
+  .header-logo-fix {
+    height: 28px;
+  }
+  
+  .header-nav-item-fix,
+  .header-action-btn-fix {
+    padding-top: 0.375rem;
+    padding-bottom: 0.375rem;
+  }
+}
+
+/* Corrections pour les écrans très étroits */
+@media (max-width: 360px) {
+  .header-container-fix {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
+  }
+  
+  .header-logo-fix {
+    max-width: 80px;
+  }
+  
+  .header-actions-fix {
+    gap: 0.25rem;
+  }
+  
+  .header-action-btn-fix {
+    padding: 0.375rem 0.5rem;
+    font-size: 0.625rem;
+  }
+}
+
+/* Corrections pour les écrans ultra-larges */
+@media (min-width: 1920px) {
+  .header-container-fix {
+    max-width: 1536px;
+    margin: 0 auto;
+  }
+}
+
+/* Protection contre les débordements sur tous les éléments */
+.header-overflow-fix * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+/* Animations fluides avec protection performance */
+@media (prefers-reduced-motion: no-preference) {
+  .header-nav-item-fix,
+  .header-action-btn-fix {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+}
+
+/* États hover avec protection */
+.header-nav-item-fix:hover,
+.header-action-btn-fix:hover {
+  transform: translateY(-1px);
+}
+
+/* États focus pour l'accessibilité */
+.header-nav-item-fix:focus,
+.header-action-btn-fix:focus {
+  outline: 2px solid #3b82f6;
+  outline-offset: 2px;
+}
+
+/* Correction pour Safari sur iOS */
+@supports (-webkit-touch-callout: none) {
+  .header-container-fix {
+    padding-top: var(--header-safe-area);
+    height: calc(var(--header-min-height) + var(--header-safe-area));
+  }
+}
+
+/* Correction pour les navigateurs avec zoom */
+@media (min-resolution: 1.5dppx) {
+  .header-nav-item-fix,
+  .header-action-btn-fix {
+    font-size: calc(clamp(0.75rem, 1.5vw, 0.875rem) * 0.95);
+  }
+}

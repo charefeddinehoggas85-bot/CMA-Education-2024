@@ -188,28 +188,28 @@ const Header = () => {
         : 'bg-white/80 backdrop-blur-lg'
     }`}>
       <nav className="max-w-7xl mx-auto px-3 sm:px-4 md:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-14 sm:h-16 md:h-18 lg:h-20 xl:h-22">
+        <div className="flex justify-between items-center h-14 sm:h-16 md:h-18 lg:h-20 xl:h-22 min-h-[56px]">
           
-          {/* Logo dynamique - Ultra Responsive */}
-          <Link href="/" className="flex items-center group flex-shrink-0">
-            <div className="relative">
+          {/* Logo dynamique - Ultra Responsive avec protection overflow */}
+          <Link href="/" className="flex items-center group flex-shrink-0 min-w-0">
+            <div className="relative overflow-hidden">
               <Image
                 src="/logo.svg"
                 alt={`${siteSettings?.siteName || 'Construction Management Academy'} Logo`}
                 width={200}
                 height={200}
-                className="h-10 sm:h-12 md:h-14 lg:h-16 xl:h-18 w-auto max-w-[120px] sm:max-w-[140px] md:max-w-[160px] lg:max-w-[180px] xl:max-w-none transition-all duration-300 group-hover:scale-105"
+                className="h-8 sm:h-10 md:h-12 lg:h-14 xl:h-16 2xl:h-18 w-auto max-w-[100px] sm:max-w-[120px] md:max-w-[140px] lg:max-w-[160px] xl:max-w-[180px] 2xl:max-w-none transition-all duration-300 group-hover:scale-105"
                 priority
               />
             </div>
           </Link>
 
-          {/* Navigation dynamique - Desktop uniquement */}
-          <div className="hidden xl:flex items-center justify-center flex-1 max-w-4xl mx-6">
-            <div className="flex items-center space-x-1 2xl:space-x-2">
+          {/* Navigation dynamique - Desktop à partir de lg */}
+          <div className="hidden lg:flex items-center justify-center flex-1 max-w-4xl mx-2 lg:mx-4 xl:mx-6 overflow-hidden">
+            <div className="flex items-center space-x-0.5 lg:space-x-1 xl:space-x-2 overflow-x-auto scrollbar-hide">
               <Link
                 href="/"
-                className={`px-2 lg:px-3 xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap ${
+                className={`px-1.5 lg:px-2 xl:px-3 2xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   pathname === '/'
                     ? 'text-primary-blue bg-primary-blue/10 shadow-sm'
                     : 'text-gray-900 hover:text-primary-blue hover:bg-gray-50/80'
@@ -219,7 +219,7 @@ const Header = () => {
               </Link>
               <Link
                 href="/about"
-                className={`px-2 lg:px-3 xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap ${
+                className={`px-1.5 lg:px-2 xl:px-3 2xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   isActive('/about')
                     ? 'text-primary-blue bg-primary-blue/10 shadow-sm'
                     : 'text-gray-900 hover:text-primary-blue hover:bg-gray-50/80'
@@ -229,7 +229,7 @@ const Header = () => {
               </Link>
               <Link
                 href="/pedagogie"
-                className={`px-2 lg:px-3 xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap ${
+                className={`px-1.5 lg:px-2 xl:px-3 2xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   isActive('/pedagogie')
                     ? 'text-primary-blue bg-primary-blue/10 shadow-sm'
                     : 'text-gray-900 hover:text-primary-blue hover:bg-gray-50/80'
@@ -239,7 +239,7 @@ const Header = () => {
               </Link>
               <Link
                 href="/admission"
-                className={`px-2 lg:px-3 xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap ${
+                className={`px-1.5 lg:px-2 xl:px-3 2xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   isActive('/admission')
                     ? 'text-primary-blue bg-primary-blue/10 shadow-sm'
                     : 'text-gray-900 hover:text-primary-blue hover:bg-gray-50/80'
@@ -256,7 +256,7 @@ const Header = () => {
               >
                 <button
                   onClick={() => setShowFormationsMenu(!showFormationsMenu)}
-                  className={`flex items-center space-x-1 px-2 lg:px-3 xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap ${
+                  className={`flex items-center space-x-1 px-1.5 lg:px-2 xl:px-3 2xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                     isActive('/formations') || showFormationsMenu
                       ? 'text-primary-blue bg-primary-blue/10 shadow-sm'
                       : 'text-gray-900 hover:text-primary-blue hover:bg-gray-50/80'
@@ -303,7 +303,7 @@ const Header = () => {
               
               <Link
                 href="/partenaires"
-                className={`px-2 lg:px-3 xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap ${
+                className={`px-1.5 lg:px-2 xl:px-3 2xl:px-4 py-2 rounded-lg font-medium text-xs lg:text-sm transition-all duration-300 whitespace-nowrap flex-shrink-0 ${
                   isActive('/partenaires')
                     ? 'text-primary-blue bg-primary-blue/10 shadow-sm'
                     : 'text-gray-900 hover:text-primary-blue hover:bg-gray-50/80'
@@ -314,34 +314,34 @@ const Header = () => {
             </div>
           </div>
 
-          {/* Actions CTA - Ultra Responsive */}
-          <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0">
+          {/* Actions CTA - Ultra Responsive avec protection overflow */}
+          <div className="flex items-center gap-1 sm:gap-2 md:gap-3 flex-shrink-0 min-w-0 overflow-hidden">
             {/* Téléphone - Visible sur desktop uniquement */}
             <a 
               href="tel:0185097106" 
-              className="hidden lg:flex items-center space-x-2 px-2 xl:px-3 py-2 text-xs xl:text-sm font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-all duration-200"
+              className="hidden xl:flex items-center space-x-2 px-2 xl:px-3 py-2 text-xs xl:text-sm font-medium text-gray-700 hover:text-primary-blue hover:bg-gray-50 rounded-lg transition-all duration-200 flex-shrink-0"
             >
-              <Phone className="w-3 xl:w-4 h-3 xl:h-4" />
-              <span className="hidden 2xl:inline">01 85 09 71 06</span>
+              <Phone className="w-3 xl:w-4 h-3 xl:h-4 flex-shrink-0" />
+              <span className="hidden 2xl:inline whitespace-nowrap">01 85 09 71 06</span>
             </a>
 
-            {/* Bouton JPO Orange - TOUJOURS VISIBLE */}
+            {/* Bouton JPO Orange - TOUJOURS VISIBLE avec tailles adaptatives */}
             <a 
               href="https://docs.google.com/forms/d/e/1FAIpQLSdHNGeoFvaaeknFrtrgIaUe7yDxS1fm0JiYo7q-bxetbfeOiQ/viewform?pli=1" 
               target="_blank" 
               rel="noopener noreferrer"
               className="flex-shrink-0"
             >
-              <button className="px-2 py-1.5 sm:px-3 sm:py-2 md:px-4 md:py-2 lg:px-5 lg:py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs sm:text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 whitespace-nowrap">
-                <span className="flex items-center gap-1">
-                  📅 
-                  <span className="hidden sm:inline">JPO</span>
-                  <span className="hidden lg:inline">Inscription</span>
+              <button className="px-1.5 py-1 sm:px-2 sm:py-1.5 md:px-3 md:py-2 lg:px-4 lg:py-2 xl:px-5 xl:py-2.5 bg-orange-500 hover:bg-orange-600 text-white font-bold text-xs sm:text-sm rounded-lg shadow-lg hover:shadow-xl transition-all duration-300 whitespace-nowrap min-w-0">
+                <span className="flex items-center gap-1 min-w-0">
+                  <span className="flex-shrink-0">📅</span>
+                  <span className="hidden sm:inline truncate">JPO</span>
+                  <span className="hidden lg:inline truncate">Inscription</span>
                 </span>
               </button>
             </a>
 
-            {/* Bouton Candidater - Visible sur tablet+ */}
+            {/* Bouton Candidater - Visible sur tablet+ avec tailles adaptatives */}
             <a 
               href="https://construction-management-academy.ymag.cloud/index.php/preinscription/" 
               target="_blank" 
@@ -353,20 +353,20 @@ const Header = () => {
                 size="sm"
                 icon={
                   <ParticleIcon particleCount={6}>
-                    <Sparkles className="w-3 lg:w-4 h-3 lg:h-4" />
+                    <Sparkles className="w-3 lg:w-4 h-3 lg:h-4 flex-shrink-0" />
                   </ParticleIcon>
                 }
                 iconPosition="left"
-                className="animate-pulse hover:animate-none text-xs lg:text-sm px-3 lg:px-4 py-1.5 lg:py-2"
+                className="animate-pulse hover:animate-none text-xs lg:text-sm px-2 md:px-3 lg:px-4 py-1.5 lg:py-2 min-w-0"
               >
-                <span className="hidden lg:inline">Candidater</span>
-                <span className="lg:hidden">Postuler</span>
+                <span className="hidden lg:inline truncate">Candidater</span>
+                <span className="lg:hidden truncate">Postuler</span>
               </ModernButton>
             </a>
 
             {/* Menu mobile - Visible sur mobile/tablet */}
             <button
-              className="xl:hidden p-2 rounded-xl hover:bg-gray-100/80 transition-colors duration-200 flex-shrink-0"
+              className="lg:hidden p-2 rounded-xl hover:bg-gray-100/80 transition-colors duration-200 flex-shrink-0"
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               aria-label="Menu"
             >
@@ -378,7 +378,7 @@ const Header = () => {
         </div>
 
         {/* Menu mobile glassmorphism - Ultra Responsive */}
-        <div className={`xl:hidden transition-all duration-300 ${
+        <div className={`lg:hidden transition-all duration-300 ${
           isMenuOpen ? 'max-h-[80vh] opacity-100' : 'max-h-0 opacity-0'
         } overflow-hidden`}>
           <div className="py-4 mt-2 bg-white/95 backdrop-blur-xl rounded-2xl border border-gray-100/50 shadow-xl max-h-[70vh] overflow-y-auto">
