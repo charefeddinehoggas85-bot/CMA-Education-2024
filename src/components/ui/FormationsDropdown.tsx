@@ -197,7 +197,8 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {isOpen && displayData.length > 0 && (
+      {/* DROPDOWN TOUJOURS AFFICHÉ quand ouvert - même si pas de données Strapi */}
+      {isOpen && (
         <div 
           className="absolute top-full left-0 mt-2 w-[600px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 max-h-[85vh] overflow-hidden backdrop-blur-sm"
           onMouseEnter={handleMouseEnter}
@@ -220,7 +221,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
             </div>
           </div>
 
-          {/* Onglets */}
+          {/* Onglets - TOUJOURS AFFICHÉS */}
           <div className="flex border-b border-gray-100 bg-gray-50 overflow-x-auto">
             {displayData.map((category, index) => {
               const IconComponent = useFallback ? (category as FallbackCategory).icon : GraduationCap
@@ -250,7 +251,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
             })}
           </div>
 
-          {/* Contenu */}
+          {/* Contenu - TOUJOURS AFFICHÉ */}
           <div className="p-6 max-h-[60vh] overflow-y-auto">
             <div className="grid grid-cols-1 gap-3">
               {(() => {
