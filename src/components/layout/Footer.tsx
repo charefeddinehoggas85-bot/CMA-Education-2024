@@ -167,33 +167,7 @@ const Footer = () => {
                 {tagline}
               </p>
 
-              {/* Stats épurées - Responsive */}
-              <div className="grid grid-cols-2 md:grid-cols-3 gap-3 md:gap-4 mb-6 md:mb-8">
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
-                  <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
-                    15+
-                  </div>
-                  <div className="text-xs text-gray-300 font-medium">
-                    Formations
-                  </div>
-                </div>
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
-                  <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
-                    95%
-                  </div>
-                  <div className="text-xs text-gray-300 font-medium">
-                    Réussite
-                  </div>
-                </div>
-                <div className="text-center bg-white/10 backdrop-blur-sm rounded-xl p-3 md:p-4">
-                  <div className="text-lg md:text-xl lg:text-2xl font-black text-primary-yellow">
-                    500+
-                  </div>
-                  <div className="text-xs text-gray-300 font-medium">
-                    Diplômés
-                  </div>
-                </div>
-              </div>
+
 
               {/* Réseaux sociaux - Responsive */}
               <div className="flex flex-wrap gap-2 md:gap-3 justify-center md:justify-start">
