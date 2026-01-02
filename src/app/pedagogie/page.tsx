@@ -125,16 +125,32 @@ export default function PedagogiePage() {
     async function loadPedagogieData() {
       try {
         const strapiData = await getPagePedagogie()
+        console.log('📦 Données Strapi Pédagogie:', strapiData)
         
         if (strapiData) {
           // Récupérer l'URL de l'image hero depuis Strapi
           let heroImageUrl = DEFAULT_HERO_IMAGE
-          if (strapiData.heroImage) {
-            const strapiImageUrl = getStrapiMediaURL(strapiData.heroImage)
+          const heroImageData = strapiData.heroImage
+          
+          console.log('🖼️ heroImage data:', heroImageData)
+          
+          if (heroImageData) {
+            // Essayer getStrapiMediaURL d'abord
+            const strapiImageUrl = getStrapiMediaURL(heroImageData)
+            console.log('🔗 getStrapiMediaURL result:', strapiImageUrl)
+            
             if (strapiImageUrl) {
               heroImageUrl = strapiImageUrl
-              console.log('✅ Image Pédagogie chargée depuis Strapi:', heroImageUrl)
+            } else if (heroImageData.data?.attributes?.url) {
+              // Fallback: construire l'URL manuellement
+              const url = heroImageData.data.attributes.url
+              heroImageUrl = url.startsWith('http') 
+                ? url 
+                : `https://cma-education-strapi-production.up.railway.app${url}`
+              console.log('🔗 URL construite manuellement:', heroImageUrl)
             }
+            
+            console.log('✅ Image Pédagogie finale:', heroImageUrl)
           }
           
           // Fusionner les données Strapi avec les valeurs par défaut
