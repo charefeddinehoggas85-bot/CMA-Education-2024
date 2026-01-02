@@ -3,7 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { getSiteSettings, getContactInfo, getProcessusAdmission, getPartners, getPageContact } from '@/lib/strapi'
-import { Phone, Mail, MapPin, Clock, CheckCircle, UserPlus, ArrowRight, Sparkles, GraduationCap, Building2, Users, Star, Rocket, Target, Award } from 'lucide-react'
+import { Phone, Mail, MapPin, Clock, CheckCircle, UserPlus, ArrowRight, Rocket, ChevronRight, ChevronLeft, ChevronUp, ChevronDown } from 'lucide-react'
 
 interface SiteSettings {
   id: number
@@ -207,185 +207,129 @@ export default function ContactPage() {
         </div>
       </section>
 
-      {/* ✨ ANIMATED CTA SECTION - Expert UI/UX Design */}
-      <section className="py-24 bg-gradient-to-br from-slate-900 via-primary-blue to-slate-900 relative overflow-hidden">
+      {/* ✨ ANIMATED CTA SECTION - Minimal Design with Attention Arrows */}
+      <section className="py-20 bg-gradient-to-br from-slate-900 via-primary-blue to-slate-900 relative overflow-hidden">
         <FloatingParticles />
         <GradientOrbs />
         
-        <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          {/* Main CTA Card */}
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
           <motion.div
             initial={{ opacity: 0, y: 40 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.8 }}
-            className="relative"
+            className="flex flex-col items-center justify-center gap-6"
           >
-            {/* Glowing border effect */}
-            <div className="absolute -inset-1 bg-gradient-to-r from-primary-yellow via-green-400 to-primary-yellow rounded-3xl blur-lg opacity-30 animate-pulse" />
-            
-            <div className="relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 md:p-12 border border-white/20">
-              {/* Badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="flex justify-center mb-8"
-              >
-                <span className="inline-flex items-center gap-2 px-6 py-2 bg-primary-yellow/20 border border-primary-yellow/40 rounded-full text-primary-yellow font-semibold">
-                  <Sparkles className="w-5 h-5" />
-                  Inscription Ouverte 2025-2026
-                </span>
-              </motion.div>
-
-              {/* Title */}
-              <motion.h2
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.3 }}
-                className="text-4xl md:text-5xl lg:text-6xl font-montserrat font-bold text-white text-center mb-6"
-              >
-                Lancez Votre Carrière
-                <span className="block mt-2 bg-gradient-to-r from-primary-yellow to-green-400 bg-clip-text text-transparent">
-                  Dans le BTP
-                </span>
-              </motion.h2>
-
-              {/* Subtitle */}
-              <motion.p
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.4 }}
-                className="text-xl text-white/80 text-center max-w-3xl mx-auto mb-10"
-              >
-                Rejoignez une formation d'excellence et accédez à des métiers passionnants 
-                avec un taux d'insertion professionnelle de <span className="text-primary-yellow font-bold">95%</span>
-              </motion.p>
-
-              {/* Stats Row */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.5 }}
-                className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12"
-              >
-                {[
-                  { icon: GraduationCap, value: '100%', label: 'Alternance' },
-                  { icon: Building2, value: '150+', label: 'Entreprises partenaires' },
-                  { icon: Users, value: '95%', label: 'Taux d\'insertion' },
-                  { icon: Award, value: 'RNCP', label: 'Titres certifiés' },
-                ].map((stat, index) => (
-                  <motion.div
-                    key={index}
-                    whileHover={{ scale: 1.05, y: -5 }}
-                    className="text-center p-4 rounded-2xl bg-white/5 border border-white/10 hover:border-primary-yellow/50 transition-all duration-300"
-                  >
-                    <stat.icon className="w-8 h-8 text-primary-yellow mx-auto mb-2" />
-                    <div className="text-2xl md:text-3xl font-bold text-white">{stat.value}</div>
-                    <div className="text-sm text-white/60">{stat.label}</div>
-                  </motion.div>
-                ))}
-              </motion.div>
-
-              {/* CTA Button */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.9 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.6 }}
-                className="flex flex-col sm:flex-row items-center justify-center gap-4"
-              >
-                <motion.a
-                  href="https://cma-education.ymag.cloud/index.php/preinscription/"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.98 }}
-                  className="group relative inline-flex items-center gap-3 px-10 py-5 bg-gradient-to-r from-primary-yellow to-yellow-400 text-primary-blue font-bold text-xl rounded-2xl shadow-2xl shadow-primary-yellow/30 hover:shadow-primary-yellow/50 transition-all duration-300 overflow-hidden"
-                >
-                  {/* Shine effect */}
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
-                  
-                  <Rocket className="w-6 h-6 group-hover:rotate-12 transition-transform" />
-                  <span>Candidater Maintenant</span>
-                  <ArrowRight className="w-6 h-6 group-hover:translate-x-2 transition-transform" />
-                </motion.a>
-
+            {/* CTA Button with Animated Arrows */}
+            <div className="relative">
+              {/* Animated Arrows - Left Side */}
+              <div className="absolute -left-16 md:-left-24 top-1/2 -translate-y-1/2 flex items-center gap-1">
                 <motion.div
-                  initial={{ opacity: 0 }}
-                  whileInView={{ opacity: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: 0.8 }}
-                  className="flex items-center gap-2 text-white/60"
+                  animate={{ x: [0, 8, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
                 >
-                  <CheckCircle className="w-5 h-5 text-green-400" />
-                  <span>Sans frais de scolarité</span>
+                  <ChevronRight className="w-8 h-8 text-primary-yellow/60" />
                 </motion.div>
-              </motion.div>
+                <motion.div
+                  animate={{ x: [0, 8, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
+                >
+                  <ChevronRight className="w-8 h-8 text-primary-yellow/80" />
+                </motion.div>
+                <motion.div
+                  animate={{ x: [0, 8, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                >
+                  <ChevronRight className="w-8 h-8 text-primary-yellow" />
+                </motion.div>
+              </div>
 
-              {/* Trust indicators */}
+              {/* Animated Arrows - Right Side */}
+              <div className="absolute -right-16 md:-right-24 top-1/2 -translate-y-1/2 flex items-center gap-1">
+                <motion.div
+                  animate={{ x: [0, -8, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                >
+                  <ChevronLeft className="w-8 h-8 text-primary-yellow" />
+                </motion.div>
+                <motion.div
+                  animate={{ x: [0, -8, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
+                >
+                  <ChevronLeft className="w-8 h-8 text-primary-yellow/80" />
+                </motion.div>
+                <motion.div
+                  animate={{ x: [0, -8, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <ChevronLeft className="w-8 h-8 text-primary-yellow/60" />
+                </motion.div>
+              </div>
+
+              {/* Animated Arrows - Top */}
+              <div className="absolute left-1/2 -translate-x-1/2 -top-12 flex flex-col items-center gap-0">
+                <motion.div
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut' }}
+                >
+                  <ChevronDown className="w-8 h-8 text-primary-yellow/60" />
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', delay: 0.15 }}
+                  className="-mt-4"
+                >
+                  <ChevronDown className="w-8 h-8 text-primary-yellow/80" />
+                </motion.div>
+                <motion.div
+                  animate={{ y: [0, 6, 0] }}
+                  transition={{ duration: 1, repeat: Infinity, ease: 'easeInOut', delay: 0.3 }}
+                  className="-mt-4"
+                >
+                  <ChevronDown className="w-8 h-8 text-primary-yellow" />
+                </motion.div>
+              </div>
+
+              {/* Pulsing Glow Effect */}
               <motion.div
-                initial={{ opacity: 0 }}
-                whileInView={{ opacity: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.9 }}
-                className="mt-10 pt-8 border-t border-white/10"
+                className="absolute inset-0 bg-primary-yellow/20 rounded-2xl blur-xl"
+                animate={{ 
+                  scale: [1, 1.1, 1],
+                  opacity: [0.3, 0.6, 0.3]
+                }}
+                transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              />
+
+              {/* Main CTA Button */}
+              <motion.a
+                href="https://cma-education.ymag.cloud/index.php/preinscription/"
+                target="_blank"
+                rel="noopener noreferrer"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.98 }}
+                className="relative group inline-flex items-center gap-3 px-12 py-6 bg-gradient-to-r from-primary-yellow to-yellow-400 text-primary-blue font-bold text-2xl rounded-2xl shadow-2xl shadow-primary-yellow/30 hover:shadow-primary-yellow/50 transition-all duration-300 overflow-hidden"
               >
-                <p className="text-center text-white/50 text-sm mb-4">Ils nous font confiance</p>
-                <div className="flex flex-wrap justify-center items-center gap-8 opacity-60">
-                  {partners.slice(0, 6).map((partner, index) => (
-                    <motion.div
-                      key={partner.id}
-                      initial={{ opacity: 0, y: 10 }}
-                      whileInView={{ opacity: 1, y: 0 }}
-                      viewport={{ once: true }}
-                      transition={{ delay: 1 + index * 0.1 }}
-                      className="h-8 grayscale hover:grayscale-0 transition-all duration-300"
-                    >
-                      <img 
-                        src={partner.logo ? `/images/partners/${partner.logo}` : `/images/partners/default.webp`}
-                        alt={partner.nom}
-                        className="h-full w-auto object-contain filter brightness-0 invert"
-                        onError={(e) => { e.currentTarget.style.display = 'none' }}
-                      />
-                    </motion.div>
-                  ))}
-                </div>
-              </motion.div>
+                {/* Shine effect */}
+                <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/30 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700" />
+                
+                <Rocket className="w-7 h-7 group-hover:rotate-12 transition-transform" />
+                <span>Candidater Maintenant</span>
+                <ArrowRight className="w-7 h-7 group-hover:translate-x-2 transition-transform" />
+              </motion.a>
             </div>
-          </motion.div>
 
-          {/* Secondary CTA Cards */}
-          <div className="grid md:grid-cols-3 gap-6 mt-12">
-            {[
-              { icon: Target, title: 'Admission simplifiée', desc: 'Sans concours, sur entretien de motivation', color: 'from-blue-500 to-cyan-500' },
-              { icon: Star, title: 'Accompagnement personnalisé', desc: 'Un conseiller dédié pour votre projet', color: 'from-purple-500 to-pink-500' },
-              { icon: GraduationCap, title: 'Diplômes reconnus', desc: 'Titres RNCP de niveau Bac+2 à Bac+5', color: 'from-green-500 to-emerald-500' },
-            ].map((card, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 30 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 + index * 0.1 }}
-                whileHover={{ y: -8, scale: 1.02 }}
-                className="relative group"
-              >
-                <div className={`absolute inset-0 bg-gradient-to-r ${card.color} rounded-2xl blur-xl opacity-0 group-hover:opacity-30 transition-opacity duration-300`} />
-                <div className="relative bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/10 hover:border-white/30 transition-all duration-300">
-                  <div className={`w-12 h-12 rounded-xl bg-gradient-to-r ${card.color} flex items-center justify-center mb-4`}>
-                    <card.icon className="w-6 h-6 text-white" />
-                  </div>
-                  <h3 className="text-lg font-bold text-white mb-2">{card.title}</h3>
-                  <p className="text-white/60 text-sm">{card.desc}</p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+            {/* Sans frais de scolarité */}
+            <motion.div
+              initial={{ opacity: 0 }}
+              whileInView={{ opacity: 1 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="flex items-center gap-2 text-white/80 text-lg mt-4"
+            >
+              <CheckCircle className="w-6 h-6 text-green-400" />
+              <span>Sans frais de scolarité</span>
+            </motion.div>
+          </motion.div>
         </div>
       </section>
 
