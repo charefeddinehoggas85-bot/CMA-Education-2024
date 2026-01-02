@@ -1,8 +1,22 @@
 import { Award, TrendingUp, BarChart3, FileText, AlertCircle } from 'lucide-react'
 import { getPageIndicateursPerformance } from '@/lib/strapi'
 
+// Interface pour les données de formation
+interface FormationIndicateur {
+  titre: string
+  certification: string
+  modeFormation: string
+  tauxReussiteCertification: string
+  tauxInsertionProfessionnelle: string
+  tauxPoursuiteEtudes: string
+  tauxSatisfactionBeneficiaires: string
+  tauxRuptureAlternance: string
+  tauxReussiteNational: string
+  valeurAjouteeCMA: string
+}
+
 // Données statiques des formations (fallback)
-const formationsDataFallback = [
+const formationsDataFallback: FormationIndicateur[] = [
   {
     titre: "Conducteur de Travaux Bâtiment et Génie Civil",
     certification: "RNCP 35027",
@@ -240,7 +254,7 @@ export default async function IndicateursPerformancePage() {
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
-                {formationsData.map((formation, index) => (
+                {formationsData.map((formation: FormationIndicateur, index: number) => (
                   <tr key={index} className={index % 2 === 0 ? 'bg-white' : 'bg-gray-50'}>
                     <td className="px-4 py-4">
                       <div>
