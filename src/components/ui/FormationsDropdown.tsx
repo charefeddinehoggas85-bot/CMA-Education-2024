@@ -2,11 +2,11 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
-import { ChevronDown } from 'lucide-react'
+import { ChevronDown, GraduationCap, Building, Users, Award } from 'lucide-react'
 import { getFormations, getFormationCategories } from '@/lib/strapi'
 
 interface FormationsDropdownProps {
-  isScrolled?: boolean // Optionnel, peut être utilisé pour le style
+  isScrolled?: boolean
 }
 
 interface Formation {
@@ -28,12 +28,52 @@ interface FormationCategory {
   formations?: Formation[]
 }
 
+// FALLBACK DATA - Formations statiques pour garantir l'affichage
+const FALLBACK_FORMATIONS = [
+  {
+    category: 'Alternance',
+    icon: GraduationCap,
+    formations: [
+      { title: 'Conducteur de Travaux Bâtiment', slug: 'conducteur-travaux-batiment', level: 'Bac+2', duree: '2 ans' },
+      { title: 'Chargé d\'Affaires Bâtiment', slug: 'charge-affaires-batiment', level: 'Bac+2', duree: '2 ans' },
+      { title: 'Chef de Chantier VRD', slug: 'chef-chantier-vrd', level: 'Bac+2', duree: '1 an' },
+      { title: 'Conducteur de Travaux VRD', slug: 'conducteur-travaux-vrd', level: 'Bac+2', duree: '1 an' }
+    ]
+  },
+  {
+    category: 'Reconversion',
+    icon: Users,
+    formations: [
+      { title: 'Conducteur de Travaux - Reconversion', slug: 'reconversion-btp/conducteur-travaux', level: 'Pro', duree: '8 mois' },
+      { title: 'Chargé d\'Affaires - Reconversion', slug: 'reconversion-btp/charge-affaires', level: 'Pro', duree: '8 mois' },
+      { title: 'Conducteur TP - Reconversion', slug: 'reconversion-btp/conducteur-travaux-publics', level: 'Pro', duree: '6 mois' }
+    ]
+  },
+  {
+    category: 'VAE',
+    icon: Award,
+    formations: [
+      { title: 'VAE Conducteur de Travaux', slug: 'vae-btp/conducteur-travaux', level: 'Validation', duree: '6-12 mois' },
+      { title: 'VAE Chargé d\'Affaires', slug: 'vae-btp/charge-affaires', level: 'Validation', duree: '6-12 mois' }
+    ]
+  },
+  {
+    category: 'Entreprises',
+    icon: Building,
+    formations: [
+      { title: 'Formation sur mesure', slug: 'entreprises', level: 'Pro', duree: 'Variable' },
+      { title: 'Accompagnement équipes', slug: 'entreprises#accompagnement', level: 'Pro', duree: 'Variable' }
+    ]
+  }
+]
+
 const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
   const [isOpen, setIsOpen] = useState(false)
   const [activeTab, setActiveTab] = useState(0)
   const [categories, setCategories] = useState<FormationCategory[]>([])
   const [loading, setLoading] = useState(true)
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
+  const [useFallback, setUseFallback] = useState(false)
 
   const handleMouseEnter = () => {
     if (hoverTimeout) {
@@ -46,7 +86,7 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
   const handleMouseLeave = () => {
     const timeout = setTimeout(() => {
       setIsOpen(false)
-    }, 150) // Délai de 150ms avant de fermer
+    }, 200) // Délai augmenté pour meilleure UX
     setHoverTimeout(timeout)
   }
 
@@ -64,33 +104,39 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
           formations: formationsData?.length || 0
         })
         
-        // Organiser les formations par catégorie (uniquement depuis Strapi)
-        const categoriesWithFormations = (categoriesData as FormationCategory[]).map(category => {
-          const categoryFormations = (formationsData as Formation[]).filter(formation => 
-            formation.category?.slug === category.slug || formation.category?.name === category.name
-          )
+        if (categoriesData && formationsData && categoriesData.length > 0 && formationsData.length > 0) {
+          // Organiser les formations par catégorie
+          const categoriesWithFormations = (categoriesData as FormationCategory[]).map(category => {
+            const categoryFormations = (formationsData as Formation[]).filter(formation => 
+              formation.category?.slug === category.slug || formation.category?.name === category.name
+            )
+            
+            return {
+              ...category,
+              formations: categoryFormations
+            }
+          })
           
-          return {
-            ...category,
-            formations: categoryFormations
+          // Filtrer pour ne garder que les catégories avec des formations
+          const validCategories = categoriesWithFormations.filter(cat => cat.formations && cat.formations.length > 0)
+          
+          if (validCategories.length > 0) {
+            console.log('✅ Utilisation des données Strapi')
+            setCategories(validCategories)
+            setUseFallback(false)
+          } else {
+            console.log('⚠️ Pas de formations valides dans Strapi, utilisation du fallback')
+            setUseFallback(true)
           }
-        })
-        
-        // Filtrer pour ne garder que les catégories avec des formations
-        const validCategories = categoriesWithFormations.filter(cat => cat.formations && cat.formations.length > 0)
-        
-        console.log('✅ Catégories avec formations:', validCategories.map(cat => ({
-          name: cat.name,
-          count: cat.formations?.length || 0
-        })))
-        
-        // Utiliser uniquement les données Strapi (pas de fallback)
-        setCategories(validCategories)
+        } else {
+          console.log('⚠️ Données Strapi insuffisantes, utilisation du fallback')
+          setUseFallback(true)
+        }
         
       } catch (error) {
         console.error('❌ Erreur chargement Strapi:', error)
-        // Pas de fallback - afficher un tableau vide
-        setCategories([])
+        console.log('🔄 Utilisation du fallback')
+        setUseFallback(true)
       } finally {
         setLoading(false)
       }
@@ -107,12 +153,15 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
     }
   }, [hoverTimeout])
 
+  // Données à afficher (Strapi ou fallback)
+  const displayData = useFallback ? FALLBACK_FORMATIONS : categories
+
   if (loading) {
     return (
       <div className="relative">
         <button className="nav-item-fix flex items-center space-x-1 font-medium transition-colors rounded-lg text-gray-900 hover:text-primary-blue">
           <span>Formations</span>
-          <ChevronDown className="w-4 h-4" />
+          <ChevronDown className="w-4 h-4 animate-pulse" />
         </button>
       </div>
     )
@@ -120,99 +169,155 @@ const FormationsDropdown = ({ isScrolled }: FormationsDropdownProps) => {
 
   return (
     <div 
-      className="relative"
+      className="relative group"
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <button
-        className="nav-item-fix flex items-center space-x-1 font-medium transition-colors rounded-lg text-gray-900 hover:text-primary-blue"
+        className="nav-item-fix flex items-center space-x-1 font-medium transition-all duration-200 rounded-lg text-gray-900 hover:text-primary-blue group-hover:bg-blue-50"
+        aria-expanded={isOpen}
+        aria-haspopup="true"
       >
+        <GraduationCap className="w-4 h-4" />
         <span>Formations</span>
         <ChevronDown className={`w-4 h-4 transition-transform duration-200 ${isOpen ? 'rotate-180' : ''}`} />
       </button>
 
-      {isOpen && categories.length > 0 && (
+      {isOpen && displayData.length > 0 && (
         <div 
-          className="absolute top-full left-0 mt-1 w-[500px] bg-white rounded-xl shadow-2xl border border-gray-100 z-50 max-h-[80vh] overflow-hidden"
+          className="absolute top-full left-0 mt-2 w-[600px] bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 max-h-[85vh] overflow-hidden backdrop-blur-sm"
           onMouseEnter={handleMouseEnter}
           onMouseLeave={handleMouseLeave}
+          style={{ 
+            boxShadow: '0 25px 50px -12px rgba(0, 0, 0, 0.25), 0 0 0 1px rgba(0, 0, 0, 0.05)' 
+          }}
         >
-          {/* Onglets */}
-          <div className="flex border-b border-gray-100 bg-gray-50">
-            {categories.map((category, index) => (
-              <button
-                key={index}
-                onMouseEnter={() => {
-                  handleMouseEnter()
-                  setActiveTab(index)
-                }}
-                className={`flex-1 px-4 py-3 text-sm font-medium transition-all duration-200 ${
-                  activeTab === index 
-                    ? 'text-primary-blue border-b-2 border-primary-blue bg-white' 
-                    : 'text-gray-600 hover:text-primary-blue hover:bg-gray-100'
-                }`}
-              >
-                <span>{category.name}</span>
-                <span className="ml-1 text-xs text-gray-400">({category.formations?.length || 0})</span>
-              </button>
-            ))}
+          {/* Header avec indicateur de source */}
+          <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
+            <div className="flex items-center justify-between">
+              <h3 className="text-lg font-semibold text-gray-900">Nos Formations</h3>
+              <div className="flex items-center space-x-2 text-xs text-gray-500">
+                {useFallback ? (
+                  <span className="px-2 py-1 bg-orange-100 text-orange-700 rounded-full">Mode hors ligne</span>
+                ) : (
+                  <span className="px-2 py-1 bg-green-100 text-green-700 rounded-full">En direct</span>
+                )}
+              </div>
+            </div>
           </div>
 
-          {/* Contenu - Affiche TOUTES les formations */}
-          <div className="p-4 max-h-[60vh] overflow-y-auto">
-            <div className="grid grid-cols-1 gap-2">
-              {categories[activeTab]?.formations && categories[activeTab].formations.length > 0 ? (
-                categories[activeTab].formations.map((formation: any, idx) => (
+          {/* Onglets */}
+          <div className="flex border-b border-gray-100 bg-gray-50 overflow-x-auto">
+            {displayData.map((category, index) => {
+              const IconComponent = useFallback ? category.icon : GraduationCap
+              return (
+                <button
+                  key={index}
+                  onMouseEnter={() => {
+                    handleMouseEnter()
+                    setActiveTab(index)
+                  }}
+                  className={`flex-shrink-0 flex items-center space-x-2 px-4 py-3 text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                    activeTab === index 
+                      ? 'text-primary-blue border-b-2 border-primary-blue bg-white shadow-sm' 
+                      : 'text-gray-600 hover:text-primary-blue hover:bg-gray-100'
+                  }`}
+                >
+                  <IconComponent className="w-4 h-4" />
+                  <span>{useFallback ? category.category : category.name}</span>
+                  <span className="ml-1 text-xs text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                    {useFallback ? category.formations.length : (category.formations?.length || 0)}
+                  </span>
+                </button>
+              )
+            })}
+          </div>
+
+          {/* Contenu */}
+          <div className="p-6 max-h-[60vh] overflow-y-auto">
+            <div className="grid grid-cols-1 gap-3">
+              {(() => {
+                const activeCategory = displayData[activeTab]
+                const formations = useFallback ? activeCategory.formations : activeCategory.formations
+                
+                if (!formations || formations.length === 0) {
+                  return (
+                    <div className="text-center py-12">
+                      <GraduationCap className="w-12 h-12 text-gray-300 mx-auto mb-4" />
+                      <p className="text-gray-500">Aucune formation disponible</p>
+                    </div>
+                  )
+                }
+
+                return formations.map((formation: any, idx) => (
                   <Link
                     key={idx}
                     href={`/formations/${formation.slug || formation.id || 'formation'}`}
-                    className="block p-3 rounded-lg hover:bg-blue-50 transition-colors group border border-transparent hover:border-blue-200"
+                    className="block p-4 rounded-xl hover:bg-blue-50 transition-all duration-200 group border border-transparent hover:border-blue-200 hover:shadow-md"
                   >
                     <div className="flex justify-between items-start">
                       <div className="flex-1">
-                        <div className="font-medium text-gray-800 group-hover:text-primary-blue text-sm">
+                        <div className="font-semibold text-gray-900 group-hover:text-primary-blue text-base mb-2">
                           {formation.title || 'Formation'}
                         </div>
-                        <div className="text-xs text-gray-500 mt-1 flex items-center gap-2">
-                          <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded">{formation.level || 'Niveau pro'}</span>
-                          <span>•</span>
-                          <span>{formation.duree || formation.duration || '1 an'}</span>
+                        <div className="flex items-center gap-3 text-sm text-gray-600">
+                          <span className="inline-flex items-center px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                            {formation.level || 'Niveau pro'}
+                          </span>
+                          <span className="flex items-center">
+                            <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            {formation.duree || formation.duration || '1 an'}
+                          </span>
                         </div>
                       </div>
-                      <span className="text-primary-blue opacity-0 group-hover:opacity-100 transition-opacity text-sm">→</span>
+                      <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
+                        <div className="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center">
+                          <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                          </svg>
+                        </div>
+                      </div>
                     </div>
                   </Link>
                 ))
-              ) : (
-                <div className="text-sm text-gray-500 text-center py-8">
-                  Aucune formation disponible dans cette catégorie
-                </div>
-              )}
+              })()}
             </div>
           </div>
           
-          {/* Footer avec liens */}
-          <div className="p-4 border-t border-gray-100 bg-gray-50 flex justify-between items-center">
-            <Link
-              href="/formations"
-              className="text-sm text-primary-blue hover:text-primary-yellow font-medium flex items-center gap-1"
-            >
-              <span>Voir toutes les formations</span>
-              <span>→</span>
-            </Link>
-            <div className="flex gap-2">
+          {/* Footer avec liens d'action */}
+          <div className="px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50">
+            <div className="flex justify-between items-center">
               <Link
-                href="/formations/entreprises"
-                className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-md text-xs font-medium hover:bg-orange-200 transition-colors"
+                href="/formations"
+                className="inline-flex items-center space-x-2 text-sm text-primary-blue hover:text-primary-yellow font-semibold transition-colors group"
               >
-                Entreprises
+                <span>Voir toutes les formations</span>
+                <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                </svg>
               </Link>
-              <Link
-                href="/formations/vae-btp"
-                className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-md text-xs font-medium hover:bg-purple-200 transition-colors"
-              >
-                VAE
-              </Link>
+              <div className="flex gap-2">
+                <Link
+                  href="/formations/entreprises"
+                  className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium hover:bg-orange-200 transition-colors"
+                >
+                  Entreprises
+                </Link>
+                <Link
+                  href="/formations/vae-btp"
+                  className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-200 transition-colors"
+                >
+                  VAE
+                </Link>
+                <Link
+                  href="/contact"
+                  className="px-3 py-1.5 bg-green-100 text-green-700 rounded-lg text-xs font-medium hover:bg-green-200 transition-colors"
+                >
+                  Contact
+                </Link>
+              </div>
             </div>
           </div>
         </div>

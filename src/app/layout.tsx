@@ -3,6 +3,7 @@ import './globals.css'
 import '@/styles/header-responsive-fix.css'
 import '@/styles/navigation-responsive-complete.css'
 import '@/styles/global-responsive-fix.css'
+import '@/styles/formations-dropdown-expert.css'
 import ServiceWorkerRegistration from '@/components/ServiceWorkerRegistration'
 import ClientOnlyComponents from '@/components/ClientOnlyComponents'
 

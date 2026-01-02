@@ -62,8 +62,8 @@ const Navigation = () => {
           {/* SECTION CENTRE - Navigation principale (Desktop à partir de md) */}
           <nav className="nav-desktop-fix items-center justify-center flex-1 max-w-5xl mx-2 md:mx-4 xl:mx-8">
             <div className="nav-items-fix">
-              {/* Dropdown Formations */}
-              <div className="relative">
+              {/* Dropdown Formations - TOUJOURS VISIBLE */}
+              <div className="relative formations-dropdown-container">
                 <FormationsDropdown isScrolled={isScrolled} />
               </div>
               
