@@ -4,58 +4,51 @@ import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import { usePathname } from 'next/navigation'
-import { Menu, X, Phone, Calendar, ChevronDown, GraduationCap, Building, Users, Award } from 'lucide-react'
+import { Menu, X, Phone, Calendar, ChevronDown, GraduationCap, Building, Users, Award, Clock, RefreshCw } from 'lucide-react'
 import OptimizedButton from '@/components/ui/OptimizedButton'
+import { getFormations } from '@/lib/strapi'
 
 interface FormationItem {
+  id?: number
   title: string
   slug: string
   level: string
   duree: string
+  category?: string
 }
 
 interface FormationCategory {
   category: string
+  categorySlug: string
   icon: React.ComponentType<any>
+  color: string
   formations: FormationItem[]
 }
 
-// DONNÉES FORMATIONS GARANTIES - TOUJOURS AFFICHÉES
-const FORMATIONS_DATA: FormationCategory[] = [
+// Données de fallback si Strapi n'est pas disponible
+const FALLBACK_FORMATIONS: FormationCategory[] = [
   {
     category: 'Alternance',
+    categorySlug: 'alternance',
     icon: GraduationCap,
+    color: 'from-primary-blue to-blue-600',
     formations: [
-      { title: 'Chargé d\'Affaires Bâtiment', slug: 'charge-affaires-batiment', level: 'Bac+2', duree: '1 an' },
-      { title: 'Conducteur de Travaux Bâtiment', slug: 'conducteur-travaux-batiment', level: 'Bac+2', duree: '1 an' },
-      { title: 'Chef de Chantier VRD', slug: 'chef-chantier-vrd', level: 'Bac+2', duree: '1 an' },
-      { title: 'Conducteur de Travaux TP', slug: 'conducteur-travaux-tp-alternance', level: 'Bac+2', duree: '1 an' },
-      { title: 'Chef de Projets BTP', slug: 'chef-projets-btp-1an', level: 'Bac+5', duree: '1 an' }
+      { title: 'Chargé d\'Affaires Bâtiment', slug: 'charge-affaires-batiment', level: 'Bac+2', duree: '1 an', category: 'Alternance' },
+      { title: 'Conducteur de Travaux Bâtiment', slug: 'conducteur-travaux-batiment', level: 'Bac+2', duree: '1 an', category: 'Alternance' },
+      { title: 'Chef de Chantier VRD', slug: 'chef-chantier-vrd', level: 'Bac+2', duree: '1 an', category: 'Alternance' },
+      { title: 'Conducteur de Travaux TP', slug: 'conducteur-travaux-tp-alternance', level: 'Bac+2', duree: '1 an', category: 'Alternance' },
+      { title: 'Chef de Projets BTP', slug: 'chef-projets-btp-1an', level: 'Bac+5', duree: '1 an', category: 'Alternance' }
     ]
   },
   {
     category: 'Reconversion',
-    icon: Users,
+    categorySlug: 'reconversion',
+    icon: RefreshCw,
+    color: 'from-green-600 to-emerald-600',
     formations: [
-      { title: 'Chargé d\'Affaires - Reconversion', slug: 'reconversion-btp/charge-affaires', level: 'Bac+2', duree: '7 mois' },
-      { title: 'Conducteur de Travaux - Reconversion', slug: 'reconversion-btp/conducteur-travaux', level: 'Bac+2', duree: '7 mois' },
-      { title: 'Conducteur TP - Reconversion', slug: 'reconversion-btp/conducteur-travaux-publics', level: 'Bac+2', duree: '7 mois' }
-    ]
-  },
-  {
-    category: 'VAE',
-    icon: Award,
-    formations: [
-      { title: 'VAE Conducteur de Travaux', slug: 'vae-btp/conducteur-travaux', level: 'Validation', duree: '6-12 mois' },
-      { title: 'VAE Chargé d\'Affaires', slug: 'vae-btp/charge-affaires', level: 'Validation', duree: '6-12 mois' }
-    ]
-  },
-  {
-    category: 'Entreprises',
-    icon: Building,
-    formations: [
-      { title: 'Formation sur mesure', slug: 'entreprises', level: 'Pro', duree: 'Variable' },
-      { title: 'Accompagnement équipes', slug: 'entreprises#accompagnement', level: 'Pro', duree: 'Variable' }
+      { title: 'Chargé d\'Affaires - Reconversion', slug: 'reconversion-btp/charge-affaires', level: 'Bac+2', duree: '7 mois', category: 'Reconversion' },
+      { title: 'Conducteur de Travaux - Reconversion', slug: 'reconversion-btp/conducteur-travaux', level: 'Bac+2', duree: '7 mois', category: 'Reconversion' },
+      { title: 'Conducteur TP - Reconversion', slug: 'reconversion-btp/conducteur-travaux-publics', level: 'Bac+2', duree: '7 mois', category: 'Reconversion' }
     ]
   }
 ]
@@ -67,10 +60,77 @@ const UnifiedHeader = () => {
   const [activeTab, setActiveTab] = useState(0)
   const [hoverTimeout, setHoverTimeout] = useState<NodeJS.Timeout | null>(null)
   const [isMounted, setIsMounted] = useState(false)
+  const [formationsData, setFormationsData] = useState<FormationCategory[]>(FALLBACK_FORMATIONS)
   const pathname = usePathname()
 
   useEffect(() => {
     setIsMounted(true)
+    
+    // Charger les formations depuis Strapi
+    async function loadFormations() {
+      try {
+        const data = await getFormations()
+        if (data && Array.isArray(data) && data.length > 0) {
+          // Filtrer et organiser par catégorie
+          const alternance = (data as any[]).filter((f) => 
+            f.category?.slug === 'alternance' || f.category?.slug === 'alternance-btp'
+          ).map((f) => ({
+            id: f.id,
+            title: f.title || f.titre,
+            slug: f.slug,
+            level: f.level || f.niveau || 'Bac+2',
+            duree: f.duree || f.duration || '1 an',
+            category: 'Alternance'
+          }))
+          
+          const reconversion = (data as any[]).filter((f) => 
+            f.category?.slug === 'reconversion' || f.category?.slug === 'reconversion-btp'
+          ).map((f) => ({
+            id: f.id,
+            title: f.title || f.titre,
+            slug: f.slug,
+            level: f.level || f.niveau || 'Bac+2',
+            duree: f.duree || f.duration || '7 mois',
+            category: 'Reconversion'
+          }))
+          
+          // Mettre à jour si on a des données
+          if (alternance.length > 0 || reconversion.length > 0) {
+            const newData: FormationCategory[] = []
+            
+            if (alternance.length > 0) {
+              newData.push({
+                category: 'Alternance',
+                categorySlug: 'alternance',
+                icon: GraduationCap,
+                color: 'from-primary-blue to-blue-600',
+                formations: alternance
+              })
+            } else {
+              newData.push(FALLBACK_FORMATIONS[0])
+            }
+            
+            if (reconversion.length > 0) {
+              newData.push({
+                category: 'Reconversion',
+                categorySlug: 'reconversion',
+                icon: RefreshCw,
+                color: 'from-green-600 to-emerald-600',
+                formations: reconversion
+              })
+            } else {
+              newData.push(FALLBACK_FORMATIONS[1])
+            }
+            
+            setFormationsData(newData)
+          }
+        }
+      } catch (error) {
+        console.log('Header: Utilisation des données de fallback')
+      }
+    }
+    
+    loadFormations()
   }, [])
 
   useEffect(() => {
@@ -174,7 +234,7 @@ const UnifiedHeader = () => {
                 {/* MEGA DROPDOWN - DESIGN EXPERT */}
                 {showFormationsMenu && (
                   <div 
-                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[600px] max-w-[90vw] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[9999] overflow-hidden backdrop-blur-sm"
+                    className="absolute top-full left-1/2 transform -translate-x-1/2 mt-2 w-[650px] max-w-[90vw] bg-white rounded-2xl shadow-2xl border border-gray-100 z-[9999] overflow-hidden backdrop-blur-sm"
                     onMouseEnter={handleFormationsMouseEnter}
                     onMouseLeave={handleFormationsMouseLeave}
                     style={{ 
@@ -184,11 +244,12 @@ const UnifiedHeader = () => {
                     {/* Header */}
                     <div className="px-6 py-4 bg-gradient-to-r from-blue-50 to-indigo-50 border-b border-gray-100">
                       <h3 className="text-lg font-semibold text-gray-900">Nos Formations</h3>
+                      <p className="text-sm text-gray-500">Alternance & Reconversion professionnelle</p>
                     </div>
 
-                    {/* Onglets */}
+                    {/* Onglets - Seulement Alternance et Reconversion */}
                     <div className="flex border-b border-gray-100 bg-gray-50 overflow-x-auto">
-                      {FORMATIONS_DATA.map((category, index) => {
+                      {formationsData.map((category, index) => {
                         const IconComponent = category.icon
                         return (
                           <button
@@ -197,15 +258,19 @@ const UnifiedHeader = () => {
                               handleFormationsMouseEnter()
                               setActiveTab(index)
                             }}
-                            className={`flex-shrink-0 flex items-center space-x-2 px-4 py-3 text-sm font-medium transition-all duration-200 whitespace-nowrap ${
+                            className={`flex-1 flex items-center justify-center space-x-2 px-4 py-3 text-sm font-medium transition-all duration-200 whitespace-nowrap ${
                               activeTab === index 
-                                ? 'text-primary-blue border-b-2 border-primary-blue bg-white shadow-sm' 
+                                ? `text-white bg-gradient-to-r ${category.color} shadow-sm` 
                                 : 'text-gray-600 hover:text-primary-blue hover:bg-gray-100'
                             }`}
                           >
                             <IconComponent className="w-4 h-4" />
                             <span>{category.category}</span>
-                            <span className="ml-1 text-xs text-gray-400 bg-gray-200 px-1.5 py-0.5 rounded-full">
+                            <span className={`ml-1 text-xs px-1.5 py-0.5 rounded-full ${
+                              activeTab === index 
+                                ? 'bg-white/20 text-white' 
+                                : 'bg-gray-200 text-gray-500'
+                            }`}>
                               {category.formations.length}
                             </span>
                           </button>
@@ -213,10 +278,10 @@ const UnifiedHeader = () => {
                       })}
                     </div>
 
-                    {/* Contenu */}
-                    <div className="p-6 max-h-[60vh] overflow-y-auto">
-                      <div className="grid grid-cols-1 gap-3">
-                        {FORMATIONS_DATA[activeTab].formations.map((formation, idx) => (
+                    {/* Contenu - Formations avec détails */}
+                    <div className="p-4 max-h-[55vh] overflow-y-auto">
+                      <div className="grid grid-cols-1 gap-2">
+                        {formationsData[activeTab]?.formations.map((formation, idx) => (
                           <Link
                             key={idx}
                             href={`/formations/${formation.slug}`}
@@ -225,21 +290,42 @@ const UnifiedHeader = () => {
                           >
                             <div className="flex justify-between items-start">
                               <div className="flex-1">
+                                {/* Titre de la formation */}
                                 <div className="font-semibold text-gray-900 group-hover:text-primary-blue text-base mb-2">
                                   {formation.title}
                                 </div>
-                                <div className="flex items-center gap-3 text-sm text-gray-600">
+                                
+                                {/* Détails: Niveau, Durée, Catégorie */}
+                                <div className="flex flex-wrap items-center gap-2 text-sm">
+                                  {/* Niveau */}
                                   <span className="inline-flex items-center px-2.5 py-1 bg-blue-100 text-blue-800 rounded-full text-xs font-medium">
+                                    <Award className="w-3 h-3 mr-1" />
                                     {formation.level}
                                   </span>
-                                  <span className="flex items-center">
-                                    <svg className="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-                                    </svg>
+                                  
+                                  {/* Durée */}
+                                  <span className="inline-flex items-center px-2.5 py-1 bg-green-100 text-green-800 rounded-full text-xs font-medium">
+                                    <Clock className="w-3 h-3 mr-1" />
                                     {formation.duree}
+                                  </span>
+                                  
+                                  {/* Catégorie */}
+                                  <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${
+                                    formation.category === 'Alternance' 
+                                      ? 'bg-primary-blue/10 text-primary-blue' 
+                                      : 'bg-emerald-100 text-emerald-800'
+                                  }`}>
+                                    {formation.category === 'Alternance' ? (
+                                      <GraduationCap className="w-3 h-3 mr-1" />
+                                    ) : (
+                                      <RefreshCw className="w-3 h-3 mr-1" />
+                                    )}
+                                    {formation.category}
                                   </span>
                                 </div>
                               </div>
+                              
+                              {/* Flèche */}
                               <div className="ml-4 opacity-0 group-hover:opacity-100 transition-opacity">
                                 <div className="w-8 h-8 bg-primary-blue rounded-full flex items-center justify-center">
                                   <svg className="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -253,7 +339,7 @@ const UnifiedHeader = () => {
                       </div>
                     </div>
                     
-                    {/* Footer */}
+                    {/* Footer avec boutons VAE, Entreprises, Contact */}
                     <div className="px-6 py-4 border-t border-gray-100 bg-gradient-to-r from-gray-50 to-blue-50">
                       <div className="flex justify-between items-center">
                         <Link
@@ -268,18 +354,20 @@ const UnifiedHeader = () => {
                         </Link>
                         <div className="flex gap-2">
                           <Link
-                            href="/formations/entreprises"
-                            className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium hover:bg-orange-200 transition-colors"
+                            href="/formations/vae-btp"
+                            className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-200 transition-colors flex items-center gap-1"
                             onClick={() => setShowFormationsMenu(false)}
                           >
-                            Entreprises
+                            <Award className="w-3 h-3" />
+                            VAE
                           </Link>
                           <Link
-                            href="/formations/vae-btp"
-                            className="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-lg text-xs font-medium hover:bg-purple-200 transition-colors"
+                            href="/formations/entreprises"
+                            className="px-3 py-1.5 bg-orange-100 text-orange-700 rounded-lg text-xs font-medium hover:bg-orange-200 transition-colors flex items-center gap-1"
                             onClick={() => setShowFormationsMenu(false)}
                           >
-                            VAE
+                            <Building className="w-3 h-3" />
+                            Entreprises
                           </Link>
                           <Link
                             href="/contact"
