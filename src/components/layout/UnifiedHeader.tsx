@@ -153,7 +153,7 @@ const UnifiedHeader = () => {
   }, [showFormationsMenu, hoverTimeout])
 
   const handleCandidater = () => {
-    window.open('https://construction-management-academy.ymag.cloud/index.php/preinscription/', '_blank')
+    window.open('https://cma-education.ymag.cloud/index.php/preinscription/', '_blank')
   }
 
   const handleFormationsMouseEnter = () => {
