@@ -4,7 +4,6 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Download, FileText, User, Building, Mail, Phone, CheckCircle, Leaf } from 'lucide-react'
 import { getFormations, getPageBrochure } from '@/lib/strapi'
-import emailjs from '@emailjs/browser'
 
 interface Formation {
   id: number
@@ -162,28 +161,32 @@ export default function BrochurePage() {
       
       console.log('✅ Brochure téléchargée avec succès !');
 
-      // Envoyer les données par EmailJS
+      // Envoyer les emails via notre API Hostinger SMTP
       try {
-        await emailjs.send(
-          'service_cma2026',
-          'template_n27932h',
-          {
-            to_email: 'contact.academy@cma-education.com',
-            formation_title: selectedFormation.title,
-            formation_id: selectedFormation.id,
-            user_nom: formData.nom,
-            user_prenom: formData.prenom,
-            user_type: formData.type,
-            user_email: formData.email,
-            user_telephone: formData.telephone,
-            date: new Date().toLocaleDateString('fr-FR'),
-            brochure_type: 'API Proxy Download'
+        const emailResponse = await fetch('/api/send-brochure-email', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-          'tdRwM2nw_IxILeGS-'
-        );
-        console.log('📧 Email de notification envoyé');
+          body: JSON.stringify({
+            prenom: formData.prenom,
+            nom: formData.nom,
+            email: formData.email,
+            telephone: formData.telephone,
+            profil: formData.type,
+            formationTitle: selectedFormation.title,
+            formationSlug: selectedFormation.slug
+          })
+        });
+
+        if (emailResponse.ok) {
+          console.log('📧 Emails envoyés avec succès (notification interne + confirmation utilisateur)');
+        } else {
+          const emailError = await emailResponse.json();
+          console.warn('⚠️ Erreur envoi emails:', emailError);
+        }
       } catch (emailError) {
-        console.warn('⚠️ Erreur envoi email:', emailError);
+        console.warn('⚠️ Erreur envoi emails:', emailError);
         // Ne pas bloquer le téléchargement si l'email échoue
       }
 

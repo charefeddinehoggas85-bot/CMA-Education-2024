@@ -6,7 +6,6 @@ import { Phone, Mail, MapPin, MessageCircle } from 'lucide-react'
 import ModernButton from '@/components/ui/ModernButton'
 import AnimatedIcon from '@/components/ui/AnimatedIcon'
 import { getSiteSettings, getPageContact, getImageURL } from '@/lib/strapi'
-import emailjs from '@emailjs/browser'
 
 interface SiteSettings {
   id: number
@@ -20,13 +19,6 @@ interface SiteSettings {
     facebook?: string
     instagram?: string
     youtube?: string
-  }
-  emailConfig?: {
-    emailjs?: {
-      serviceId: string
-      templateId: string
-      publicKey: string
-    }
   }
 }
 
@@ -63,16 +55,9 @@ const ContactSection = () => {
     siteName: 'Construction Management Academy',
     contactPhone: '01 85 09 71 06',
     contactEmail: 'contact.academy@cma-education.com',
-    emailInscription: 'inscription.academy@cma-education.com',
+    emailInscription: 'inscription@cma-education.com',
     contactAddress: '67-69 Avenue du Général de Gaulle, 77420 Champs sur Marne',
-    socialMedia: {},
-    emailConfig: {
-      emailjs: {
-        serviceId: 'service_cma2026',
-        templateId: 'template_n27932h',
-        publicKey: 'tdRwM2nw_IxILeGS-'
-      }
-    }
+    socialMedia: {}
   })
 
   useEffect(() => {
@@ -102,26 +87,21 @@ const ContactSection = () => {
     setIsLoading(true)
     
     try {
-      const emailConfig = siteSettings.emailConfig?.emailjs
-      if (emailConfig) {
-        await emailjs.sendForm(
-          emailConfig.serviceId,
-          emailConfig.templateId,
-          form.current,
-          emailConfig.publicKey
-        )
-      } else {
-        // Fallback configuration
-        await emailjs.sendForm(
-          'service_cma2026',
-          'template_n27932h',
-          form.current,
-          'tdRwM2nw_IxILeGS-'
-        )
-      }
+      // Utiliser notre API SMTP Hostinger
+      const formData = new FormData(form.current)
       
-      alert('✅ Message envoyé avec succès ! Nous vous recontacterons rapidement.')
-      form.current.reset()
+      const response = await fetch('/api/send-contact-email', {
+        method: 'POST',
+        body: formData
+      })
+
+      if (response.ok) {
+        alert('✅ Message envoyé avec succès ! Nous vous recontacterons rapidement.')
+        form.current.reset()
+      } else {
+        const errorData = await response.json()
+        throw new Error(errorData.error || 'Erreur lors de l\'envoi')
+      }
     } catch (error) {
       console.error('Erreur:', error)
       alert('❌ Erreur lors de l\'envoi. Veuillez réessayer.')
