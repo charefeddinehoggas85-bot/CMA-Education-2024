@@ -102,7 +102,7 @@ function ArtisticFormationsCarousel({
       {/* Container avec design moderne */}
       <div className="relative bg-white/60 backdrop-blur-xl rounded-3xl p-6 shadow-xl border border-white/20 overflow-hidden">
         {/* Motif de fond artistique */}
-        <div className="absolute inset-0 opacity-5">
+        <div className="absolute inset-0 opacity-5 pointer-events-none">
           <div 
             className="absolute inset-0"
             style={{
@@ -289,7 +289,7 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
           }}
         />
         {/* Overlay gradient */}
-        <div className={`absolute inset-0 bg-gradient-to-t ${getCategoryGradient(category)} opacity-20 group-hover:opacity-30 transition-opacity duration-500`} />
+        <div className={`absolute inset-0 bg-gradient-to-t ${getCategoryGradient(category)} opacity-20 group-hover:opacity-30 transition-opacity duration-500 pointer-events-none`} />
         
         {/* Badge niveau sur l'image */}
         {formation.level && (
@@ -367,9 +367,9 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
         </div>
       </div>
 
-      {/* Effet de bordure animée au hover */}
+      {/* Effet de bordure animée au hover - pointer-events-none pour ne pas bloquer les clics */}
       <motion.div
-        className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(category)} opacity-0 group-hover:opacity-10`}
+        className={`absolute inset-0 rounded-3xl bg-gradient-to-br ${getCategoryGradient(category)} opacity-0 group-hover:opacity-10 pointer-events-none`}
         style={{ 
           background: `linear-gradient(135deg, transparent 0%, rgba(255,255,255,0.1) 50%, transparent 100%)`,
           mixBlendMode: 'overlay'
