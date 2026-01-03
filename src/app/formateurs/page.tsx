@@ -201,7 +201,7 @@ const staticFormateurs: Formateur[] = [
 
 const sectorLabels: Record<string, string> = {
   'direction': 'Direction & Pédagogie',
-  'batiment': 'Bâtiment & Gestion de Projet',
+  'batiment': 'Conduite et management de projet BTP / IA / Transition numérique et énergétique',
   'travaux-publics': 'Travaux Publics & Infrastructure',
   'architecture-energie': 'Architecture & Énergie'
 }
