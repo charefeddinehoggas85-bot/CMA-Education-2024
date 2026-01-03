@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+    
+    <!-- Page d'accueil -->
+    <url>
+        <loc>https://cma-education.com/</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>1.0</priority>
+    </url>
+    
+    <!-- Pages principales formations -->
+    <url>
+        <loc>https://cma-education.com/formations</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <!-- Formations alternance -->
+    <url>
+        <loc>https://cma-education.com/formations/conducteur-travaux-batiment-alternance</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/charge-affaires-batiment-alternance</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/conducteur-travaux-publics-alternance</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/responsable-travaux-bim-alternance</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/chef-projet-btp-alternance</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Formations reconversion -->
+    <url>
+        <loc>https://cma-education.com/formations/reconversion-btp</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/reconversion-btp/conducteur-travaux</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/reconversion-btp/charge-affaires</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- VAE BTP -->
+    <url>
+        <loc>https://cma-education.com/formations/vae-btp</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/vae-btp/conducteur-travaux</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formations/vae-btp/charge-affaires</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <!-- Formations entreprises -->
+    <url>
+        <loc>https://cma-education.com/formations/entreprises</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <!-- Pages institutionnelles -->
+    <url>
+        <loc>https://cma-education.com/about</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/contact</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/pedagogie</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/partenaires</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/admission</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/formateurs</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/blog</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/brochure</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/indicateurs-performance</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>monthly</changefreq>
+        <priority>0.5</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/mentions-legales</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    
+    <url>
+        <loc>https://cma-education.com/confidentialite</loc>
+        <lastmod>2026-01-03</lastmod>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+    
+</urlset>

@@ -1,0 +1,28 @@
+User-agent: *
+Allow: /
+
+# Priorité aux pages formations
+Allow: /formations/
+Allow: /formations/conducteur-travaux-batiment-alternance
+Allow: /formations/charge-affaires-batiment-alternance
+Allow: /formations/reconversion-btp/
+Allow: /formations/vae-btp/
+
+# Bloquer les fichiers techniques
+Disallow: /.next/
+Disallow: /api/
+Disallow: /_next/
+Disallow: /admin/
+Disallow: /private/
+
+# Bloquer les paramètres de tracking
+Disallow: /*?utm_*
+Disallow: /*?ref=*
+Disallow: /*?source=*
+
+# Sitemaps
+Sitemap: https://cma-education.com/sitemap.xml
+Sitemap: https://cma-education.com/sitemap-formations-btp.xml
+
+# Crawl-delay pour éviter la surcharge
+Crawl-delay: 1
