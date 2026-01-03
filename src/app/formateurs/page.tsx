@@ -206,7 +206,14 @@ const sectorLabels: Record<string, string> = {
 }
 
 const FormatorsSection = () => {
-  const [formateurs, setFormateurs] = useState<Formateur[]>(staticFormateurs)
+  // Trier les données statiques pour mettre le directeur en premier
+const sortedStaticFormateurs = [...staticFormateurs].sort((a, b) => {
+  if (a.isDirector && !b.isDirector) return -1
+  if (!a.isDirector && b.isDirector) return 1
+  return (a.id || 999) - (b.id || 999)
+})
+
+const [formateurs, setFormateurs] = useState<Formateur[]>(sortedStaticFormateurs)
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
@@ -228,10 +235,19 @@ const FormatorsSection = () => {
             certifications: f.certifications || [],
             linkedin: f.linkedin,
             gender: f.gender || 'male',
-            isDirector: f.isDirector || false,
+            // Identifier le directeur par isDirector OU par secteur "direction" OU par poste contenant "Directeur"
+            isDirector: f.isDirector || f.secteur === 'direction' || (f.poste && f.poste.toLowerCase().includes('directeur')),
             ordre: f.ordre,
             photoData: f.photoData
           }))
+          
+          // Trier pour mettre les directeurs en premier
+          normalized.sort((a, b) => {
+            if (a.isDirector && !b.isDirector) return -1
+            if (!a.isDirector && b.isDirector) return 1
+            return (a.ordre || 999) - (b.ordre || 999)
+          })
+          
           setFormateurs(normalized)
         }
       } catch (error) {
