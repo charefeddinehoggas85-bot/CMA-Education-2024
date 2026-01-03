@@ -20,9 +20,8 @@ Disallow: /*?utm_*
 Disallow: /*?ref=*
 Disallow: /*?source=*
 
-# Sitemaps
+# Sitemap principal (généré dynamiquement par Next.js)
 Sitemap: https://cma-education.com/sitemap.xml
-Sitemap: https://cma-education.com/sitemap-formations-btp.xml
 
 # Crawl-delay pour éviter la surcharge
 Crawl-delay: 1
