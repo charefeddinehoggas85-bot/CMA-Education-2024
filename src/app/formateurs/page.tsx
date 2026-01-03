@@ -3,6 +3,7 @@
 import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { Building2, Zap, Users, MapPin, Award } from 'lucide-react'
+import Link from 'next/link'
 import FormatorCard from '@/components/ui/FormatorCard'
 import { getFormateurs } from '@/lib/strapi'
 
@@ -427,12 +428,18 @@ const [formateurs, setFormateurs] = useState<Formateur[]>(sortedStaticFormateurs
               Bénéficiez de l'expertise de nos formateurs pour développer vos compétences dans le BTP
             </p>
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <button className="px-8 py-4 bg-primary-yellow text-primary-blue font-bold rounded-xl hover:bg-yellow-400 transition-colors">
+              <Link 
+                href="/formations"
+                className="px-8 py-4 bg-primary-yellow text-primary-blue font-bold rounded-xl hover:bg-yellow-400 transition-colors inline-block text-center"
+              >
                 Découvrir nos formations
-              </button>
-              <button className="px-8 py-4 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-primary-blue transition-colors">
+              </Link>
+              <Link 
+                href="/contact"
+                className="px-8 py-4 border-2 border-white text-white font-bold rounded-xl hover:bg-white hover:text-primary-blue transition-colors inline-block text-center"
+              >
                 Nous contacter
-              </button>
+              </Link>
             </div>
           </div>
         </motion.div>
