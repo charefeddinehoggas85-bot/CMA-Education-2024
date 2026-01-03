@@ -355,25 +355,16 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
 
         {/* BOUTON DÉCOUVRIR - Lien vers la page de formation */}
         <div className="mt-auto flex-shrink-0">
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
+          <Link
+            href={`/formations/${formation.slug}`}
+            className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl w-full border-2 border-white/20 hover:border-white/40 hover:scale-[1.02] active:scale-[0.98]`}
           >
-            <Link
-              href={`/formations/${formation.slug}`}
-              className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl w-full border-2 border-white/20 hover:border-white/40`}
-              onClick={(e) => {
-                console.log('🔍 Discover button clicked for formation:', formation.slug);
-                console.log('🔗 Navigating to:', `/formations/${formation.slug}`);
-              }}
-            >
-              <span className="relative z-10 font-bold text-white drop-shadow-sm">Découvrir</span>
-              <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform text-white drop-shadow-sm" />
-              
-              {/* Effet de brillance au hover */}
-              <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
-            </Link>
-          </motion.div>
+            <span className="relative z-10 font-bold text-white drop-shadow-sm">Découvrir</span>
+            <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform text-white drop-shadow-sm" />
+            
+            {/* Effet de brillance au hover */}
+            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+          </Link>
         </div>
       </div>
 
