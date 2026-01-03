@@ -191,16 +191,16 @@ const UnifiedHeader = () => {
       <div className="max-w-7xl mx-auto px-3 sm:px-4 lg:px-6 xl:px-8">
         <div className="flex items-center justify-between h-16 sm:h-18 lg:h-20">
           
-          {/* LOGO - Ultra Responsive */}
+          {/* LOGO - Ultra Responsive - Agrandi */}
           <div className="flex-shrink-0">
             <Link href="/" className="group flex items-center">
               <div className="relative transition-transform duration-200 group-hover:scale-105">
                 <Image
                   src="/images/logoo.svg"
                   alt="Construction Management Academy"
-                  width={200}
-                  height={60}
-                  className="h-10 sm:h-12 lg:h-14 xl:h-16 w-auto max-w-[120px] sm:max-w-[140px] lg:max-w-[160px] xl:max-w-[180px]"
+                  width={240}
+                  height={72}
+                  className="h-12 sm:h-14 lg:h-16 xl:h-20 w-auto max-w-[140px] sm:max-w-[160px] lg:max-w-[200px] xl:max-w-[220px]"
                   priority
                 />
               </div>
