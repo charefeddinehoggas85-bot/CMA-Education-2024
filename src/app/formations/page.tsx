@@ -5,6 +5,7 @@ import { GraduationCap, Clock, Award, ArrowRight, RefreshCw, CheckCircle, Buildi
 import { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Head from 'next/head'
 import { getFormations, getImageURL, getVAEFormules, getVAECertifications, getPageFormations, getStrapiMediaURL } from '@/lib/strapi'
 
 // Données statiques pour VAE et entreprises (à migrer vers Strapi plus tard)

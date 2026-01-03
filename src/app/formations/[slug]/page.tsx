@@ -1,9 +1,57 @@
 import { notFound } from 'next/navigation'
+import { Metadata } from 'next'
 import FormationContent from './FormationContent'
 
 // Force le rendu dynamique (SSR) pour toujours récupérer les données fraîches de Strapi
 export const dynamic = 'force-dynamic'
 export const revalidate = 0
+
+// Génération dynamique des metadata SEO pour chaque formation
+export async function generateMetadata({ params }: { params: { slug: string } }): Promise<Metadata> {
+  const { formation } = await getFormationData(params.slug)
+  
+  if (!formation) {
+    return {
+      title: 'Formation non trouvée | Construction Management Academy',
+      description: 'Cette formation n\'existe pas ou n\'est plus disponible.'
+    }
+  }
+
+  const title = `${formation.title} | Formation BTP ${formation.level} | CMA Education`
+  const description = formation.shortDescription || formation.shortDesc || 
+    `Formation ${formation.title} en alternance. ${formation.rncp ? `Certification ${formation.rncp}.` : ''} ${formation.tauxInsertion ? `${formation.tauxInsertion} d'insertion professionnelle.` : ''} Prise en charge OPCO.`
+
+  return {
+    title,
+    description,
+    keywords: [
+      `formation ${formation.title.toLowerCase()}`,
+      'formation btp alternance',
+      'formation conducteur travaux',
+      'formation chargé affaires bâtiment',
+      formation.rncp || '',
+      'formation btp ile de france',
+      'alternance btp',
+      formation.level?.toLowerCase() || ''
+    ].filter(Boolean),
+    openGraph: {
+      title,
+      description,
+      type: 'website',
+      locale: 'fr_FR',
+      siteName: 'Construction Management Academy',
+      url: `https://cma-education.com/formations/${params.slug}`,
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+    },
+    alternates: {
+      canonical: `https://cma-education.com/formations/${params.slug}`,
+    },
+  }
+}
 
 interface Formation {
   id: number

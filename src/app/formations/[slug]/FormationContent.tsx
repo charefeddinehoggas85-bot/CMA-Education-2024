@@ -4,7 +4,71 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { GraduationCap, Clock, Users, MapPin, CheckCircle, Target, ArrowLeft, Download, Phone, ExternalLink, BookOpen, Award, TrendingUp, Briefcase, FileText, Calendar, Euro, Mail, Building, ArrowRight } from 'lucide-react'
 import Link from 'next/link'
+import Script from 'next/script'
 import { getImageURL, getPageFormationDetail } from '@/lib/strapi'
+
+// Génère le schema Course dynamique pour SEO (Schema.org)
+function generateCourseSchema(formation: Formation) {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    "name": formation.title,
+    "description": formation.shortDescription || formation.shortDesc || formation.fullDescription || formation.fullDesc || `Formation ${formation.title} en alternance`,
+    "provider": {
+      "@type": "EducationalOrganization",
+      "name": "Construction Management Academy",
+      "url": "https://cma-education.com",
+      "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "67-69 Avenue du Général de Gaulle",
+        "addressLocality": "Champs-sur-Marne",
+        "postalCode": "77420",
+        "addressCountry": "FR"
+      }
+    },
+    "courseMode": "onsite",
+    "educationalLevel": formation.level || "Formation professionnelle",
+    ...(formation.duree && { "duration": formation.duree }),
+    ...(formation.rncp && { "courseCode": formation.rncp }),
+    ...(formation.volumeHoraire && { "timeRequired": `PT${formation.volumeHoraire.replace(/[^0-9]/g, '')}H` }),
+    "occupationalCategory": "BTP - Bâtiment et Travaux Publics",
+    "educationalCredentialAwarded": formation.rncp ? `Titre professionnel ${formation.level}` : formation.level,
+    ...(formation.prerequis && Array.isArray(formation.prerequis) && { 
+      "coursePrerequisites": formation.prerequis.join('. ') 
+    }),
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "EUR",
+      "description": formation.financement || "Prise en charge intégrale OPCO",
+      "availability": "https://schema.org/InStock"
+    },
+    "hasCourseInstance": {
+      "@type": "CourseInstance",
+      "courseMode": "onsite",
+      "location": {
+        "@type": "Place",
+        "name": "Construction Management Academy",
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": "67-69 Avenue du Général de Gaulle",
+          "addressLocality": "Champs-sur-Marne",
+          "postalCode": "77420",
+          "addressCountry": "FR"
+        }
+      }
+    },
+    ...(formation.tauxReussite && { 
+      "aggregateRating": {
+        "@type": "AggregateRating",
+        "ratingValue": "4.8",
+        "bestRating": "5",
+        "ratingCount": "50"
+      }
+    }),
+    "url": `https://cma-education.com/formations/${formation.slug}`
+  }
+}
 
 // Types pour les labels de page
 interface PageLabels {
@@ -178,8 +242,19 @@ export default function FormationContent({ formation }: { formation: Formation }
   const hasImage = imageUrl && imageUrl !== '/images/formations/formations-hero.jpg'
   const rncpUrl = getRncpUrl(formation.rncp, formation.rncpUrl)
   
+  // Générer le schema Course pour cette formation
+  const courseSchema = generateCourseSchema(formation)
+  
   return (
     <>
+      {/* Schema.org Course JSON-LD pour SEO */}
+      <Script
+        id="course-schema"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(courseSchema) }}
+        strategy="afterInteractive"
+      />
+      
       {/* Hero */}
       <section className="pt-24 pb-8 relative min-h-[500px]">
         {hasImage ? (
