@@ -14,6 +14,15 @@ const CACHE_STRATEGIES = {
   static: 'cache-first'
 }
 
+// Liste des routes API à ne JAMAIS intercepter
+const API_BYPASS_ROUTES = [
+  '/api/download-brochure',
+  '/api/brochure-download',
+  '/api/proxy-brochure',
+  '/api/contact',
+  '/api/send-brochure'
+]
+
 // Installation du Service Worker
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -43,8 +52,15 @@ self.addEventListener('fetch', (event) => {
   const { request } = event
   const url = new URL(request.url)
 
-  // Ignorer les requêtes non-GET
-  if (request.method !== 'GET') return
+  // IMPORTANT: Ne JAMAIS intercepter les requêtes non-GET (POST, PUT, DELETE, etc.)
+  if (request.method !== 'GET') {
+    return // Laisser passer directement au réseau
+  }
+
+  // Ne jamais intercepter les routes API critiques
+  if (API_BYPASS_ROUTES.some(route => url.pathname.startsWith(route))) {
+    return // Laisser passer directement au réseau
+  }
 
   // Ignorer les requêtes chrome-extension:// pour éviter les erreurs de cache
   if (url.protocol === 'chrome-extension:' || url.protocol === 'moz-extension:') return

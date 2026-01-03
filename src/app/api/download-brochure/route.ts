@@ -1,5 +1,14 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+// GET method for testing API availability
+export async function GET() {
+  return NextResponse.json({ 
+    status: 'ok',
+    message: 'API download-brochure disponible. Utilisez POST avec formationId.',
+    timestamp: new Date().toISOString()
+  });
+}
+
 export async function POST(request: NextRequest) {
   try {
     const { formationId, userData } = await request.json();
