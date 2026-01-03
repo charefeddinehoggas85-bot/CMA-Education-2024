@@ -357,13 +357,12 @@ function ArtisticFormationCard({ formation, index, category }: { formation: any,
         <div className="mt-auto flex-shrink-0">
           <Link
             href={`/formations/${formation.slug}`}
-            className={`group/btn relative overflow-hidden bg-gradient-to-r ${getCategoryGradient(category)} text-white px-6 py-3 rounded-xl font-bold text-sm transition-all duration-300 flex items-center justify-center gap-2 shadow-xl hover:shadow-2xl w-full border-2 border-white/20 hover:border-white/40 hover:scale-[1.02] active:scale-[0.98]`}
+            className={`block bg-gradient-to-r ${getCategoryGradient(category)} text-white px-6 py-3 rounded-xl font-bold text-sm text-center shadow-lg hover:shadow-xl w-full border-2 border-white/20 hover:border-white/40 transition-all duration-200 hover:brightness-110`}
           >
-            <span className="relative z-10 font-bold text-white drop-shadow-sm">Découvrir</span>
-            <ArrowRight className="w-4 h-4 relative z-10 group-hover/btn:translate-x-1 transition-transform text-white drop-shadow-sm" />
-            
-            {/* Effet de brillance au hover */}
-            <div className="absolute inset-0 bg-gradient-to-r from-transparent via-white/20 to-transparent -translate-x-full group-hover/btn:translate-x-full transition-transform duration-700" />
+            <span className="flex items-center justify-center gap-2">
+              <span>Découvrir</span>
+              <ArrowRight className="w-4 h-4" />
+            </span>
           </Link>
         </div>
       </div>
