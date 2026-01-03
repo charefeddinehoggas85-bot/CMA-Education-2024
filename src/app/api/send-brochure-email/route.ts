@@ -67,7 +67,15 @@ export async function GET() {
     message: 'API send-brochure-email disponible',
     smtp: {
       host: process.env.SMTP_HOST || 'smtp.hostinger.com',
-      configured: !!process.env.SMTP_PASS
+      port: process.env.SMTP_PORT || '465',
+      user: process.env.SMTP_USER || 'notification@cma-education.com',
+      configured: !!process.env.SMTP_PASS,
+      // Ne pas exposer le mot de passe, juste sa longueur pour debug
+      passLength: process.env.SMTP_PASS?.length || 0
+    },
+    emails: {
+      notification: process.env.NOTIFICATION_EMAIL || 'notification@cma-education.com',
+      inscription: process.env.INSCRIPTION_EMAIL || 'inscription@cma-education.com'
     }
   });
 }

@@ -1,5 +1,14 @@
 import nodemailer from 'nodemailer';
 
+// Log de debug pour vérifier la configuration
+console.log('📧 SMTP Config Check:', {
+  host: process.env.SMTP_HOST || 'smtp.hostinger.com',
+  port: process.env.SMTP_PORT || '465',
+  user: process.env.SMTP_USER || 'notification@cma-education.com',
+  passConfigured: !!process.env.SMTP_PASS,
+  passLength: process.env.SMTP_PASS?.length || 0
+});
+
 // Configuration SMTP Hostinger
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST || 'smtp.hostinger.com',
@@ -7,7 +16,7 @@ const transporter = nodemailer.createTransport({
   secure: true, // SSL
   auth: {
     user: process.env.SMTP_USER || 'notification@cma-education.com',
-    pass: process.env.SMTP_PASS,
+    pass: process.env.SMTP_PASS || '',
   },
 });
 
@@ -264,9 +273,23 @@ function generateInternalEmailHTML(data: BrochureDownloadData): string {
 
 // Envoyer les emails
 export async function sendBrochureEmails(data: BrochureDownloadData): Promise<{ success: boolean; error?: string }> {
+  // Vérifier que le mot de passe SMTP est configuré
+  if (!process.env.SMTP_PASS) {
+    console.error('❌ SMTP_PASS non configuré dans les variables d\'environnement');
+    return { 
+      success: false, 
+      error: 'Configuration SMTP incomplète - SMTP_PASS manquant' 
+    };
+  }
+
   try {
     const notificationEmail = process.env.NOTIFICATION_EMAIL || 'notification@cma-education.com';
     const inscriptionEmail = process.env.INSCRIPTION_EMAIL || 'inscription@cma-education.com';
+
+    console.log('📧 Tentative d\'envoi email...');
+    console.log('  - From:', notificationEmail);
+    console.log('  - To (interne):', inscriptionEmail);
+    console.log('  - To (user):', data.email);
 
     // Email 1: Notification interne vers inscription@cma-education.com
     await transporter.sendMail({
