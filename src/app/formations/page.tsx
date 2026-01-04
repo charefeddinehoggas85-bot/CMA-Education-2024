@@ -7,6 +7,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import Head from 'next/head'
 import { getFormations, getImageURL, getVAEFormules, getVAECertifications, getPageFormations, getStrapiMediaURL } from '@/lib/strapi'
+import DevisModal from '@/components/ui/DevisModal'
 
 // Données statiques pour VAE et entreprises (à migrer vers Strapi plus tard)
 const staticVaeFormules = [
@@ -479,6 +480,7 @@ export default function FormationsPage() {
   const [loading, setLoading] = useState(true)
   const [pageData, setPageData] = useState<any>(null)
   const [heroImage, setHeroImage] = useState<string>('/images/formations/formations-hero.jpg')
+  const [isDevisModalOpen, setIsDevisModalOpen] = useState(false)
 
   // Helper pour normaliser les données VAE de Strapi
   const normalizeVAEFormule = (formule: any): VAEFormule => {
@@ -923,7 +925,7 @@ export default function FormationsPage() {
                 <p className="text-white/80">Financement OPCO possible</p>
               </div>
               <button 
-                onClick={handleCandidater}
+                onClick={() => setIsDevisModalOpen(true)}
                 className="mt-4 md:mt-0 bg-white text-orange-600 px-6 py-3 rounded-full font-semibold hover:bg-gray-100 transition-colors"
               >
                 Demander un devis
@@ -961,6 +963,12 @@ export default function FormationsPage() {
           </motion.div>
         </div>
       </section>
+
+      {/* Modal Devis Entreprise */}
+      <DevisModal 
+        isOpen={isDevisModalOpen} 
+        onClose={() => setIsDevisModalOpen(false)} 
+      />
     </>
   )
 }

@@ -9,6 +9,7 @@ import {
 } from 'lucide-react'
 import Link from 'next/link'
 import { getEntrepriseServices, getFormationThematiques, getPageEntreprise, getEntrepriseModalites } from '@/lib/strapi'
+import DevisModal from '@/components/ui/DevisModal'
 
 interface EntrepriseService {
   id: number
@@ -104,7 +105,7 @@ const defaultPageData: PageEntrepriseData = {
   ctaBoutonPrincipal: "Nous contacter",
   ctaBoutonSecondaire: "Télécharger la brochure",
   telephone: "01 85 09 71 06",
-  email: "contact.academy@cma-education.com"
+  email: "contact@cma-education.com"
 }
 
 // Avantages par défaut
@@ -152,6 +153,7 @@ export default function FormationsEntreprises() {
   const [thematiques, setThematiques] = useState<FormationThematique[]>(defaultThematiques)
   const [modalites, setModalites] = useState<EntrepriseModalite[]>(defaultModalites)
   const [page, setPage] = useState<PageEntrepriseData>(defaultPageData)
+  const [isDevisModalOpen, setIsDevisModalOpen] = useState(false)
   
   const heroRef = useRef<HTMLDivElement>(null)
   const { scrollYProgress } = useScroll({
@@ -245,13 +247,13 @@ export default function FormationsEntreprises() {
               </div>
 
               <div className="flex flex-col sm:flex-row gap-4">
-                <Link 
-                  href="/contact"
+                <button 
+                  onClick={() => setIsDevisModalOpen(true)}
                   className="group bg-primary-blue text-white px-8 py-4 rounded-xl font-semibold hover:bg-blue-700 hover:shadow-lg transition-all inline-flex items-center justify-center"
                 >
                   {page.heroBoutonPrincipal}
                   <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-                </Link>
+                </button>
                 <Link 
                   href="/brochure"
                   className="border-2 border-white/30 text-white px-8 py-4 rounded-xl font-semibold hover:bg-white/10 backdrop-blur-sm transition-all text-center"
@@ -415,12 +417,12 @@ export default function FormationsEntreprises() {
                 <p className="text-white/90 mb-8 leading-relaxed">
                   {page.surMesureDescription}
                 </p>
-                <Link
-                  href="/contact"
+                <button
+                  onClick={() => setIsDevisModalOpen(true)}
                   className="block w-full bg-primary-blue text-white py-4 rounded-xl font-semibold text-center hover:bg-blue-700 transition-colors"
                 >
                   {page.surMesureBouton}
-                </Link>
+                </button>
               </div>
 
               {/* Badge info */}
@@ -566,13 +568,13 @@ export default function FormationsEntreprises() {
             </p>
             
             <div className="flex flex-col sm:flex-row gap-4 justify-center mb-8">
-              <Link 
-                href="/contact"
+              <button 
+                onClick={() => setIsDevisModalOpen(true)}
                 className="group bg-gradient-to-r from-orange-500 to-amber-500 text-white px-8 py-4 rounded-xl font-semibold hover:shadow-lg hover:shadow-orange-500/25 transition-all inline-flex items-center justify-center"
               >
-                {page.ctaBoutonPrincipal}
+                Demander un devis
                 <ArrowRight className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" />
-              </Link>
+              </button>
               <Link 
                 href="/brochure"
                 className="border-2 border-gray-300 text-gray-700 px-8 py-4 rounded-xl font-semibold hover:border-orange-500 hover:text-orange-600 transition-all text-center"
@@ -601,6 +603,12 @@ export default function FormationsEntreprises() {
           </motion.div>
         </div>
       </section>
+
+      {/* Modal Devis */}
+      <DevisModal 
+        isOpen={isDevisModalOpen} 
+        onClose={() => setIsDevisModalOpen(false)} 
+      />
     </>
   )
 }

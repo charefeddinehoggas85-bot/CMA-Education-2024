@@ -12,7 +12,7 @@ const OptimizedGoogleMap = memo(({ address, className = '' }: OptimizedGoogleMap
   const [isLoaded, setIsLoaded] = useState(false)
   const [showMap, setShowMap] = useState(false)
   
-  const directionsUrl = `https://www.google.com/maps/search/Construction-Management-Academy/@48.8589516,2.2796556,11z?entry=ttu&g_ep=EgoyMDI1MTIwOS4wIKXMDSoKLDEwMDc5MjA2OUgBUAM%3D`
+  const directionsUrl = `https://maps.app.goo.gl/C1GYvTDDWwVazXnA8`
 
   const handleShowMap = () => {
     setShowMap(true)
